@@ -1,8 +1,10 @@
 <!--
   Sync Impact Report
-  Version: 1.0.0 → 1.1.0
-  Modified principles: I. SPA Architecture (state solution pinned to Technology Stack)
-  Added sections: Technology Stack
+  Version: 1.1.0 → 1.2.0
+  Modified principles: n/a (principles added)
+  Added principles: VI. Accessibility (a11y), VII. Code Quality Gates (SonarQube)
+  Added sections: Environment & Configuration, Git Workflow & Conventions,
+    Observability & Production Monitoring, Documentation
   Removed sections: n/a
   Deferred TODOs: n/a
 -->
@@ -78,6 +80,32 @@ Nothing ships to production unless it meets the release bar.
 - Rationale: A clean, optimized, observable bundle is what makes the SPA
   reliable for real users in production.
 
+### VI. Accessibility (a11y)
+
+The SPA MUST meet WCAG 2.1 AA as the accessibility target.
+
+- Every interactive element MUST be operable via keyboard, with a visible
+  focus indicator.
+- Forms MUST ship with labels and accessible error messages.
+- Complex widgets (dialog, menu, tooltip, tabs, etc.) MUST be built on Radix
+  UI primitives to inherit correct ARIA behavior.
+- Color contrast MUST meet WCAG AA; information MUST NOT be conveyed by color
+  alone.
+- Rationale: Accessibility is part of product quality, and the Radix primitives
+  already mandated by the Technology Stack provide the correct behavior for
+  free.
+
+### VII. Code Quality Gates (SonarQube)
+
+SonarQube analysis MUST run as a CI gate and the quality gate MUST be green
+before any merge to `main`.
+
+- No new Bugs, Vulnerabilities, or Security Hotspots are allowed.
+- New code MUST meet the coverage threshold (≥ 80%) and duplication limits.
+- SonarQube findings MUST be addressed or explicitly justified before merge.
+- Rationale: An automated quality gate catches maintainability and security
+  issues that linting and unit tests alone cannot.
+
 ## Technology Stack
 
 The stack below is mandatory for TURTLE-Frontend. It is selected to maximize
@@ -118,10 +146,11 @@ Additional constraints that MUST hold at all times:
 ## Development Workflow & Production Gate
 
 The development cycle MUST follow: feature branch → local dev → commit →
-pull request → CI validation → review approval → merge → release.
+CI validation → merge → release, with the PR gate required when entering
+`main` (see Git Workflow & Conventions).
 
 - CI MUST run lint, typecheck, tests, and the production build on every pull
-  request; the PR MUST NOT merge unless all gates pass.
+  request into `main`; the PR MUST NOT merge unless all gates pass.
 - Every feature MUST reference its spec and related tests in the PR
   description.
 - A release checklist MUST be completed before deployment: green CI,
@@ -129,6 +158,62 @@ pull request → CI validation → review approval → merge → release.
   paths, and a rollback plan.
 - Releases MUST be tagged and versioned; production changes MUST be
   revertible.
+
+## Environment & Configuration
+
+The development environment MUST be reproducible and consistent across the
+team.
+
+- Node.js LTS MUST be used and pinned in `.nvmrc`.
+- CI MUST install and run with the Node version defined in `.nvmrc` (e.g.
+  `node-version-file: .nvmrc`).
+- `package.json` MUST declare an `engines` field with the supported LTS range.
+- npm is the package manager of record; package-lock files MUST be committed.
+- All environment variables MUST be declared in `.env`/`.env.template` with
+  the `VITE_` prefix and validated at startup; a missing required variable
+  MUST fail fast.
+- Environment-specific values MUST NOT be hardcoded in source.
+
+## Git Workflow & Conventions
+
+The SPA MUST be developed through a feature-branch workflow with Conventional
+Commits.
+
+- Each feature MUST be developed on its own branch derived from the latest
+  `main`, referencing its spec.
+- Commit messages MUST follow Conventional Commits (`feat:`, `fix:`, `docs:`,
+  `refactor:`, `test:`, `chore:`).
+- **Merge policy (hybrid)**: direct merges between feature/integration
+  branches are allowed without a PR; merging into `main` MUST go through a PR
+  with review approval and green CI + SonarQube.
+- `main` MUST be protected and always deployable.
+- PRs MUST be small, reference the feature spec, and pass all gates before
+  merging.
+
+## Observability & Production Monitoring
+
+The SPA MUST be observable in production, not only in development.
+
+- Error tracking MUST be active in production, configured via environment
+  variables, so runtime errors are captured and visible to the team.
+- Error boundaries MUST catch render failures and report them.
+- Core Web Vitals MUST be monitored in production; regressions MUST be
+  addressed.
+- Error reports MUST include context (route, component, relevant state)
+  without leaking secrets or personal data.
+- The concrete monitoring tool MUST be selected after prior consultation,
+  following the dependency rules in the Technology Stack.
+
+## Documentation
+
+Documentation MUST travel with the code it describes.
+
+- The repository MUST maintain a README covering setup, environment
+  variables, available scripts, and deployment.
+- Public components MUST document their props and usage.
+- Architecture decisions that affect the Technology Stack MUST be recorded
+  as ADRs.
+- Documentation MUST be updated in the same PR as the change it describes.
 
 ## Governance
 
@@ -147,4 +232,4 @@ released.
 - Complexity MUST be justified; the simplest design that meets the
   specification wins.
 
-**Version**: 1.1.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-02
+**Version**: 1.2.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-02
