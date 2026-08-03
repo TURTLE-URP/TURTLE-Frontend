@@ -1,10 +1,10 @@
 <!--
   Sync Impact Report
-  Version: 1.1.0 → 1.2.0
-  Modified principles: n/a (principles added)
-  Added principles: VI. Accessibility (a11y), VII. Code Quality Gates (SonarQube)
-  Added sections: Environment & Configuration, Git Workflow & Conventions,
-    Observability & Production Monitoring, Documentation
+  Version: 1.2.0 → 1.3.0
+  Modified principles: III. Test-First (logic tests vs component tests; Browser
+    Mode mandatory; per-component tests)
+  Modified sections: Environment & Configuration (CI browser runtime provision)
+  Added sections: n/a
   Removed sections: n/a
   Deferred TODOs: n/a
 -->
@@ -43,13 +43,19 @@ Type safety is the first line of defense against regressions.
 Tests MUST be written and approved before feature implementation, following
 the red-green-refactor cycle. This is a mandatory, non-negotiable rule.
 
-- Unit tests MUST be written with Vitest.
-- Component/interaction tests MUST be written with React Testing Library.
+- **Logic tests** MUST be written with Vitest in the `node` environment and
+  MUST cover business logic independently of any component rendering:
+  calculations, utils, formatters, hooks, Zustand store logic, and data
+  transformations. Logic MUST NOT be tested only through the UI.
+- **Component tests** MUST be written with Vitest Browser Mode, running in a
+  real browser; every component MUST have its own test covering rendering and
+  interaction (props, states, events, accessibility).
 - Critical paths (authentication, data fetching, forms, checkout-like flows)
   MUST have coverage.
 - A feature without passing tests MUST NOT be merged.
-- Rationale: Tests-first keeps the specification executable and prevents
-  regressions as the SPA evolves.
+- Rationale: Logic is verified at its own level (fast, deterministic), while
+  component behavior is verified in a real browser (real events, layout, and
+  APIs) for trustworthy results.
 
 ### IV. Security by Design
 
@@ -169,6 +175,8 @@ team.
   `node-version-file: .nvmrc`).
 - `package.json` MUST declare an `engines` field with the supported LTS range.
 - npm is the package manager of record; package-lock files MUST be committed.
+- CI MUST provision the browser runtime required by Vitest Browser Mode so
+  component tests run in a real browser.
 - All environment variables MUST be declared in `.env`/`.env.template` with
   the `VITE_` prefix and validated at startup; a missing required variable
   MUST fail fast.
@@ -232,4 +240,4 @@ released.
 - Complexity MUST be justified; the simplest design that meets the
   specification wins.
 
-**Version**: 1.2.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-02
+**Version**: 1.3.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-02
