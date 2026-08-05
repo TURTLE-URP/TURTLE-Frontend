@@ -25,11 +25,11 @@
 
 **Purpose**: Project initialization and basic structure per plan.md
 
-- [ ] T001 Create `.nvmrc` pinning Node 24 (Active LTS) at repository root
-- [ ] T002 Scaffold Vite react-ts project at repository root (package.json, tsconfig.json with strict mode, vite.config.ts); add `engines` field with Node `>=24` range in package.json and commit package-lock.json
-- [ ] T003 [P] Configure ESLint flat config in eslint.config.mjs (typescript-eslint, react-hooks, react-refresh) and Prettier in prettier.config.mjs
-- [ ] T004 [P] Create `.gitignore` (node_modules/, dist/, *.log, .env*) and `.env.template` (VITE_APP_NAME, VITE_API_BASE_URL) at repository root
-- [ ] T005 Create directory structure per plan: src/app, src/components/ui, src/features/greeting/components, src/features/greeting/logic, src/lib/env, src/lib/http, src/routes, src/stores, src/styles
+- [X] T001 Create `.nvmrc` pinning Node 24 (Active LTS) at repository root
+- [X] T002 Scaffold Vite react-ts project at repository root (package.json, tsconfig.json with strict mode, vite.config.ts); add `engines` field with Node `>=24` range in package.json and commit package-lock.json
+- [X] T003 [P] Configure ESLint flat config in eslint.config.mjs (typescript-eslint, react-hooks, react-refresh) and Prettier in prettier.config.mjs
+- [X] T004 [P] Create `.gitignore` (node_modules/, dist/, *.log, .env*) and `.env.template` (VITE_APP_NAME, VITE_API_BASE_URL) at repository root
+- [X] T005 Create directory structure per plan: src/app, src/components/ui, src/features/greeting/components, src/features/greeting/logic, src/lib/env, src/lib/http, src/routes, src/stores, src/styles
 
 ---
 
@@ -39,20 +39,20 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 [P] Configure Vitest `node` environment for logic tests in vitest.config.ts
-- [ ] T007 [P] Configure Vitest Browser Mode (Playwright provider, Chromium) for component tests in vitest.config.ts
-- [ ] T008 [P] Configure Tailwind CSS v4 via `@tailwindcss/vite` in vite.config.ts and create src/styles/index.css
-- [ ] T009 [P] Configure TanStack Router file-based routing (`@tanstack/router-vite-plugin` in vite.config.ts); create src/routes/__root.tsx with layout wrapper
-- [ ] T010 [P] Configure TanStack Query QueryClient in src/app/providers.tsx
-- [ ] T011 [P] Install Radix UI primitives (@radix-ui/react-slot, @radix-ui/react-dialog)
-- [ ] T012 Write logic tests for env validation in src/lib/env/env.test.ts (fail-fast behavior, missing required var) — MUST FAIL before T013
-- [ ] T013 Implement env validation in src/lib/env/env.ts (schema-driven fail-fast per contracts/environment.md) — depends on T012
-- [ ] T014 Write logic tests for HTTP wrapper in src/lib/http/http.test.ts (JSON, timeout, error normalization per contracts/http-client.md) — MUST FAIL before T015
-- [ ] T015 Implement HTTP wrapper in src/lib/http/http.ts (native fetch, timeout, standardized HttpError) — depends on T014
-- [ ] T016 Write logic tests for app store in src/stores/app-store.test.ts — MUST FAIL before T017
-- [ ] T017 Implement Zustand app store in src/stores/app-store.ts (reads validated env appName) — depends on T016
-- [ ] T018 Implement error boundary in src/app/error-boundary.tsx (captures render failures, env-guarded report hook)
-- [ ] T019 [P] Configure GitHub Actions CI in .github/workflows/ci.yml (node-version-file .nvmrc, npm ci, lint, typecheck, logic tests, playwright install chromium, component tests, build, npm audit)
+- [X] T006 [P] Configure Vitest `node` environment for logic tests in vitest.config.ts
+- [X] T007 [P] Configure Vitest Browser Mode (Playwright provider, Chromium) for component tests in vitest.config.ts
+- [X] T008 [P] Configure Tailwind CSS v4 via `@tailwindcss/vite` in vite.config.ts and create src/styles/index.css
+- [X] T009 [P] Configure TanStack Router file-based routing (`@tanstack/router-vite-plugin` in vite.config.ts); create src/routes/__root.tsx with layout wrapper
+- [X] T010 [P] Configure TanStack Query QueryClient in src/app/providers.tsx
+- [X] T011 [P] Install Radix UI primitives (@radix-ui/react-slot, @radix-ui/react-dialog)
+- [X] T012 Write logic tests for env validation in src/lib/env/env.test.ts (fail-fast behavior, missing required var) — MUST FAIL before T013
+- [X] T013 Implement env validation in src/lib/env/env.ts (schema-driven fail-fast per contracts/environment.md) — depends on T012
+- [X] T014 Write logic tests for HTTP wrapper in src/lib/http/http.test.ts (JSON, timeout, error normalization per contracts/http-client.md) — MUST FAIL before T015
+- [X] T015 Implement HTTP wrapper in src/lib/http/http.ts (native fetch, timeout, standardized HttpError) — depends on T014
+- [X] T016 Write logic tests for app store in src/stores/app-store.test.ts — MUST FAIL before T017
+- [X] T017 Implement Zustand app store in src/stores/app-store.ts (reads validated env appName) — depends on T016
+- [X] T018 Implement error boundary in src/app/error-boundary.tsx (captures render failures, env-guarded report hook)
+- [X] T019 [P] Configure GitHub Actions CI in .github/workflows/ci.yml (node-version-file .nvmrc, npm ci, lint, typecheck, logic tests, playwright install chromium, component tests, build, npm audit)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -66,10 +66,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Implement home route in src/routes/index.tsx rendering the layout and greeting example
-- [ ] T021 [US1] Implement layout with header/nav showing `VITE_APP_NAME` in src/routes/__root.tsx
-- [ ] T022 [US1] Create README.md covering setup, environment variables, available scripts, and deployment per Documentation section
-- [ ] T023 [US1] Verify local flow per quickstart.md: `npm ci`, `npm run dev`, and fail-fast probe with missing `VITE_APP_NAME`
+- [X] T020 [US1] Implement home route in src/routes/index.tsx rendering the layout and greeting example
+- [X] T021 [US1] Implement layout with header/nav showing `VITE_APP_NAME` in src/routes/__root.tsx
+- [X] T022 [US1] Create README.md covering setup, environment variables, available scripts, and deployment per Documentation section
+- [X] T023 [US1] Verify local flow per quickstart.md: `npm ci`, `npm run dev`, and fail-fast probe with missing `VITE_APP_NAME`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -85,15 +85,15 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T024 [P] [US2] Write component test for greeting-card in src/features/greeting/components/greeting-card.test.tsx (Browser Mode: props, states, events, accessibility) — MUST FAIL before T027
-- [ ] T025 [P] [US2] Write logic tests for build-greeting in src/features/greeting/logic/build-greeting.test.ts (morning/afternoon/evening, empty name, hour clamp) — MUST FAIL before T026
+- [X] T024 [P] [US2] Write component test for greeting-card in src/features/greeting/components/greeting-card.test.tsx (Browser Mode: props, states, events, accessibility) — MUST FAIL before T027
+- [X] T025 [P] [US2] Write logic tests for build-greeting in src/features/greeting/logic/build-greeting.test.ts (morning/afternoon/evening, empty name, hour clamp) — MUST FAIL before T026
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Implement greeting logic in src/features/greeting/logic/build-greeting.ts (per data-model.md §2) — depends on T025
-- [ ] T027 [US2] Implement greeting-card component in src/features/greeting/components/greeting-card.tsx (explicit props, JSDoc, Tailwind classes, uses build-greeting) — depends on T026, T024
-- [ ] T028 [US2] Add npm scripts in package.json: `lint`, `typecheck`, `test`, `test:components`, `build`
-- [ ] T029 [US2] Verify full gate flow per quickstart.md: lint, typecheck, logic tests, component tests (real browser), production build all pass
+- [X] T026 [US2] Implement greeting logic in src/features/greeting/logic/build-greeting.ts (per data-model.md §2) — depends on T025
+- [X] T027 [US2] Implement greeting-card component in src/features/greeting/components/greeting-card.tsx (explicit props, JSDoc, Tailwind classes, uses build-greeting) — depends on T026, T024
+- [X] T028 [US2] Add npm scripts in package.json: `lint`, `typecheck`, `test`, `test:components`, `build`
+- [X] T029 [US2] Verify full gate flow per quickstart.md: lint, typecheck, logic tests, component tests (real browser), production build all pass
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -107,10 +107,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T030 [P] [US3] Create nginx/nginx.conf with SPA fallback (`try_files ... /index.html`) and security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
-- [ ] T031 [P] [US3] Create multi-stage Dockerfile at repository root (Node 24 build stage → Nginx serve stage)
-- [ ] T032 [US3] Verify container deployment per quickstart.md: `docker build -t turtle-frontend .`, run on port 8080, confirm 200 on `/` and deep link, and required security headers via `curl -I`
-- [ ] T033 [US3] Confirm no developer-only features, hardcoded environment values, or `console.log` remain in src/ (Principles II and V)
+- [X] T030 [P] [US3] Create nginx/nginx.conf with SPA fallback (`try_files ... /index.html`) and security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
+- [X] T031 [P] [US3] Create multi-stage Dockerfile at repository root (Node 24 build stage → Nginx serve stage)
+- [X] T032 [US3] Verify container deployment per quickstart.md: `docker build -t turtle-frontend .`, run on port 8080, confirm 200 on `/` and deep link, and required security headers via `curl -I`
+- [X] T033 [US3] Confirm no developer-only features, hardcoded environment values, or `console.log` remain in src/ (Principles II and V)
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -120,11 +120,11 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T034 [P] Run quickstart.md end-to-end validation (setup → dev → gates → container)
-- [ ] T035 [P] Verify accessibility basics on the home route (keyboard operability, visible focus, labels) per Principle VI
-- [ ] T036 [P] Verify env validation and error boundary behavior in the production build (no dev-only leaks)
-- [ ] T037 [P] Confirm ADR-0001 reflects the final implemented decisions; update if implementation diverged
-- [ ] T038 [P] Final `npm audit` and dependency compatibility review (no high/critical, mutually compatible versions)
+- [X] T034 [P] Run quickstart.md end-to-end validation (setup → dev → gates → container)
+- [X] T035 [P] Verify accessibility basics on the home route (keyboard operability, visible focus, labels) per Principle VI
+- [X] T036 [P] Verify env validation and error boundary behavior in the production build (no dev-only leaks)
+- [X] T037 [P] Confirm ADR-0001 reflects the final implemented decisions; update if implementation diverged
+- [X] T038 [P] Final `npm audit` and dependency compatibility review (no high/critical, mutually compatible versions)
 
 ---
 

@@ -1,0 +1,16 @@
+node_modules
+dist
+.git
+.gitignore
+Dockerfile
+.dockerignore
+.env
+.env.*
+!.env.template
+specs
+.specify
+docs
+coverage
+playwright-report
+test-results
+*.log
