@@ -22,7 +22,7 @@ coverage
 playwright-report
 test-results
 .vitest-attachments
-
+src/**/__screenshots__/
 # TypeScript build info
 *.tsbuildinfo
 
