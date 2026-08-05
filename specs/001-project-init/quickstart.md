@@ -53,8 +53,13 @@ browser (Vitest Browser Mode / Playwright).
 
 ## Container build (deployment)
 
+`VITE_*` variables are build-time: they are inlined by Vite when the image
+is built (the real `.env` is excluded from the image context), so pass them
+via `--build-arg`. Runtime `--env` on `docker run` does NOT affect the
+client-side JS.
+
 ```sh
-docker build -t turtle-frontend .
+docker build --build-arg VITE_APP_NAME="TURTLE Frontend" -t turtle-frontend .
 docker run -p 8080:80 turtle-frontend
 curl -I http://localhost:8080
 ```
@@ -62,7 +67,9 @@ curl -I http://localhost:8080
 **Expected**: image builds; serving Nginx returns 200 on `/` and on a deep
 link (SPA fallback); response headers include `Content-Security-Policy`,
 `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`,
-`Referrer-Policy`.
+`Referrer-Policy`. The bundle must contain the `VITE_APP_NAME` value passed at
+build time; if it is missing, the client app fails fast in the browser with a
+message naming the variable.
 
 ## CI
 

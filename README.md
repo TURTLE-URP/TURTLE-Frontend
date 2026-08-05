@@ -32,8 +32,10 @@ cp .env.template .env   # provide real values
 | `VITE_APP_NAME`     | yes      | Application name (1–50 chars) |
 | `VITE_API_BASE_URL` | no       | Absolute backend URL, if any  |
 
-Values are read from `.env` (gitignored). A missing required variable fails
-fast at startup with a message naming the variable.
+Values are read from `.env` (gitignored) at **build time**: Vite inlines
+`VITE_*` variables into the bundle when `npm run build` runs. A missing
+required variable fails fast at startup with a message naming the variable.
+Runtime variables (`docker run --env ...`) never reach the client-side JS.
 
 ## Available scripts
 
@@ -66,13 +68,17 @@ runs all gates plus `npm audit` on every pull request into `main`.
 ## Deployment (containerized)
 
 A multi-stage Dockerfile builds the SPA with Node 24 and serves it with Nginx
-(SPA fallback + security headers).
+(SPA fallback + security headers). Because `VITE_*` variables are build-time,
+pass them with `--build-arg` (real `.env` files are excluded from the image):
 
 ```sh
-docker build -t turtle-frontend .
+docker build --build-arg VITE_APP_NAME="TURTLE Frontend" -t turtle-frontend .
 docker run -p 8080:80 turtle-frontend
 curl -I http://localhost:8080   # expect 200 + security headers
 ```
+
+If `VITE_APP_NAME` is not provided at build time, the client app fails fast
+with a message naming the missing variable.
 
 The app must be served over HTTPS in production.
 
