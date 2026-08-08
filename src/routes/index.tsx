@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { GreetingCard } from '../features/greeting/components/greeting-card'
+import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -17,6 +18,7 @@ function HomePage() {
       </p>
       <div className="mt-6">
         <GreetingCard name="Developer" hour={9} />
+        <Button>Hola gobernador</Button>
       </div>
     </section>
   )
