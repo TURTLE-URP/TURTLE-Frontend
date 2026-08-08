@@ -16,7 +16,8 @@ headers.
 
 **Amendment (2026-08-08)**: Adopt a shadcn/ui design-system layer on top of
 the mandated Tailwind + Radix stack (preset `radix-lyra`, `components.json`,
-`@/*` aliases via `vite-tsconfig-paths`). UI primitives live in
+`@/*` aliases resolved via Vite's native `resolve.tsconfigPaths`). UI
+primitives live in
 `src/components/ui/` built with `class-variance-authority` variants and the
 `cn` utility (`clsx` + `tailwind-merge`); icons come from
 `@phosphor-icons/react`; fonts are Fontsource variable fonts (JetBrains Mono,

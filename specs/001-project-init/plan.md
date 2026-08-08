@@ -24,8 +24,8 @@ headers. Monitoring tool and SonarQube server are deferred per the constitution.
 `cn` in `src/lib/utils.ts`, Radix UI primitives, TanStack Query v5, TanStack
 Router v1, Zustand v5, `@phosphor-icons/react`, Fontsource variable fonts
 (Montserrat, Playfair Display, JetBrains Mono), Vitest + @vitest/browser
-(Playwright), React Testing Library, ESLint (flat config), Prettier,
-`vite-tsconfig-paths` (for `@/*` aliases)
+(Playwright), React Testing Library, ESLint (flat config), Prettier.
+`@/*` path aliases are resolved via Vite's native `resolve.tsconfigPaths`.
 
 **Storage**: N/A (SPA; no persistent data in this feature)
 
@@ -101,7 +101,7 @@ specs/001-project-init/
 ├── package.json
 ├── prettier.config.mjs
 ├── tsconfig.json            # @/* path alias
-├── vite.config.ts           # react, tailwindcss, tanstackRouter, tsconfigPaths
+├── vite.config.ts            # react, tailwindcss, tanstackRouter, native tsconfigPaths
 ├── vitest.config.ts
 └── src/
     ├── app/
