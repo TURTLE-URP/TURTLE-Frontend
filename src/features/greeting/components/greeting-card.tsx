@@ -17,9 +17,9 @@ export function GreetingCard({ name, hour }: GreetingCardProps) {
   return (
     <div
       role="status"
-      className="inline-block rounded-xl border border-zinc-200 bg-white px-6 py-4 shadow-sm"
+      className="inline-block rounded-xl border border-border bg-card px-6 py-4 shadow-sm"
     >
-      <p className="text-lg font-medium text-zinc-800">{greeting}</p>
+      <p className="text-lg font-medium text-card-foreground">{greeting}</p>
     </div>
   )
 }

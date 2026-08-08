@@ -45,9 +45,15 @@ Minimal Zustand store (`src/stores/app-store.ts`) for the scaffold:
 ```
 app-store {
   appName: string          // from validated env
-  ui: { theme: 'light' }   // reserved, not yet used
+  ui: { theme: 'light' }   // reserved in the store; not yet persisted
 }
 ```
+
+The scaffold already ships a theme system in `src/styles/index.css`:
+semantic tokens for light and dark modes, toggled by the `.dark` class on a
+parent element. `ui.theme` remains reserved in the store and is not yet
+connected to the CSS class; wiring the toggle is out of scope for this
+feature.
 
 No lifecycle transitions apply in this feature; the store is intentionally
 minimal and will grow with future features.
