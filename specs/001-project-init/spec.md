@@ -17,6 +17,12 @@
 - Q: ¿Qué versión LTS de Node.js se fija en .nvmrc y en el campo engines del package.json? → A: Node 24
 - Q: ¿Qué contenido tendrá la UI inicial del scaffold? → A: Shell mínimo con ejemplo (routing, layout, home route, error boundary y un componente de ejemplo)
 
+### Session 2026-08-08
+
+- Q: ¿Qué capa de componentes añade el scaffold sobre Tailwind + Radix? → A: Se adopta shadcn/ui (preset `radix-lyra`) como convención de design system: primitivos generados en `src/components/ui/` con variantes CVA, utilitario `cn` en `src/lib/utils.ts`, alias de import `@/*`, íconos Phosphor y fuentes variable Fontsource. Decision registrada en ADR-0001.
+- Q: ¿Cuál es el tema visual del scaffold? → A: Tema de marca con tokens semánticos (paleta azul/verde/morado en OKLCH) y dark mode vía clase `.dark`; fuentes Montserrat (sans), Playfair Display (serif) y JetBrains Mono (mono). Los componentes deben usar los tokens, no colores hardcodeados.
+- Q: ¿Cómo se incorporan nuevos primitivos de UI? → A: Vía el flujo de shadcn (`components.json` + `npx shadcn add`), respetando las reglas del contract de componentes.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Developer sets up and runs the application locally (Priority: P1)
@@ -128,7 +134,12 @@ present and functional.
 - **FR-002**: The project MUST include the mandated technology stack:
   Tailwind CSS for styling, Radix UI primitives for components, TanStack
   Query for data fetching, TanStack Router for routing, Zustand for global
-  state, and native `fetch` for HTTP, per the Technology Stack section.
+  state, and native `fetch` for HTTP, per the Technology Stack section. On
+  top of Tailwind + Radix, the scaffold MUST adopt a shadcn/ui design-system
+  layer (preset `radix-lyra`): primitives in `src/components/ui/` built with
+  `class-variance-authority` variants and the `cn` utility, semantic theme
+  tokens in `src/styles/index.css` (light/dark), Phosphor icons, and
+  Fontsource variable fonts (Montserrat, Playfair Display, JetBrains Mono).
 - **FR-003**: The project MUST pin Node.js 24 (Active LTS) in `.nvmrc`, declare
   the supported range in `package.json` `engines`, use npm as the package
   manager, and commit the lockfile.
@@ -163,10 +174,12 @@ present and functional.
   serving the static build) with security headers configured (CSP,
   X-Frame-Options, HSTS), per the Security Requirements section.
 - **FR-014**: The initial application MUST ship a minimal UI shell: routing
-  with a home route, a layout with header/navigation, an error boundary, and
-  one example component that demonstrates the mandated component-test
+  with a home route, a layout with header/navigation, an error boundary, one
+  example component that demonstrates the mandated component-test pattern,
+  and one shadcn/ui primitive (a `Button`) that demonstrates the UI-primitive
   pattern; any business logic in the example MUST be covered by a separate
-  logic test.
+  logic test. Styling MUST use the semantic theme tokens rather than
+  hardcoded palette colors, so the light/dark theme applies consistently.
 
 ### Key Entities
 

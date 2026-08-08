@@ -216,3 +216,18 @@ With multiple developers:
 - Stop at any checkpoint to validate story independently
 - Deferred by design: SonarQube CI gate and monitoring tool (external infra/consultation) — not tasks in this feature
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+
+---
+
+## Phase 7: Convergence
+
+**Purpose**: Close the gap between the artifacts and the design-system work
+implemented after the original phases (shadcn/ui setup, brand theme tokens,
+fonts, path aliases). Findings from `/speckit.converge` on 2026-08-08.
+
+- [X] T039 Record justification for the new design-system dependencies (shadcn, radix-ui, class-variance-authority, clsx, tailwind-merge, tw-animate-css, @phosphor-icons/react, @fontsource-variable/jetbrains-mono, vite-tsconfig-paths) by amending docs/adr/0001-project-scaffold-tooling.md and backfilling spec/plan/tasks/contracts/README in the same PR, per Constitution Tech Stack dependency rules + Documentation (contradicts) — CRITICAL
+- [X] T040 Backfill spec.md (FR-002/FR-014 + Clarifications) and plan.md (Primary Dependencies + Project Structure) to cover the shadcn/ui design-system layer (components.json, src/components/ui/button.tsx, src/lib/utils.ts, @theme tokens in src/styles/index.css, `@/*` aliases via vite-tsconfig-paths), per spec FR-002/FR-014 and plan: structure (unrequested)
+- [X] T041 Add @fontsource-variable/montserrat and @fontsource-variable/playfair-display to package.json and import them in src/styles/index.css so the declared --font-sans/--font-serif resolve, per design-system font tokens (partial)
+- [X] T042 Migrate hardcoded zinc-* classes to design tokens in src/routes/__root.tsx and src/features/greeting/components/greeting-card.tsx (bg-background, border-border, text-foreground, text-muted-foreground, bg-card), per design system + Constitution VI dark mode (partial)
+- [X] T043 Update specs/001-project-init/data-model.md §3 so ui.theme reflects the light/dark theme system now supported via `.dark` class + CSS variables (still reserved in the store), per data-model §3 (partial)
+- [X] T044 Update spec.md FR-014 and quickstart.md expected output to cover the additional `<Button>` example on the home route, per spec FR-014 (unrequested)

@@ -19,9 +19,13 @@ headers. Monitoring tool and SonarQube server are deferred per the constitution.
 
 **Language/Version**: TypeScript (strict mode), React 19, Node.js 24 (Active LTS)
 
-**Primary Dependencies**: Vite, Tailwind CSS v4, Radix UI primitives, TanStack
-Query v5, TanStack Router v1, Zustand v5, Vitest + @vitest/browser (Playwright),
-React Testing Library, ESLint (flat config), Prettier
+**Primary Dependencies**: Vite, Tailwind CSS v4, shadcn/ui (preset
+`radix-lyra`) with `class-variance-authority`, `clsx`, `tailwind-merge` and
+`cn` in `src/lib/utils.ts`, Radix UI primitives, TanStack Query v5, TanStack
+Router v1, Zustand v5, `@phosphor-icons/react`, Fontsource variable fonts
+(Montserrat, Playfair Display, JetBrains Mono), Vitest + @vitest/browser
+(Playwright), React Testing Library, ESLint (flat config), Prettier,
+`vite-tsconfig-paths` (for `@/*` aliases)
 
 **Storage**: N/A (SPA; no persistent data in this feature)
 
@@ -57,6 +61,7 @@ feature
 | Principle VI (WCAG 2.1 AA, Radix for complex widgets) | Radix primitives available; a11y noted in component contract | PASS |
 | Principle VII (SonarQube gate) | Deferred to CI follow-up (requires external infra) — documented in assumptions | PASS (deferred) |
 | Technology Stack (Tailwind, Radix, TanStack Q/R, Zustand, fetch) | All mandated deps in package.json; no extra HTTP client | PASS |
+| Design System (shadcn/ui + deps) | shadcn/ui, CVA, clsx, tailwind-merge, Phosphor, Fontsource fonts added on top of the mandated stack; justified and recorded in ADR-0001 (dependency consultation rule) | PASS |
 | Security Requirements (HTTPS, headers, npm audit) | nginx.conf with headers; `npm audit` script | PASS |
 | Environment (Node 24 .nvmrc, engines, npm, CI browser provisioning, env fail-fast) | .nvmrc=24, engines field, npm, Playwright install in CI, env validation util | PASS |
 | Git Workflow (Conventional Commits, hybrid merge) | Documented in README contributing notes | PASS |
@@ -88,14 +93,15 @@ specs/001-project-init/
 ├── .env.template
 ├── .gitignore
 ├── .nvmrc
+├── components.json          # shadcn/ui configuration
 ├── Dockerfile
 ├── nginx/nginx.conf
 ├── README.md
 ├── eslint.config.mjs
 ├── package.json
 ├── prettier.config.mjs
-├── tsconfig.json
-├── vite.config.ts
+├── tsconfig.json            # @/* path alias
+├── vite.config.ts           # react, tailwindcss, tanstackRouter, tsconfigPaths
 ├── vitest.config.ts
 └── src/
     ├── app/
@@ -103,6 +109,7 @@ specs/001-project-init/
     │   └── providers.tsx
     ├── components/
     │   └── ui/
+    │       └── button.tsx   # shadcn UI primitive (CVA variants + cn)
     ├── features/
     │   └── greeting/
     │       ├── components/
@@ -115,15 +122,16 @@ specs/001-project-init/
     │   ├── env/
     │   │   ├── env.ts
     │   │   └── env.test.ts
-    │   └── http/
-    │       └── http.ts
+    │   ├── http/
+    │   │   └── http.ts
+    │   └── utils.ts          # cn() class-merge utility
     ├── routes/
     │   ├── __root.tsx
     │   └── index.tsx
     ├── stores/
     │   └── app-store.ts
     └── styles/
-        └── index.css
+        └── index.css         # theme tokens (light/dark), fonts
 ```
 
 **Structure Decision**: Feature-first SPA layout (Option 1 adapted). Source is

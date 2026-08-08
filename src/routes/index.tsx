@@ -9,10 +9,10 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   return (
     <section aria-labelledby="home-title">
-      <h1 id="home-title" className="text-2xl font-bold text-zinc-900">
+      <h1 id="home-title" className="text-2xl font-bold text-foreground">
         Welcome to the scaffold
       </h1>
-      <p className="mt-2 text-zinc-600">
+      <p className="mt-2 text-muted-foreground">
         This minimal shell demonstrates routing, the layout, an error boundary, and the example
         component.
       </p>

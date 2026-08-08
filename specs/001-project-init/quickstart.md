@@ -33,7 +33,10 @@ npm run dev             # http://localhost:5173
 ```
 
 **Expected**: browser opens the home route rendered inside the layout
-(header/nav); greeting example renders with the configured `VITE_APP_NAME`.
+(header/nav); greeting example renders with the configured `VITE_APP_NAME`,
+alongside the shadcn `Button` ("Hola gobernador") styled with the brand theme
+tokens (Montserrat/JetBrains Mono, brand palette); the layout and greeting use
+theme tokens so they follow light/dark mode.
 
 **Failure probe**: remove `VITE_APP_NAME` from `.env` and restart — the app
 must fail fast with a message naming the missing variable.

@@ -7,9 +7,11 @@ the [TURTLE-Frontend constitution](./.specify/memory/constitution.md) v1.3.0.
 
 - **Vite 8 + React 19** (TypeScript strict)
 - **Tailwind CSS v4** for styling, **Radix UI** primitives for accessible widgets
+- **shadcn/ui** design system (`components.json`, `src/components/ui/`, CVA variants + `cn` utility, `@/*` aliases)
 - **TanStack Router** (file-based routes) + **TanStack Query** (server state)
 - **Zustand** for global client state; native `fetch` for HTTP
 - **Vitest** — logic tests (node env) + component tests (Browser Mode / Playwright)
+- **Brand theme**: OKLCH design tokens (light/dark) in `src/styles/index.css`; fonts JetBrains Mono, Montserrat, Playfair Display; Phosphor icons
 
 ## Requirements
 
@@ -87,12 +89,12 @@ The app must be served over HTTPS in production.
 ```text
 src/
 ├── app/            # Composition root: providers, router, error boundary
-├── components/ui/  # Presentational primitives
+├── components/ui/  # shadcn/ui primitives (e.g. button.tsx)
 ├── features/       # Self-contained feature slices (components/ + logic/)
-├── lib/            # Framework-free utilities (env validation, HTTP wrapper)
+├── lib/            # Framework-free utilities (env validation, HTTP wrapper, cn)
 ├── routes/         # TanStack Router file-based routes
 ├── stores/         # Zustand stores
-└── styles/         # Global styles
+└── styles/         # Global styles + theme tokens
 ```
 
 ## Contributing
