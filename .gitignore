@@ -26,6 +26,9 @@ src/**/__screenshots__/
 # TypeScript build info
 *.tsbuildinfo
 
+# Design dumps (e.g. Figma Make exports) — never committed
+dump
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
