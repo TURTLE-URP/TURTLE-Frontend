@@ -1,5 +1,7 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { ErrorBoundary } from '../app/error-boundary'
+import { getMockSesion } from '../features/proveedores/data/mock-session'
+import { puedeGestionarProveedores } from '../features/proveedores/logic/access'
 import { useAppStore } from '../stores/app-store'
 
 export const Route = createRootRoute({
@@ -15,11 +17,19 @@ function RootLayout() {
         <header className="border-b border-border bg-background">
           <nav
             aria-label="Main navigation"
-            className="mx-auto flex h-16 w-full max-w-5xl items-center px-4"
+            className="mx-auto flex h-16 w-full max-w-5xl items-center gap-6 px-4"
           >
             <a href="/" className="font-semibold text-foreground">
               {appName}
             </a>
+            {puedeGestionarProveedores(getMockSesion().rol) && (
+              <Link
+                to="/proveedores"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                Proveedores
+              </Link>
+            )}
           </nav>
         </header>
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">

@@ -40,18 +40,18 @@ mock, toast infrastructure, query hooks, route + admin guard (FR-013, FR-014).
 
 ### Tests (red first)
 
-- [ ] T003 [P] Write logic test for toast store in src/stores/toast-store.test.ts (queue, success/error tones, prune, FR-012)
-- [ ] T004 Write logic tests for the mock repository in src/features/proveedores/data/mock-proveedores-repository.test.ts (pagination size 10 + envelope, partial search over nombreComercial/ruc/contacto, RUC uniqueness throw on crear/actualizar, fiscal miss throws for unknown RUC, Activo↔Inactivo transitions)
+- [X] T003 [P] Write logic test for toast store in src/stores/toast-store.test.ts (queue, success/error tones, prune, FR-012)
+- [X] T004 Write logic tests for the mock repository in src/features/proveedores/data/mock-proveedores-repository.test.ts (pagination size 10 + envelope, partial search over nombreComercial/ruc/contacto, RUC uniqueness throw on crear/actualizar, fiscal miss throws for unknown RUC, Activo↔Inactivo transitions)
 
 ### Implementation
 
-- [ ] T005 Create shared types in src/features/proveedores/data/types.ts per data-model.md: Proveedor, ProveedorInput, DatosFiscales, FiltrosProveedores, ListadoProveedores
-- [ ] T006 Define the ProveedoresRepository port + `RucDuplicadoError` + `createProveedoresRepository()` factory in src/features/proveedores/data/proveedores-repository.ts per contracts/proveedores-repository.md (factory: `VITE_API_BASE_URL` set → HTTP adapter placeholder / else mock)
-- [ ] T007 [P] Implement the Zustand toast store in src/stores/toast-store.ts matching T003
-- [ ] T008 Implement the in-memory mock in src/features/proveedores/data/mock-proveedores-repository.ts implementing the port (seed ~25 realistas con mix Activo/Inactivo, latency 300–700 ms, soft-delete seule, cantina fiscal para RUCs del seed) matching T004
-- [ ] T009 [P] Implement query hooks in src/features/proveedores/data/proveedores-query.ts: `useProveedoresList` (queryKey `['proveedores', { texto, pagina }]`, `placeholderData: keepPreviousData`, debounce 300 ms), `useDatosFiscales(ruc)`, `useCrearProveedor`, `useActualizarProveedor`, `useCambiarEstado` (invalidate `['proveedores']` on success)
-- [ ] T010 [P] Implement the toast component in src/features/proveedores/components/toast.tsx with its component test src/features/proveedores/components/toast.test.tsx (renders queue, ARIA live region)
-- [ ] T011 Create the admin route guard + mock session and the lazy route in src/routes/proveedores.tsx (file-based TanStack Router; `beforeLoad` guard assuming Admin per research.md FR-013; placeholder page for now), and add a guarded "Proveedores" nav link in src/routes/__root.tsx
+- [X] T005 Create shared types in src/features/proveedores/data/types.ts per data-model.md: Proveedor, ProveedorInput, DatosFiscales, FiltrosProveedores, ListadoProveedores
+- [X] T006 Define the ProveedoresRepository port + `RucDuplicadoError` + `createProveedoresRepository()` factory in src/features/proveedores/data/proveedores-repository.ts per contracts/proveedores-repository.md (factory: `VITE_API_BASE_URL` set → HTTP adapter placeholder / else mock)
+- [X] T007 [P] Implement the Zustand toast store in src/stores/toast-store.ts matching T003
+- [X] T008 Implement the in-memory mock in src/features/proveedores/data/mock-proveedores-repository.ts implementing the port (seed ~25 realistas con mix Activo/Inactivo, latency 300–700 ms, soft-delete seule, cantina fiscal para RUCs del seed) matching T004
+- [X] T009 [P] Implement query hooks in src/features/proveedores/data/proveedores-query.ts: `useProveedoresList` (queryKey `['proveedores', { texto, pagina }]`, `placeholderData: keepPreviousData`, debounce 300 ms), `useDatosFiscales(ruc)`, `useCrearProveedor`, `useActualizarProveedor`, `useCambiarEstado` (invalidate `['proveedores']` on success)
+- [X] T010 [P] Implement the toast component in src/features/proveedores/components/toast.tsx with its component test src/features/proveedores/components/toast.test.tsx (renders queue, ARIA live region)
+- [X] T011 Create the admin route guard + mock session and the lazy route in src/routes/proveedores.tsx (file-based TanStack Router; `beforeLoad` guard assuming Admin per research.md FR-013; placeholder page for now), and add a guarded "Proveedores" nav link in src/routes/__root.tsx
 
 **Checkpoint**: Foundation ready — repository port+mock, toasts, hooks, route+guard. Stories can now start (parallelizable).
 
