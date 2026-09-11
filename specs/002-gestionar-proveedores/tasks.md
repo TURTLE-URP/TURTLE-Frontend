@@ -24,8 +24,8 @@ implemented, tested, and delivered independently (MVP first = User Story 1).
 
 **Purpose**: Add the approved UI primitives and create the feature slice skeleton.
 
-- [ ] T001 Add shadcn/ui primitives via `npx shadcn add badge dialog input label select table` so src/components/ui/{badge,dialog,input,label,select,table}.tsx exist (Radix-based, CVA + `cn`, theme tokens per ADR-0001)
-- [ ] T002 [P] Create feature skeleton directories src/features/proveedores/{components,logic,data} and the public barrel src/features/proveedores/index.ts (re-exports to be filled in as modules land)
+- [X] T001 Add shadcn/ui primitives via `npx shadcn add badge dialog input label select table` so src/components/ui/{badge,dialog,input,label,select,table}.tsx exist (Radix-based, CVA + `cn`, theme tokens per ADR-0001)
+- [X] T002 [P] Create feature skeleton directories src/features/proveedores/{components,logic,data} and the public barrel src/features/proveedores/index.ts (re-exports to be filled in as modules land)
 
 **Checkpoint**: Primitives and skeleton exist; nothing user-visible yet.
 
