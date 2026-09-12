@@ -1,6 +1,7 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet, useRouterState } from '@tanstack/react-router'
 import { ErrorBoundary } from '../app/error-boundary'
 import { useAppStore } from '../stores/app-store'
+import { useAuthStore } from '../stores/auth-store'
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -8,26 +9,46 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   const appName = useAppStore((state) => state.appName)
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const session = useAuthStore((state) => state.session)
+  const signOut = useAuthStore((state) => state.signOut)
+  const isLogin = pathname === '/login'
 
   return (
     <ErrorBoundary>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col bg-background">
         <header className="border-b border-border bg-background">
           <nav
-            aria-label="Main navigation"
-            className="mx-auto flex h-16 w-full max-w-5xl items-center px-4"
+            aria-label="Navegación principal"
+            className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4"
           >
-            <a href="/" className="font-semibold text-foreground">
+            <Link to="/" className="text-base font-semibold tracking-tight text-foreground">
               {appName}
-            </a>
+            </Link>
+            {isLogin ? null : session ? (
+              <div className="flex items-center gap-3">
+                <span className="hidden text-sm text-muted-foreground sm:inline">{session.email}</span>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="rounded-full bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-opacity hover:opacity-80 focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
+              >
+                Iniciar sesión
+              </Link>
+            )}
           </nav>
         </header>
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
           <Outlet />
         </main>
-        <footer className="border-t border-border py-4 text-center text-sm text-muted-foreground">
-          {appName} — Vite + React SPA
-        </footer>
       </div>
     </ErrorBoundary>
   )
