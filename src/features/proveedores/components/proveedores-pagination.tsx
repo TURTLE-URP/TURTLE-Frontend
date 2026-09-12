@@ -10,28 +10,19 @@ import { paginasVisibles } from '../logic/filters'
 interface ProveedoresPaginationProps {
   pagina: number
   totalPaginas: number
-  total: number
-  tamano: number
   onPaginaChange: (pagina: number) => void
 }
 
 export function ProveedoresPagination({
   pagina,
   totalPaginas,
-  total,
-  tamano,
   onPaginaChange,
 }: ProveedoresPaginationProps) {
   const puedeAnterior = pagina > 1
   const puedeSiguiente = pagina < totalPaginas
-  const desde = total === 0 ? 0 : (pagina - 1) * tamano + 1
-  const hasta = Math.min(pagina * tamano, total)
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4">
-      <p aria-live="polite" className="text-sm text-muted-foreground">
-        Mostrando {desde}–{hasta} de {total}
-      </p>
+    <div className="flex flex-wrap items-center justify-end gap-4">
       <nav aria-label="Paginación" className="flex items-center gap-1">
         <Button
           type="button"

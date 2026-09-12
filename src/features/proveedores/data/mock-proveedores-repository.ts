@@ -39,14 +39,16 @@ const SEED: Proveedor[] = [
 export const PROVEEDORES_SEMILLA: Proveedor[] = SEED
 
 const DATOS_FISCALES_POR_RUC: Record<string, DatosFiscales> = {
-  '20123456789': { razonSocial: 'Agro Andina S.A.C.', nombreComercial: 'Agro Andina', direccion: 'Av. Industrial 120' },
-  '20500112233': { razonSocial: 'Textiles Lima S.A.C.', nombreComercial: 'Textiles Lima', direccion: 'Jr. Unión 45' },
-  '20602223344': { razonSocial: 'Frutas del Valle E.I.R.L.', nombreComercial: 'Frutas del Valle', direccion: 'Panamericana Km 10' },
-  '20504445566': { razonSocial: 'Tecnología Perú S.A.', nombreComercial: 'Tecnología Perú', direccion: 'Calle Los Pinos 88' },
-  '20605556677': { razonSocial: 'Comercial Norte S.A.C.', nombreComercial: 'Comercial Norte', direccion: 'Av. Balta 210' },
-  '20407778899': { razonSocial: 'Minería Andahuaylas S.A.C.', nombreComercial: 'Minería Andahuaylas', direccion: 'Carretera Abancay Km 5' },
-  '20511112233': { razonSocial: 'Transportes El Sol S.A.C.', nombreComercial: 'Transportes El Sol', direccion: 'Carretera a Punchana Km 2' },
-  '20113334455': { razonSocial: 'Construcción Andina S.A.C.', nombreComercial: 'Construcción Andina', direccion: 'Av. Ejercito 1200' },
+  '20123456789': { razonSocial: 'Agro Andina S.A.C.', nombreComercial: 'Agro Andina', direccion: 'Av. Industrial 120', ciudad: 'Arequipa' },
+  '20500112233': { razonSocial: 'Textiles Lima S.A.C.', nombreComercial: 'Textiles Lima', direccion: 'Jr. Unión 45', ciudad: 'Lima' },
+  '20602223344': { razonSocial: 'Frutas del Valle E.I.R.L.', nombreComercial: 'Frutas del Valle', direccion: 'Panamericana Km 10', ciudad: 'Trujillo' },
+  '20504445566': { razonSocial: 'Tecnología Perú S.A.', nombreComercial: 'Tecnología Perú', direccion: 'Calle Los Pinos 88', ciudad: 'Lima' },
+  '20605556677': { razonSocial: 'Comercial Norte S.A.C.', nombreComercial: 'Comercial Norte', direccion: 'Av. Balta 210', ciudad: 'Chiclayo' },
+  '20407778899': { razonSocial: 'Minería Andahuaylas S.A.C.', nombreComercial: 'Minería Andahuaylas', direccion: 'Carretera Abancay Km 5', ciudad: 'Andahuaylas' },
+  '20511112233': { razonSocial: 'Transportes El Sol S.A.C.', nombreComercial: 'Transportes El Sol', direccion: 'Carretera a Punchana Km 2', ciudad: 'Iquitos' },
+  '20113334455': { razonSocial: 'Construcción Andina S.A.C.', nombreComercial: 'Construcción Andina', direccion: 'Av. Ejercito 1200', ciudad: 'Arequipa' },
+  // RUCs conocidos por la fuente fiscal pero aún no registrados como proveedores.
+  '20900000001': { razonSocial: 'Nuevo Sol S.A.C.', nombreComercial: 'Nuevo Sol', direccion: 'Av. Nueva 100', ciudad: 'Lima' },
 }
 
 export interface MockOptions {

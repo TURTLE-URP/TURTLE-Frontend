@@ -14,6 +14,7 @@ export {
   useCrearProveedor,
   useDatosFiscales,
   useDebouncedValue,
+  useExisteRuc,
   useProveedoresList,
 } from './data/proveedores-query'
 export { getMockSesion, type Sesion } from './data/mock-session'
@@ -26,4 +27,13 @@ export {
   TAMANO_PAGINA,
 } from './logic/filters'
 export { etiquetaEstado, formatearFecha } from './logic/format'
+export {
+  esEmailValido,
+  esRucValido,
+  esTelefonoValido,
+  validarProveedor,
+  type CampoProveedor,
+  type ErroresProveedor,
+} from './logic/validation'
 export { ProveedoresPage } from './pages/proveedores-page'
+export { ProveedorFormDialog } from './components/proveedor-form-dialog'

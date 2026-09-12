@@ -34,6 +34,21 @@ export function useDatosFiscales(ruc: string) {
   })
 }
 
+export function useExisteRuc(ruc: string) {
+  const rucLimpio = ruc.trim()
+  const habilitado = /^\d{11}$/.test(rucLimpio)
+  return useQuery({
+    queryKey: ['proveedores', 'existe-ruc', rucLimpio],
+    queryFn: () =>
+      repository
+        .listar({ texto: rucLimpio, pagina: 1, tamano: 10 })
+        .then((listado) => listado.items.some((p) => p.ruc === rucLimpio)),
+    enabled: habilitado,
+    retry: false,
+    staleTime: 30_000,
+  })
+}
+
 export function useCrearProveedor() {
   const queryClient = useQueryClient()
   return useMutation({

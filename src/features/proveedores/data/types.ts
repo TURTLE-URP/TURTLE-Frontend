@@ -30,6 +30,7 @@ export interface DatosFiscales {
   razonSocial: string
   nombreComercial: string
   direccion: string
+  ciudad: string
 }
 
 export interface FiltrosProveedores {

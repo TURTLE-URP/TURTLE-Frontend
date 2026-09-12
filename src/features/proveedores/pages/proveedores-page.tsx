@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ProveedoresFilters } from '../components/proveedores-filters'
+import { ProveedorFormDialog } from '../components/proveedor-form-dialog'
 import { ProveedoresPagination } from '../components/proveedores-pagination'
 import {
   ListadoCargando,
@@ -16,6 +17,7 @@ const TIEMPO_DEBOUNCE_MS = 300
 export function ProveedoresPage() {
   const [texto, setTexto] = useState('')
   const [pagina, setPagina] = useState(1)
+  const [dialogoAbierto, setDialogoAbierto] = useState(false)
   const textoDebounced = useDebouncedValue(texto, TIEMPO_DEBOUNCE_MS)
 
   const [textoDebouncedPrevio, setTextoDebouncedPrevio] = useState(textoDebounced)
@@ -29,23 +31,23 @@ export function ProveedoresPage() {
 
   const paginaActual = data?.pagina ?? pagina
   const totalPaginas = data?.totalPaginas ?? 1
-  const total = data?.total ?? 0
   const base = (paginaActual - 1) * filtros.tamano
 
   return (
     <section aria-labelledby="titulo-proveedores" className="space-y-6">
       <div>
         <h1 id="titulo-proveedores" className="text-2xl font-bold text-foreground">
-          Gestionar Proveedores
+          Gestión de proveedores
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          Administra el registro de proveedores: alta, actualización y desactivación.
-        </p>
       </div>
 
       <div className="rounded-lg border bg-background">
         <div className="border-b p-4">
-          <ProveedoresFilters texto={texto} onTextoChange={setTexto} total={total} />
+          <ProveedoresFilters
+            texto={texto}
+            onTextoChange={setTexto}
+            onNuevo={() => setDialogoAbierto(true)}
+          />
         </div>
 
         <div className="p-4">
@@ -73,13 +75,19 @@ export function ProveedoresPage() {
             <ProveedoresPagination
               pagina={paginaActual}
               totalPaginas={totalPaginas}
-              total={total}
-              tamano={filtros.tamano}
               onPaginaChange={setPagina}
             />
           </div>
         ) : null}
       </div>
+
+      {dialogoAbierto ? (
+        <ProveedorFormDialog
+          abierto
+          onCerrar={() => setDialogoAbierto(false)}
+          onExito={() => setDialogoAbierto(false)}
+        />
+      ) : null}
     </section>
   )
 }

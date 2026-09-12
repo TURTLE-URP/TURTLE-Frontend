@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { ToastRegion } from '@/features/proveedores/components/toast'
 import { ProveedoresRoute } from './proveedores'
 
 function renderPagina() {
@@ -10,6 +11,7 @@ function renderPagina() {
   return render(
     <QueryClientProvider client={queryClient}>
       <ProveedoresRoute />
+      <ToastRegion />
     </QueryClientProvider>,
   )
 }
@@ -20,8 +22,8 @@ describe('ProveedoresRoute (US1)', () => {
     expect(await screen.findByText('Agro Andina', {}, { timeout: 4000 })).toBeInTheDocument()
     expect(screen.getAllByRole('row')).toHaveLength(11) // cabecera + 10 filas
     expect(screen.getByText('001')).toBeInTheDocument()
-    expect(screen.getByText('Mostrando 1–10 de 25')).toBeInTheDocument()
-    expect(screen.getByText('25 proveedores')).toBeInTheDocument()
+    expect(screen.getByText('010')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '1' })).toHaveAttribute('aria-current', 'page')
   })
 
   it('filtra por búsqueda ("andina")', async () => {
@@ -32,7 +34,7 @@ describe('ProveedoresRoute (US1)', () => {
       await screen.findByText('Construcción Andina', {}, { timeout: 4000 }),
     ).toBeInTheDocument()
     await waitFor(() => {
-      expect(screen.getByText('Mostrando 1–2 de 2')).toBeInTheDocument()
+      expect(screen.getAllByRole('row')).toHaveLength(3) // cabecera + 2 filas
     })
     expect(screen.getAllByRole('row')).toHaveLength(3) // cabecera + 2 filas
     expect(screen.getByText('Agro Andina')).toBeInTheDocument()
@@ -47,9 +49,45 @@ describe('ProveedoresRoute (US1)', () => {
       await screen.findByText('Alimentos Pura Vida', {}, { timeout: 4000 }),
     ).toBeInTheDocument()
     await waitFor(() => {
-      expect(screen.getByText('Mostrando 11–20 de 25')).toBeInTheDocument()
+      expect(screen.getByText('011')).toBeInTheDocument()
     })
     expect(screen.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page')
     expect(screen.queryByText('Agro Andina')).not.toBeInTheDocument()
+  })
+
+  it('registra un proveedor nuevo: fila Activo + notificación (US2)', async () => {
+    renderPagina()
+    expect(await screen.findByText('Agro Andina', {}, { timeout: 4000 })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Nuevo Proveedor' }))
+    expect(
+      await screen.findByRole('dialog', { name: 'Nuevo proveedor' }, { timeout: 4000 }),
+    ).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText(/^RUC/i), {
+      target: { value: '20900000001' },
+    })
+    expect(
+      await screen.findByDisplayValue('Nuevo Sol S.A.C.', {}, { timeout: 4000 }),
+    ).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText(/nombre de contacto/i), {
+      target: { value: 'Sol Pérez' },
+    })
+    fireEvent.change(screen.getByLabelText(/teléfono/i), {
+      target: { value: '+51 1 555 0188' },
+    })
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), {
+      target: { value: 'sol@nuevosol.pe' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Registrar Proveedor' }))
+    await waitFor(
+      () => {
+        expect(screen.getByText('Proveedor registrado correctamente.')).toBeInTheDocument()
+      },
+      { timeout: 4000 },
+    )
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Nuevo proveedor' })).not.toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Última página' }))
+    expect(await screen.findByText('Nuevo Sol', {}, { timeout: 4000 })).toBeInTheDocument()
   })
 })

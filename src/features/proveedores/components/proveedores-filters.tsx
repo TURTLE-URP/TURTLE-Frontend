@@ -1,13 +1,18 @@
-import { MagnifyingGlass } from '@phosphor-icons/react'
+import { MagnifyingGlass, Plus } from '@phosphor-icons/react'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 interface ProveedoresFiltersProps {
   texto: string
   onTextoChange: (texto: string) => void
-  total: number
+  onNuevo: () => void
 }
 
-export function ProveedoresFilters({ texto, onTextoChange, total }: ProveedoresFiltersProps) {
+export function ProveedoresFilters({
+  texto,
+  onTextoChange,
+  onNuevo,
+}: ProveedoresFiltersProps) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="relative w-full max-w-sm">
@@ -24,9 +29,12 @@ export function ProveedoresFilters({ texto, onTextoChange, total }: ProveedoresF
           className="pl-8"
         />
       </div>
-      <p aria-live="polite" className="text-sm text-muted-foreground">
-        {total === 1 ? '1 proveedor' : `${total} proveedores`}
-      </p>
+      <div className="flex items-center gap-4">
+        <Button type="button" onClick={onNuevo} className="bg-blue-700 text-white hover:bg-blue-800">
+          <Plus aria-hidden="true" />
+          Nuevo Proveedor
+        </Button>
+      </div>
     </div>
   )
 }

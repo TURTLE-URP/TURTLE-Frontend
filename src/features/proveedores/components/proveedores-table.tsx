@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -30,7 +29,6 @@ export function ProveedoresTable({
 }: ProveedoresTableProps) {
   return (
     <Table>
-      <TableCaption>Listado de proveedores registrados.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead scope="col">#</TableHead>

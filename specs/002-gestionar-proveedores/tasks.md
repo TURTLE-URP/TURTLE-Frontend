@@ -106,14 +106,14 @@ RUC no-seed bloquea el avance con error + reintentar.
 
 ### Tests for User Story 2 (red first) ⚠️
 
-- [ ] T026 [P] [US2] Write logic test for src/features/proveedores/logic/validation.test.ts (RUC de 11 dígitos, email válido, teléfono válido, mapa de errores por campo)
-- [ ] T027 [P] [US2] Write component test for src/features/proveedores/components/proveedor-form-dialog.test.tsx (register mode: autocompletado fiscal, errores de validación resaltados, alerta de duplicado, error fiscal con "Reintentar" que bloquea el envío)
+- [X] T026 [P] [US2] Write logic test for src/features/proveedores/logic/validation.test.ts (RUC de 11 dígitos, email válido, teléfono válido, mapa de errores por campo)
+- [X] T027 [P] [US2] Write component test for src/features/proveedores/components/proveedor-form-dialog.test.tsx (register mode: autocompletado fiscal, errores de validación resaltados, alerta de duplicado, error fiscal con "Reintentar" que bloquea el envío)
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Implement src/features/proveedores/logic/validation.ts matching T026
-- [ ] T029 [US2] Implement src/features/proveedores/components/proveedor-form-dialog.tsx (Radix Dialog; secciones del formulario; `useDatosFiscales` autocompleta al llegar a 11 dígitos; modo registro; submit → `useCrearProveedor`; feedback de errores accesible; notificación tras éxito)
-- [ ] T030 [US2] Wire the "Nuevo Proveedor" action into the US-1 page (proveedores-table/filters) and ensure success/failure toasts fire (FR-012)
+- [X] T028 [US2] Implement src/features/proveedores/logic/validation.ts matching T026
+- [X] T029 [US2] Implement src/features/proveedores/components/proveedor-form-dialog.tsx (Radix Dialog; secciones del formulario; `useDatosFiscales` autocompleta al llegar a 11 dígitos; modo registro; submit → `useCrearProveedor`; feedback de errores accesible; notificación tras éxito)
+- [X] T030 [US2] Wire the "Nuevo Proveedor" action into the US-1 page (proveedores-table/filters) and ensure success/failure toasts fire (FR-012)
 
 **Checkpoint**: US-1 + US-2 funcionan e interactúan.
 
