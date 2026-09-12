@@ -16,9 +16,12 @@ function HomePage() {
         This minimal shell demonstrates routing, the layout, an error boundary, and the example
         component.
       </p>
-      <div className="mt-6">
+      <div className="mt-6 flex items-center gap-3">
         <GreetingCard name="Developer" hour={9} />
         <Button>Hola gobernador</Button>
+        <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white">
+          <a href="/mesas">Ir a Mesas</a>
+        </Button>
       </div>
     </section>
   )

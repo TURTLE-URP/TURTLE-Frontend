@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet, useLocation } from '@tanstack/react-router'
 import { ErrorBoundary } from '../app/error-boundary'
 import { useAppStore } from '../stores/app-store'
 
@@ -8,6 +8,16 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   const appName = useAppStore((state) => state.appName)
+  const location = useLocation()
+  const isMesasPage = location.pathname === '/mesas'
+
+  if (isMesasPage) {
+    return (
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <ErrorBoundary>
@@ -26,7 +36,7 @@ function RootLayout() {
           <Outlet />
         </main>
         <footer className="border-t border-border py-4 text-center text-sm text-muted-foreground">
-          {appName} — Vite + React SPA
+          {appName} — Turtle Sistema de Restaurante
         </footer>
       </div>
     </ErrorBoundary>
