@@ -70,23 +70,23 @@ destello de carga; lista vacía y fallo de carga muestran estados diseñados.
 
 ### Tests for User Story 1 (red first) ⚠️
 
-- [ ] T012 [P] [US1] Write logic test for src/features/proveedores/logic/format.test.ts (formato de `fechaRegistro`, texto de estado)
-- [ ] T013 [P] [US1] Write logic test for src/features/proveedores/logic/filters.test.ts (construcción de FiltrosProveedores, transición dinámica de página, clamp)
-- [ ] T014 [P] [US1] Write component test for src/features/proveedores/components/estado-badge.test.tsx (renderiza Activo/Inactivo con tokens del tema)
-- [ ] T015 [P] [US1] Write component test for src/features/proveedores/components/proveedores-table.test.tsx (columnas FR-001, filas, badge + acciones por fila)
-- [ ] T016 [P] [US1] Write component test for src/features/proveedores/components/proveedores-filters.test.tsx (input de búsqueda debounced, controles página anterior/siguiente)
-- [ ] T017 [P] [US1] Write component test for src/features/proveedores/components/proveedores-states.test.tsx (loading skeleton aria-busy, error con "Reintentar", vacío con CTA y sin-resultados)
+- [X] T012 [P] [US1] Write logic test for src/features/proveedores/logic/format.test.ts (formato de `fechaRegistro`, texto de estado)
+- [X] T013 [P] [US1] Write logic test for src/features/proveedores/logic/filters.test.ts (construcción de FiltrosProveedores, transición dinámica de página, clamp)
+- [X] T014 [P] [US1] Write component test for src/features/proveedores/components/estado-badge.test.tsx (renderiza Activo/Inactivo con tokens del tema)
+- [X] T015 [P] [US1] Write component test for src/features/proveedores/components/proveedores-table.test.tsx (columnas FR-001, filas, badge + acciones por fila)
+- [X] T016 [P] [US1] Write component test for src/features/proveedores/components/proveedores-filters.test.tsx (input de búsqueda debounced, controles página anterior/siguiente)
+- [X] T017 [P] [US1] Write component test for src/features/proveedores/components/proveedores-states.test.tsx (loading skeleton aria-busy, error con "Reintentar", vacío con CTA y sin-resultados)
 
 ### Implementation for User Story 1
 
-- [ ] T018 [US1] Implement src/features/proveedores/logic/format.ts matching T012
-- [ ] T019 [US1] Implement src/features/proveedores/logic/filters.ts matching T013
-- [ ] T020 [P] [US1] Implement src/features/proveedores/components/estado-badge.tsx (themed badge, Activo/Inactivo)
-- [ ] T021 [P] [US1] Implement src/features/proveedores/components/proveedores-states.tsx (Loading/Error/Empty components matching FR-011)
-- [ ] T022 [P] [US1] Implement src/features/proveedores/components/proveedores-table.tsx (shadcn table, semantic `<caption>`/`<th scope>`, actions column)
-- [ ] T023 [US1] Implement src/features/proveedores/components/proveedores-filters.tsx (search input + pagination controls wired to `useProveedoresList`)
-- [ ] T024 [US1] Replace the route placeholder: render the full US-1 page in src/routes/proveedores.tsx using `useProveedoresList`, `proveedores-states`, `proveedores-table`, `proveedores-filters`
-- [ ] T025 [US1] Write mount/integration component test in src/routes/proveedores.test.tsx (list loads from mock → 10 rows page 1; search filters; page change updates rows)
+- [X] T018 [US1] Implement src/features/proveedores/logic/format.ts matching T012
+- [X] T019 [US1] Implement src/features/proveedores/logic/filters.ts matching T013
+- [X] T020 [P] [US1] Implement src/features/proveedores/components/estado-badge.tsx (themed badge, Activo/Inactivo)
+- [X] T021 [P] [US1] Implement src/features/proveedores/components/proveedores-states.tsx (Loading/Error/Empty components matching FR-011)
+- [X] T022 [P] [US1] Implement src/features/proveedores/components/proveedores-table.tsx (shadcn table, semantic `<caption>`/`<th scope>`, actions column)
+- [X] T023 [US1] Implement src/features/proveedores/components/proveedores-filters.tsx (search input + pagination controls wired to `useProveedoresList`)
+- [X] T024 [US1] Replace the route placeholder: render the full US-1 page in src/routes/proveedores.tsx using `useProveedoresList`, `proveedores-states`, `proveedores-table`, `proveedores-filters`
+- [X] T025 [US1] Write mount/integration component test in src/routes/proveedores.test.tsx (list loads from mock → 10 rows page 1; search filters; page change updates rows)
 
 **Checkpoint**: US-1 fully functional y testeable sola — este es el **MVP**.
 

@@ -18,3 +18,12 @@ export {
 } from './data/proveedores-query'
 export { getMockSesion, type Sesion } from './data/mock-session'
 export { puedeGestionarProveedores, ROL_ADMIN, type Rol } from './logic/access'
+export {
+  anteriorPagina,
+  crearFiltros,
+  paginasVisibles,
+  siguientePagina,
+  TAMANO_PAGINA,
+} from './logic/filters'
+export { etiquetaEstado, formatearFecha } from './logic/format'
+export { ProveedoresPage } from './pages/proveedores-page'
