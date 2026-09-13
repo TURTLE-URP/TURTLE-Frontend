@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as InsumosRouteImport } from './routes/insumos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesasRoute = MesasRouteImport.update({
+  id: '/mesas',
+  path: '/mesas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsumosRoute = InsumosRouteImport.update({
@@ -25,27 +31,34 @@ const InsumosRoute = InsumosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths: '/' | '/insumos'
+  fullPaths: '/' | '/mesas'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/insumos'
   id: '__root__' | '/' | '/insumos'
+  to: '/' | '/mesas'
+  id: '__root__' | '/' | '/mesas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MesasRoute: typeof MesasRoute
   InsumosRoute: typeof InsumosRoute
 }
 
@@ -65,11 +78,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsumosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mesas': {
+      id: '/mesas'
+      path: '/mesas'
+      fullPath: '/mesas'
+      preLoaderRoute: typeof MesasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MesasRoute: MesasRoute,
   InsumosRoute: InsumosRoute,
 }
 export const routeTree = rootRouteImport
