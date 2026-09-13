@@ -110,7 +110,7 @@ export function UserManagementPage() {
                 <p className="mt-2 max-w-xl text-sm text-[#71827b]">Gestiona los accesos y permisos de tu equipo desde un solo lugar.</p>
               </div>
               <Button onClick={() => setIsInviteOpen(true)} className="h-10 rounded-md bg-[#19483f] px-4 text-sm hover:bg-[#276b5d]">
-                <Plus weight="bold" /> Invitar usuario
+                <Plus weight="bold" /> Invitar trabajador
               </Button>
             </div>
 
