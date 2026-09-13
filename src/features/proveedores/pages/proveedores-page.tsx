@@ -10,6 +10,7 @@ import {
 } from '../components/proveedores-states'
 import { ProveedoresTable } from '../components/proveedores-table'
 import { useDebouncedValue, useProveedoresList } from '../data/proveedores-query'
+import type { Proveedor } from '../data/types'
 import { crearFiltros } from '../logic/filters'
 
 const TIEMPO_DEBOUNCE_MS = 300
@@ -18,6 +19,7 @@ export function ProveedoresPage() {
   const [texto, setTexto] = useState('')
   const [pagina, setPagina] = useState(1)
   const [dialogoAbierto, setDialogoAbierto] = useState(false)
+  const [editando, setEditando] = useState<Proveedor | null>(null)
   const textoDebounced = useDebouncedValue(texto, TIEMPO_DEBOUNCE_MS)
 
   const [textoDebouncedPrevio, setTextoDebouncedPrevio] = useState(textoDebounced)
@@ -59,7 +61,7 @@ export function ProveedoresPage() {
             <ProveedoresTable
               proveedores={data.items}
               base={base}
-              onEditar={() => {}}
+              onEditar={(proveedor) => setEditando(proveedor)}
               onDesactivar={() => {}}
               onReactivar={() => {}}
             />
@@ -86,6 +88,14 @@ export function ProveedoresPage() {
           abierto
           onCerrar={() => setDialogoAbierto(false)}
           onExito={() => setDialogoAbierto(false)}
+        />
+      ) : null}
+      {editando ? (
+        <ProveedorFormDialog
+          abierto
+          proveedor={editando}
+          onCerrar={() => setEditando(null)}
+          onExito={() => setEditando(null)}
         />
       ) : null}
     </section>

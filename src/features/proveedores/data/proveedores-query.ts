@@ -22,9 +22,9 @@ export function useProveedoresList(filtros: FiltrosProveedores) {
   })
 }
 
-export function useDatosFiscales(ruc: string) {
+export function useDatosFiscales(ruc: string, opciones: { habilitado?: boolean } = {}) {
   const rucLimpio = ruc.trim()
-  const habilitado = /^\d{11}$/.test(rucLimpio)
+  const habilitado = /^\d{11}$/.test(rucLimpio) && (opciones.habilitado ?? true)
   return useQuery({
     queryKey: ['datos-fiscales', rucLimpio],
     queryFn: () => repository.getDatosFiscales(rucLimpio),
@@ -34,15 +34,17 @@ export function useDatosFiscales(ruc: string) {
   })
 }
 
-export function useExisteRuc(ruc: string) {
+export function useExisteRuc(ruc: string, exceptoId?: string) {
   const rucLimpio = ruc.trim()
   const habilitado = /^\d{11}$/.test(rucLimpio)
   return useQuery({
-    queryKey: ['proveedores', 'existe-ruc', rucLimpio],
+    queryKey: ['proveedores', 'existe-ruc', rucLimpio, exceptoId ?? null],
     queryFn: () =>
       repository
         .listar({ texto: rucLimpio, pagina: 1, tamano: 10 })
-        .then((listado) => listado.items.some((p) => p.ruc === rucLimpio)),
+        .then((listado) =>
+          listado.items.some((p) => p.ruc === rucLimpio && p.id !== exceptoId),
+        ),
     enabled: habilitado,
     retry: false,
     staleTime: 30_000,

@@ -55,6 +55,36 @@ describe('ProveedoresRoute (US1)', () => {
     expect(screen.queryByText('Agro Andina')).not.toBeInTheDocument()
   })
 
+  it('edita un proveedor: fila actualizada + notificación (US3)', async () => {
+    renderPagina()
+    expect(await screen.findByText('Agro Andina', {}, { timeout: 4000 })).toBeInTheDocument()
+    fireEvent.click(screen.getAllByRole('button', { name: 'Editar' })[0])
+    expect(
+      await screen.findByRole('dialog', { name: 'Editar proveedor' }, { timeout: 4000 }),
+    ).toBeInTheDocument()
+    expect(screen.getByDisplayValue('María López')).toBeInTheDocument()
+    await waitFor(
+      () => {
+        expect(screen.getByRole('button', { name: 'Guardar cambios' })).not.toBeDisabled()
+      },
+      { timeout: 4000 },
+    )
+    fireEvent.change(screen.getByLabelText(/nombre de contacto/i), {
+      target: { value: 'María López Vega' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }))
+    await waitFor(
+      () => {
+        expect(screen.getByText('Proveedor actualizado correctamente.')).toBeInTheDocument()
+      },
+      { timeout: 4000 },
+    )
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Editar proveedor' })).not.toBeInTheDocument()
+    })
+    expect(await screen.findByText('María López Vega', {}, { timeout: 4000 })).toBeInTheDocument()
+  })
+
   it('registra un proveedor nuevo: fila Activo + notificación (US2)', async () => {
     renderPagina()
     expect(await screen.findByText('Agro Andina', {}, { timeout: 4000 })).toBeInTheDocument()

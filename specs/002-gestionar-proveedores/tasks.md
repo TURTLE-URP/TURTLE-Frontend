@@ -130,12 +130,12 @@ duplicado.
 
 ### Tests for User Story 3 (red first) ⚠️
 
-- [ ] T031 [P] [US3] Extend src/features/proveedores/components/proveedor-form-dialog.test.tsx for edit mode (prefill con datos actuales, guarda cambios, RUC propio no duplica)
+- [X] T031 [P] [US3] Extend src/features/proveedores/components/proveedor-form-dialog.test.tsx for edit mode (prefill con datos actuales, guarda cambios, RUC propio no duplica)
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Add edit mode to src/features/proveedores/components/proveedor-form-dialog.tsx (acepta proveedor actual; submit → `useActualizarProveedor`; los datos originales se cargan al abrir)
-- [ ] T033 [US3] Wire the "Editar" action in proveedores-table rows + success toast + list refresh
+- [X] T032 [US3] Add edit mode to src/features/proveedores/components/proveedor-form-dialog.tsx (acepta proveedor actual; submit → `useActualizarProveedor`; los datos originales se cargan al abrir)
+- [X] T033 [US3] Wire the "Editar" action in proveedores-table rows + success toast + list refresh
 
 **Checkpoint**: CRUD completo sobre un proveedor.
 

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useCrearProveedor, useDatosFiscales, useExisteRuc } from '../data/proveedores-query'
+import { useActualizarProveedor, useCrearProveedor, useDatosFiscales, useExisteRuc } from '../data/proveedores-query'
 import { ProveedoresError } from '../data/proveedores-repository'
 import type { Proveedor, ProveedorInput } from '../data/types'
 import { validarProveedor, type ErroresProveedor } from '../logic/validation'
@@ -22,6 +22,7 @@ interface ProveedorFormDialogProps {
   abierto: boolean
   onCerrar: () => void
   onExito: (proveedor: Proveedor) => void
+  proveedor?: Proveedor
 }
 
 const RUC_COMPLETO_PATTERN = /^\d{11}$/
@@ -87,23 +88,30 @@ function Seccion({ id, titulo, children }: { id: string; titulo: string; childre
   )
 }
 
-export function ProveedorFormDialog({ abierto, onCerrar, onExito }: ProveedorFormDialogProps) {
-  const [nombreComercial, setNombreComercial] = useState('')
-  const [ruc, setRuc] = useState('')
-  const [razonSocial, setRazonSocial] = useState('')
-  const [contactoNombre, setContactoNombre] = useState('')
-  const [contactoTelefono, setContactoTelefono] = useState('')
-  const [contactoEmail, setContactoEmail] = useState('')
-  const [direccion, setDireccion] = useState('')
-  const [ciudad, setCiudad] = useState('')
+export function ProveedorFormDialog({
+  abierto,
+  onCerrar,
+  onExito,
+  proveedor,
+}: ProveedorFormDialogProps) {
+  const modoEdicion = proveedor !== undefined
+  const [nombreComercial, setNombreComercial] = useState(proveedor?.nombreComercial ?? '')
+  const [ruc, setRuc] = useState(proveedor?.ruc ?? '')
+  const [razonSocial, setRazonSocial] = useState(proveedor?.razonSocial ?? '')
+  const [contactoNombre, setContactoNombre] = useState(proveedor?.contactoNombre ?? '')
+  const [contactoTelefono, setContactoTelefono] = useState(proveedor?.contactoTelefono ?? '')
+  const [contactoEmail, setContactoEmail] = useState(proveedor?.contactoEmail ?? '')
+  const [direccion, setDireccion] = useState(proveedor?.direccion ?? '')
+  const [ciudad, setCiudad] = useState(proveedor?.ciudad ?? '')
   const [errores, setErrores] = useState<ErroresProveedor>({})
   const [duplicado, setDuplicado] = useState(false)
-  const [fiscalAplicadoPara, setFiscalAplicadoPara] = useState('')
+  const [fiscalAplicadoPara, setFiscalAplicadoPara] = useState(proveedor?.ruc.trim() ?? '')
 
   const notificar = useToastStore((state) => state.notificar)
-  const fiscal = useDatosFiscales(ruc)
-  const existeRuc = useExisteRuc(ruc)
+  const fiscal = useDatosFiscales(ruc, { habilitado: !modoEdicion })
+  const existeRuc = useExisteRuc(ruc, proveedor?.id)
   const crear = useCrearProveedor()
+  const actualizar = useActualizarProveedor()
 
   const rucLimpio = ruc.trim()
   const rucCompleto = RUC_COMPLETO_PATTERN.test(rucLimpio)
@@ -113,8 +121,9 @@ export function ProveedorFormDialog({ abierto, onCerrar, onExito }: ProveedorFor
   const bloqueoFiscal = rucCompleto && (fiscal.isFetching || fiscal.isError)
   const desbloqueado =
     rucCompleto && !bloqueoFiscal && !duplicadoTemprano && existeRuc.data === false
+  const guardando = crear.isPending || actualizar.isPending
   const puedeGuardar =
-    rucCompleto && !bloqueoFiscal && !duplicadoTemprano && !crear.isPending
+    rucCompleto && !bloqueoFiscal && !duplicadoTemprano && !guardando
 
   if (
     rucCompleto &&
@@ -165,6 +174,30 @@ export function ProveedorFormDialog({ abierto, onCerrar, onExito }: ProveedorFor
     if (Object.keys(validacion).length > 0) {
       return
     }
+    if (modoEdicion && proveedor) {
+      const id = proveedor.id
+      actualizar.mutate(
+        { id, input },
+        {
+          onSuccess: (actualizado) => {
+            notificar('success', 'Proveedor actualizado correctamente.')
+            resetFormulario()
+            onExito(actualizado)
+          },
+          onError: (error) => {
+            if (error instanceof ProveedoresError && error.code === 'RUC_DUPLICADO') {
+              setDuplicado(true)
+            } else {
+              notificar(
+                'error',
+                error instanceof Error ? error.message : 'No se pudo actualizar el proveedor.',
+              )
+            }
+          },
+        },
+      )
+      return
+    }
     crear.mutate(input, {
       onSuccess: (proveedor) => {
         notificar('success', 'Proveedor registrado correctamente.')
@@ -195,9 +228,11 @@ export function ProveedorFormDialog({ abierto, onCerrar, onExito }: ProveedorFor
     >
       <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-lg">
         <DialogHeader className="shrink-0">
-          <DialogTitle>Nuevo proveedor</DialogTitle>
+          <DialogTitle>{modoEdicion ? 'Editar proveedor' : 'Nuevo proveedor'}</DialogTitle>
           <DialogDescription>
-            Completa los datos para registrar un nuevo proveedor.
+            {modoEdicion
+              ? 'Modifica los datos del proveedor.'
+              : 'Completa los datos para registrar un nuevo proveedor.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -211,6 +246,7 @@ export function ProveedorFormDialog({ abierto, onCerrar, onExito }: ProveedorFor
               inputMode="numeric"
               maxLength={11}
               placeholder="11 dígitos"
+              bloqueado={modoEdicion}
               onChange={(event) => {
                 setRuc(event.target.value)
                 setDuplicado(false)
@@ -335,7 +371,7 @@ export function ProveedorFormDialog({ abierto, onCerrar, onExito }: ProveedorFor
                 disabled={!puedeGuardar}
                 className="bg-blue-700 text-white hover:bg-blue-800"
               >
-                {crear.isPending ? 'Registrando…' : 'Registrar Proveedor'}
+                {guardando ? 'Guardando…' : modoEdicion ? 'Guardar cambios' : 'Registrar Proveedor'}
               </Button>
             </div>
           </DialogFooter>
