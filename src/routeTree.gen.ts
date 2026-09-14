@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProveedoresRouteImport } from './routes/proveedores'
 import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as InsumosRouteImport } from './routes/insumos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProveedoresRoute = ProveedoresRouteImport.update({
+  id: '/proveedores',
+  path: '/proveedores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MesasRoute = MesasRouteImport.update({
@@ -31,25 +37,31 @@ const InsumosRoute = InsumosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/proveedores': typeof ProveedoresRoute
   '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/proveedores': typeof ProveedoresRoute
   '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/proveedores': typeof ProveedoresRoute
   '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/proveedores'
   fullPaths: '/' | '/insumos'
   fullPaths: '/' | '/mesas'
   fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/proveedores'
+  id: '__root__' | '/' | '/proveedores'
   to: '/' | '/insumos'
   id: '__root__' | '/' | '/insumos'
   to: '/' | '/mesas'
@@ -58,6 +70,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProveedoresRoute: typeof ProveedoresRoute
   MesasRoute: typeof MesasRoute
   InsumosRoute: typeof InsumosRoute
 }
@@ -69,6 +82,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proveedores': {
+      id: '/proveedores'
+      path: '/proveedores'
+      fullPath: '/proveedores'
+      preLoaderRoute: typeof ProveedoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insumos': {
@@ -90,6 +110,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProveedoresRoute: ProveedoresRoute,
   MesasRoute: MesasRoute,
   InsumosRoute: InsumosRoute,
 }
