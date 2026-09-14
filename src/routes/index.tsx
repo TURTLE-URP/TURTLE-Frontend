@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { UserManagementPage } from '../features/user-management/components/user-management-page'
 import { useState, useMemo, type FormEvent } from 'react'
 import {
   Plus,
@@ -866,3 +867,10 @@ export function GestionarAlmacenesPage() {
 }
 
 export default GestionarAlmacenesPage
+//   component: HomePage,
+// })
+
+// function HomePage() {
+//   return <UserManagementPage />
+
+}

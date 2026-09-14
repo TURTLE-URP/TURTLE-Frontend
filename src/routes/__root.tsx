@@ -32,7 +32,7 @@ function RootLayout() {
             </a>
           </nav>
         </header>
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+        <main className="w-full flex-1">
           <Outlet />
         </main>
         <footer className="border-t border-border py-4 text-center text-sm text-muted-foreground">
