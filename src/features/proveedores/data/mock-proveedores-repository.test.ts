@@ -7,17 +7,14 @@ function crearRepo() {
 }
 
 function entrada(
-  sobre: Partial<Omit<import('./types').Proveedor, 'id' | 'fechaRegistro' | 'estado'>> = {},
+  sobre: Partial<Omit<import('./types').Proveedor, 'id' | 'fechaRegistro' | 'condicion'>> = {},
 ) {
   return {
     nombreComercial: 'Compañía Demo',
     ruc: '20300112233',
     razonSocial: 'Compañía Demo S.A.C.',
-    contactoNombre: 'Ada Pérez',
-    contactoTelefono: '+51 1 555 0199',
-    contactoEmail: 'ada@companiademo.pe',
+    contactos: [{ nombre: 'Ada Pérez', telefono: '+51 1 555 0199', email: 'ada@companiademo.pe' }],
     direccion: 'Av. Prueba 1',
-    ciudad: 'Lima',
     ...sobre,
   }
 }
@@ -59,7 +56,9 @@ describe('MockProveedoresRepository.listar', () => {
     const repo = crearRepo()
     const res = await repo.listar({ texto: 'María', pagina: 1, tamano: 10 })
     expect(res.total).toBeGreaterThan(0)
-    expect(res.items.every((p) => p.contactoNombre.includes('María'))).toBe(true)
+    expect(
+      res.items.every((p) => p.contactos.some((c) => c.nombre.includes('María'))),
+    ).toBe(true)
   })
 
   it('búsqueda sin coincidencias devuelve lista vacía y total 0', async () => {
@@ -101,10 +100,10 @@ describe('MockProveedoresRepository.getDatosFiscales', () => {
 })
 
 describe('MockProveedoresRepository.crear', () => {
-  it('crea el proveedor en estado Activo y lo agrega al listado', async () => {
+  it('crea el proveedor con condición En proceso de verificación y lo agrega al listado', async () => {
     const repo = crearRepo()
     const creado = await repo.crear(entrada())
-    expect(creado.estado).toBe('Activo')
+    expect(creado.condicion).toBe('En proceso de verificación')
     expect(creado.id).toBeTruthy()
     expect(new Date(creado.fechaRegistro).getTime()).not.toBeNaN()
 
@@ -121,13 +120,14 @@ describe('MockProveedoresRepository.crear', () => {
 })
 
 describe('MockProveedoresRepository.actualizar', () => {
-  it('actualiza los campos editables y conserva fechaRegistro y estado', async () => {
+  it('actualiza los campos editables y conserva fechaRegistro y condicion', async () => {
     const repo = crearRepo()
     const original = PROVEEDORES_SEMILLA.find((p) => p.id === 'p01')!
-    const actualizado = await repo.actualizar('p01', entrada({ contactoTelefono: '+51 1 555 0000' }))
-    expect(actualizado.contactoTelefono).toBe('+51 1 555 0000')
+    const contactosActualizados = [{ nombre: 'Juan López', telefono: '+51 1 555 0000', email: 'juan@agroandina.pe' }]
+    const actualizado = await repo.actualizar('p01', entrada({ contactos: contactosActualizados }))
+    expect(actualizado.contactos[0]?.nombre).toBe('Juan López')
     expect(actualizado.fechaRegistro).toBe(original.fechaRegistro)
-    expect(actualizado.estado).toBe(original.estado)
+    expect(actualizado.condicion).toBe(original.condicion)
   })
 
   it('rechaza RUC duplicado de otro proveedor', async () => {
@@ -151,33 +151,21 @@ describe('MockProveedoresRepository.actualizar', () => {
   })
 })
 
-describe('MockProveedoresRepository.cambiarEstado', () => {
-  it('desactiva un proveedor Activo', async () => {
+describe('MockProveedoresRepository.eliminar', () => {
+  it('elimina físicamente el registro del mock', async () => {
     const repo = crearRepo()
-    const res = await repo.cambiarEstado('p01', 'Inactivo')
-    expect(res.estado).toBe('Inactivo')
+    const totalAntes = (await repo.listar({ texto: '', pagina: 1, tamano: 100 })).total
+    await repo.eliminar('p01')
+    const totalDespues = (await repo.listar({ texto: '', pagina: 1, tamano: 100 })).total
+    expect(totalDespues).toBe(totalAntes - 1)
     const listado = await repo.listar({ texto: '', pagina: 1, tamano: 100 })
-    expect(listado.items.find((p) => p.id === 'p01')?.estado).toBe('Inactivo')
-  })
-
-  it('reactiva un proveedor Inactivo', async () => {
-    const repo = crearRepo()
-    const res = await repo.cambiarEstado('p03', 'Activo')
-    expect(res.estado).toBe('Activo')
+    expect(listado.items.some((p) => p.id === 'p01')).toBe(false)
   })
 
   it('rechaza con ProveedorNoEncontradoError para un id inexistente', async () => {
     const repo = crearRepo()
-    await expect(repo.cambiarEstado('nope', 'Inactivo')).rejects.toBeInstanceOf(
+    await expect(repo.eliminar('nope')).rejects.toBeInstanceOf(
       ProveedorNoEncontradoError,
     )
-  })
-
-  it('no elimina físicamente el registro al desactivar (soft delete)', async () => {
-    const repo = crearRepo()
-    const totalAntes = (await repo.listar({ texto: '', pagina: 1, tamano: 100 })).total
-    await repo.cambiarEstado('p01', 'Inactivo')
-    const totalDespues = (await repo.listar({ texto: '', pagina: 1, tamano: 100 })).total
-    expect(totalDespues).toBe(totalAntes)
   })
 })

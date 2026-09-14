@@ -1,36 +1,35 @@
-export type EstadoProveedor = 'Activo' | 'Inactivo'
+export type CondicionProveedor =
+  | 'Habido'
+  | 'No habido'
+  | 'No hallado'
+  | 'En proceso de verificación'
+
+export interface Contacto {
+  nombre: string
+  telefono: string
+  email: string
+}
 
 export interface Proveedor {
   id: string
   nombreComercial: string
   ruc: string
   razonSocial: string
-  contactoNombre: string
-  contactoTelefono: string
-  contactoEmail: string
+  contactos: Contacto[]
   direccion: string
-  ciudad: string
   fechaRegistro: string
-  estado: EstadoProveedor
+  condicion: CondicionProveedor
 }
 
 export type ProveedorInput = Pick<
   Proveedor,
-  | 'nombreComercial'
-  | 'ruc'
-  | 'razonSocial'
-  | 'contactoNombre'
-  | 'contactoTelefono'
-  | 'contactoEmail'
-  | 'direccion'
-  | 'ciudad'
+  'nombreComercial' | 'ruc' | 'razonSocial' | 'contactos' | 'direccion'
 >
 
 export interface DatosFiscales {
   razonSocial: string
   nombreComercial: string
   direccion: string
-  ciudad: string
 }
 
 export interface FiltrosProveedores {

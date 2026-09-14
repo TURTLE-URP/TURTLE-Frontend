@@ -1,7 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { createProveedoresRepository } from './proveedores-repository'
-import type { EstadoProveedor, FiltrosProveedores, ProveedorInput } from './types'
+import type { FiltrosProveedores, ProveedorInput } from './types'
 
 const repository = createProveedoresRepository()
 
@@ -72,11 +72,10 @@ export function useActualizarProveedor() {
   })
 }
 
-export function useCambiarEstado() {
+export function useEliminarProveedor() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, estado }: { id: string; estado: EstadoProveedor }) =>
-      repository.cambiarEstado(id, estado),
+    mutationFn: (id: string) => repository.eliminar(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['proveedores'] })
     },

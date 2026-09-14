@@ -1,7 +1,6 @@
 import { MockProveedoresRepository } from './mock-proveedores-repository'
 import type {
   DatosFiscales,
-  EstadoProveedor,
   FiltrosProveedores,
   ListadoProveedores,
   Proveedor,
@@ -44,7 +43,7 @@ export interface ProveedoresRepository {
   getDatosFiscales(ruc: string): Promise<DatosFiscales>
   crear(input: ProveedorInput): Promise<Proveedor>
   actualizar(id: string, input: ProveedorInput): Promise<Proveedor>
-  cambiarEstado(id: string, estado: EstadoProveedor): Promise<Proveedor>
+  eliminar(id: string): Promise<void>
 }
 
 export function createProveedoresRepository(): ProveedoresRepository {

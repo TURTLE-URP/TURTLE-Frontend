@@ -35,13 +35,10 @@ const AGRO_ANDINA: Proveedor = {
   nombreComercial: 'Agro Andina',
   ruc: '20123456789',
   razonSocial: 'Agro Andina S.A.C.',
-  contactoNombre: 'María López',
-  contactoTelefono: '+51 1 555 0101',
-  contactoEmail: 'maria@agroandina.pe',
+  contactos: [{ nombre: 'María López', telefono: '+51 1 555 0101', email: 'maria@agroandina.pe' }],
   direccion: 'Av. Industrial 120',
-  ciudad: 'Arequipa',
   fechaRegistro: '2026-01-15T10:00:00Z',
-  estado: 'Activo',
+  condicion: 'Habido',
 }
 
 const IMPORTADORA_SUR: Proveedor = {
@@ -49,13 +46,10 @@ const IMPORTADORA_SUR: Proveedor = {
   nombreComercial: 'Importadora Sur',
   ruc: '20403334455',
   razonSocial: 'Importadora Sur S.A.C.',
-  contactoNombre: 'Luis Rojas',
-  contactoTelefono: '+51 84 555 0104',
-  contactoEmail: 'luis@importadorasur.pe',
+  contactos: [{ nombre: 'Luis Rojas', telefono: '+51 84 555 0104', email: 'luis@importadorasur.pe' }],
   direccion: 'Av. Los Incas 300',
-  ciudad: 'Cusco',
   fechaRegistro: '2026-03-02T11:15:00Z',
-  estado: 'Activo',
+  condicion: 'Habido',
 }
 
 function completarContacto() {
@@ -68,6 +62,10 @@ function completarContacto() {
   fireEvent.change(screen.getByLabelText(/correo electrónico/i), {
     target: { value: 'juana@nuevosol.pe' },
   })
+}
+
+function expandirContacto1() {
+  fireEvent.click(screen.getByText('Contacto 1'))
 }
 
 beforeEach(() => {
@@ -84,9 +82,9 @@ describe('ProveedorFormDialog (registro)', () => {
     expect(screen.getByText('Ubicación')).toBeInTheDocument()
     expect(screen.getByLabelText(/nombre comercial/i)).toBeDisabled()
     expect(screen.getByLabelText(/razón social/i)).toBeDisabled()
+    expandirContacto1()
     expect(screen.getByLabelText(/nombre de contacto/i)).toBeDisabled()
     expect(screen.getByLabelText(/dirección/i)).toBeDisabled()
-    expect(screen.queryByLabelText(/ciudad/i)).not.toBeInTheDocument()
   })
 
   it('bloquea Guardar hasta ingresar el RUC con texto guía', () => {
@@ -116,6 +114,7 @@ describe('ProveedorFormDialog (registro)', () => {
     ).toBeInTheDocument()
     expect(screen.getByDisplayValue('Nuevo Sol')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Av. Nueva 100')).toBeInTheDocument()
+    expandirContacto1()
     expect(screen.getByLabelText(/nombre de contacto/i)).not.toBeDisabled()
   })
 
@@ -127,6 +126,7 @@ describe('ProveedorFormDialog (registro)', () => {
     expect(
       await screen.findByDisplayValue('Nuevo Sol S.A.C.', {}, { timeout: 4000 }),
     ).toBeInTheDocument()
+    expandirContacto1()
     fireEvent.click(screen.getByRole('button', { name: 'Registrar Proveedor' }))
     expect(await screen.findByText('El nombre de contacto es obligatorio.')).toBeInTheDocument()
     expect(screen.getByText('El correo electrónico es obligatorio.')).toBeInTheDocument()
@@ -145,6 +145,7 @@ describe('ProveedorFormDialog (registro)', () => {
       await screen.findByText('*El RUC ya se encuentra registrado en el sistema.*', {}, { timeout: 4000 }),
     ).toBeInTheDocument()
     expect(screen.queryByDisplayValue('Textiles Lima S.A.C.')).not.toBeInTheDocument()
+    expandirContacto1()
     expect(screen.getByLabelText(/nombre de contacto/i)).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Registrar Proveedor' })).toBeDisabled()
     expect(onExito).not.toHaveBeenCalled()
@@ -169,13 +170,13 @@ describe('ProveedorFormDialog (registro)', () => {
     expect(
       await screen.findByDisplayValue('Nuevo Sol S.A.C.', {}, { timeout: 4000 }),
     ).toBeInTheDocument()
+    expandirContacto1()
     completarContacto()
     fireEvent.click(screen.getByRole('button', { name: 'Registrar Proveedor' }))
     await waitFor(() => expect(onExito).toHaveBeenCalled(), { timeout: 4000 })
     const creado = onExito.mock.calls[0][0] as Proveedor
-    expect(creado.estado).toBe('Activo')
+    expect(creado.condicion).toBe('En proceso de verificación')
     expect(creado.ruc).toBe('20900000001')
-    expect(creado.ciudad).toBe('Lima')
     expect(
       useToastStore.getState().toasts.some((t) => t.tono === 'success'),
     ).toBe(true)
@@ -185,16 +186,19 @@ describe('ProveedorFormDialog (registro)', () => {
 describe('ProveedorFormDialog (edición)', () => {
   it('precarga los datos actuales del proveedor', async () => {
     renderDialog({ proveedor: AGRO_ANDINA })
-    expect(screen.getByRole('dialog', { name: 'Editar proveedor' })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: 'Ver/Editar proveedor' })).toBeInTheDocument()
     expect(screen.getByDisplayValue('20123456789')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Agro Andina')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Agro Andina S.A.C.')).toBeInTheDocument()
-    expect(screen.getByDisplayValue('María López')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Av. Industrial 120')).toBeInTheDocument()
+    expect(screen.getByText('María López')).toBeInTheDocument()
+    fireEvent.click(screen.getByText('María López'))
+    expect(await screen.findByDisplayValue('María López')).toBeInTheDocument()
   })
 
   it('no marca duplicado con el RUC propio y habilita el formulario', async () => {
     renderDialog({ proveedor: AGRO_ANDINA })
+    fireEvent.click(screen.getByText('María López'))
     await waitFor(
       () => {
         expect(screen.getByLabelText(/nombre de contacto/i)).not.toBeDisabled()
@@ -209,6 +213,7 @@ describe('ProveedorFormDialog (edición)', () => {
 
   it('guarda los cambios, notifica y avisa al padre', async () => {
     const { onExito } = renderDialog({ proveedor: AGRO_ANDINA })
+    fireEvent.click(screen.getByText('María López'))
     await waitFor(
       () => {
         expect(screen.getByLabelText(/teléfono/i)).not.toBeDisabled()
@@ -222,7 +227,7 @@ describe('ProveedorFormDialog (edición)', () => {
     await waitFor(() => expect(onExito).toHaveBeenCalled(), { timeout: 4000 })
     const actualizado = onExito.mock.calls[0][0] as Proveedor
     expect(actualizado.id).toBe('p01')
-    expect(actualizado.contactoTelefono).toBe('+51 1 555 0707')
+    expect(actualizado.contactos[0]?.telefono).toBe('+51 1 555 0707')
     expect(
       useToastStore.getState().toasts.some(
         (t) => t.tono === 'success' && t.mensaje === 'Proveedor actualizado correctamente.',
@@ -230,21 +235,24 @@ describe('ProveedorFormDialog (edición)', () => {
     ).toBe(true)
   })
 
-  it('bloquea el RUC en edición pero permite los demás campos', async () => {
+  it('bloquea el RUC, nombre comercial, razón social y dirección en edición', async () => {
     renderDialog({ proveedor: AGRO_ANDINA })
     expect(screen.getByLabelText(/^RUC/i)).toBeDisabled()
+    expect(screen.getByLabelText(/nombre comercial/i)).toBeDisabled()
+    expect(screen.getByLabelText(/razón social/i)).toBeDisabled()
+    expect(screen.getByLabelText(/dirección/i)).toBeDisabled()
+    fireEvent.click(screen.getByText('María López'))
     await waitFor(
       () => {
-        expect(screen.getByLabelText(/nombre comercial/i)).not.toBeDisabled()
+        expect(screen.getByLabelText(/nombre de contacto/i)).not.toBeDisabled()
       },
       { timeout: 4000 },
     )
-    expect(screen.getByLabelText(/nombre de contacto/i)).not.toBeDisabled()
-    expect(screen.getByLabelText(/dirección/i)).not.toBeDisabled()
   })
 
   it('no consulta datos fiscales en edición aunque el RUC no los tenga', async () => {
     renderDialog({ proveedor: IMPORTADORA_SUR })
+    fireEvent.click(screen.getByText('Luis Rojas'))
     await waitFor(
       () => {
         expect(screen.getByLabelText(/nombre de contacto/i)).not.toBeDisabled()

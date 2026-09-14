@@ -1,8 +1,9 @@
 // Barril público de la feature Gestionar Proveedores.
 export * from './data/proveedores-repository'
 export type {
+  CondicionProveedor,
+  Contacto,
   DatosFiscales,
-  EstadoProveedor,
   FiltrosProveedores,
   ListadoProveedores,
   Proveedor,
@@ -10,10 +11,10 @@ export type {
 } from './data/types'
 export {
   useActualizarProveedor,
-  useCambiarEstado,
   useCrearProveedor,
   useDatosFiscales,
   useDebouncedValue,
+  useEliminarProveedor,
   useExisteRuc,
   useProveedoresList,
 } from './data/proveedores-query'
@@ -26,14 +27,14 @@ export {
   siguientePagina,
   TAMANO_PAGINA,
 } from './logic/filters'
-export { etiquetaEstado, formatearFecha } from './logic/format'
+export { etiquetaCondicion, formatearFecha } from './logic/format'
 export {
   esEmailValido,
   esRucValido,
   esTelefonoValido,
   validarProveedor,
-  type CampoProveedor,
   type ErroresProveedor,
 } from './logic/validation'
 export { ProveedoresPage } from './pages/proveedores-page'
 export { ProveedorFormDialog } from './components/proveedor-form-dialog'
+export { ProveedorConfirmDialog } from './components/proveedor-confirm-dialog'

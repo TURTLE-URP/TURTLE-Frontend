@@ -1,4 +1,4 @@
-import type { EstadoProveedor } from '../data/types'
+import type { CondicionProveedor } from '../data/types'
 
 const FORMATO_FECHA = new Intl.DateTimeFormat('es-PE', {
   year: 'numeric',
@@ -14,6 +14,6 @@ export function formatearFecha(iso: string): string {
   return FORMATO_FECHA.format(fecha)
 }
 
-export function etiquetaEstado(estado: EstadoProveedor): string {
-  return estado
+export function etiquetaCondicion(condicion: CondicionProveedor): string {
+  return condicion
 }

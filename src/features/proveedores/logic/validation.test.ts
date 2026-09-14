@@ -6,11 +6,8 @@ const VALIDO: ProveedorInput = {
   nombreComercial: 'Agro Andina',
   ruc: '20123456789',
   razonSocial: 'Agro Andina S.A.C.',
-  contactoNombre: 'María López',
-  contactoTelefono: '+51 1 555 0101',
-  contactoEmail: 'maria@agroandina.pe',
+  contactos: [{ nombre: 'María López', telefono: '+51 1 555 0101', email: 'maria@agroandina.pe' }],
   direccion: 'Av. Industrial 120',
-  ciudad: 'Arequipa',
 }
 
 describe('esRucValido', () => {
@@ -59,35 +56,49 @@ describe('validarProveedor', () => {
     expect(validarProveedor(VALIDO)).toEqual({})
   })
 
-  it('devuelve un error por campo para un input vacío', () => {
+  it('devuelve error si no hay contactos', () => {
     const errores = validarProveedor({
-      nombreComercial: '',
-      ruc: '',
-      razonSocial: '',
-      contactoNombre: '',
-      contactoTelefono: '',
-      contactoEmail: '',
-      direccion: '',
-      ciudad: '',
+      nombreComercial: 'Test',
+      ruc: '20123456789',
+      razonSocial: 'Test S.A.C.',
+      contactos: [],
+      direccion: 'Av. Test 1',
     })
-    expect(Object.keys(errores).sort()).toEqual(
-      [
-        'ciudad',
-        'contactoEmail',
-        'contactoNombre',
-        'contactoTelefono',
-        'direccion',
-        'nombreComercial',
-        'razonSocial',
-        'ruc',
-      ].sort(),
-    )
+    expect(errores.contactos).toBe('Debe haber al menos un contacto.')
   })
 
-  it('señala RUC, email y teléfono con mensajes específicos', () => {
-    const errores = validarProveedor({ ...VALIDO, ruc: '123', contactoEmail: 'mal', contactoTelefono: 'abc' })
+  it('devuelve error si hay más de 5 contactos', () => {
+    const contactos = Array.from({ length: 6 }, () => ({
+      nombre: 'Test',
+      telefono: '+51 1 555 0000',
+      email: 'test@test.pe',
+    }))
+    const errores = validarProveedor({
+      nombreComercial: 'Test',
+      ruc: '20123456789',
+      razonSocial: 'Test S.A.C.',
+      contactos,
+      direccion: 'Av. Test 1',
+    })
+    expect(errores.contactos).toBe('No puede haber más de 5 contactos.')
+  })
+
+  it('devuelve errores individuales por contacto', () => {
+    const errores = validarProveedor({
+      nombreComercial: 'Test',
+      ruc: '20123456789',
+      razonSocial: 'Test S.A.C.',
+      contactos: [{ nombre: '', telefono: '', email: '' }],
+      direccion: 'Av. Test 1',
+    })
+    expect(errores.contactosDetalle).toBeDefined()
+    expect(errores.contactosDetalle?.[0]?.nombre).toBeDefined()
+    expect(errores.contactosDetalle?.[0]?.telefono).toBeDefined()
+    expect(errores.contactosDetalle?.[0]?.email).toBeDefined()
+  })
+
+  it('señala RUC con mensaje específico', () => {
+    const errores = validarProveedor({ ...VALIDO, ruc: '123' })
     expect(errores.ruc).toBe('El RUC debe tener 11 dígitos.')
-    expect(errores.contactoEmail).toBe('El correo electrónico no es válido.')
-    expect(errores.contactoTelefono).toBe('El teléfono no es válido.')
   })
 })

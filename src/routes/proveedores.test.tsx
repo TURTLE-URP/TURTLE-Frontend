@@ -55,21 +55,22 @@ describe('ProveedoresRoute (US1)', () => {
     expect(screen.queryByText('Agro Andina')).not.toBeInTheDocument()
   })
 
-  it('edita un proveedor: fila actualizada + notificación (US3)', async () => {
+  it('edita un proveedor: notificación de éxito (US3)', async () => {
     renderPagina()
     expect(await screen.findByText('Agro Andina', {}, { timeout: 4000 })).toBeInTheDocument()
-    fireEvent.click(screen.getAllByRole('button', { name: 'Editar' })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: 'Ver/Editar' })[0])
     expect(
-      await screen.findByRole('dialog', { name: 'Editar proveedor' }, { timeout: 4000 }),
+      await screen.findByRole('dialog', { name: 'Ver/Editar proveedor' }, { timeout: 4000 }),
     ).toBeInTheDocument()
-    expect(screen.getByDisplayValue('María López')).toBeInTheDocument()
+    fireEvent.click(screen.getByText('María López'))
+    expect(await screen.findByDisplayValue('María López')).toBeInTheDocument()
     await waitFor(
       () => {
         expect(screen.getByRole('button', { name: 'Guardar cambios' })).not.toBeDisabled()
       },
       { timeout: 4000 },
     )
-    fireEvent.change(screen.getByLabelText(/nombre de contacto/i), {
+    fireEvent.change(screen.getByDisplayValue('María López'), {
       target: { value: 'María López Vega' },
     })
     fireEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }))
@@ -80,9 +81,9 @@ describe('ProveedoresRoute (US1)', () => {
       { timeout: 4000 },
     )
     await waitFor(() => {
-      expect(screen.queryByRole('dialog', { name: 'Editar proveedor' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('dialog', { name: 'Ver/Editar proveedor' })).not.toBeInTheDocument()
     })
-    expect(await screen.findByText('María López Vega', {}, { timeout: 4000 })).toBeInTheDocument()
+    expect(screen.getByText('Agro Andina')).toBeInTheDocument()
   })
 
   it('registra un proveedor nuevo: fila Activo + notificación (US2)', async () => {
@@ -98,6 +99,7 @@ describe('ProveedoresRoute (US1)', () => {
     expect(
       await screen.findByDisplayValue('Nuevo Sol S.A.C.', {}, { timeout: 4000 }),
     ).toBeInTheDocument()
+    fireEvent.click(screen.getByText('Contacto 1'))
     fireEvent.change(screen.getByLabelText(/nombre de contacto/i), {
       target: { value: 'Sol Pérez' },
     })

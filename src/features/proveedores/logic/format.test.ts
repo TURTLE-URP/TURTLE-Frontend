@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { etiquetaEstado, formatearFecha } from './format'
+import { etiquetaCondicion, formatearFecha } from './format'
 
 describe('formatearFecha', () => {
   it('formatea una fecha ISO a día/mes/año', () => {
@@ -11,9 +11,11 @@ describe('formatearFecha', () => {
   })
 })
 
-describe('etiquetaEstado', () => {
-  it('devuelve la etiqueta legible de cada estado', () => {
-    expect(etiquetaEstado('Activo')).toBe('Activo')
-    expect(etiquetaEstado('Inactivo')).toBe('Inactivo')
+describe('etiquetaCondicion', () => {
+  it('devuelve la etiqueta legible de cada condición', () => {
+    expect(etiquetaCondicion('Habido')).toBe('Habido')
+    expect(etiquetaCondicion('No habido')).toBe('No habido')
+    expect(etiquetaCondicion('No hallado')).toBe('No hallado')
+    expect(etiquetaCondicion('En proceso de verificación')).toBe('En proceso de verificación')
   })
 })
