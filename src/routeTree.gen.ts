@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AbastoRouteImport } from './routes/abasto'
 import { Route as ProveedoresRouteImport } from './routes/proveedores'
 import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as InsumosRouteImport } from './routes/insumos'
@@ -17,6 +18,11 @@ import { Route as InsumosRouteImport } from './routes/insumos'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbastoRoute = AbastoRouteImport.update({
+  id: '/abasto',
+  path: '/abasto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProveedoresRoute = ProveedoresRouteImport.update({
@@ -37,12 +43,14 @@ const InsumosRoute = InsumosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abasto': typeof AbastoRoute
   '/proveedores': typeof ProveedoresRoute
   '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abasto': typeof AbastoRoute
   '/proveedores': typeof ProveedoresRoute
   '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
@@ -53,13 +61,17 @@ export interface FileRoutesById {
   '/proveedores': typeof ProveedoresRoute
   '/mesas': typeof MesasRoute
   '/insumos': typeof InsumosRoute
+  '/abasto': typeof AbastoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/abasto'
   fullPaths: '/' | '/proveedores'
   fullPaths: '/' | '/insumos'
   fullPaths: '/' | '/mesas'
   fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/abasto'
+  id: '__root__' | '/' | '/abasto'
   to: '/' | '/proveedores'
   id: '__root__' | '/' | '/proveedores'
   to: '/' | '/insumos'
@@ -73,6 +85,7 @@ export interface RootRouteChildren {
   ProveedoresRoute: typeof ProveedoresRoute
   MesasRoute: typeof MesasRoute
   InsumosRoute: typeof InsumosRoute
+  AbastoRoute: typeof AbastoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -105,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MesasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abasto': {
+      id: '/abasto'
+      path: '/abasto'
+      fullPath: '/abasto'
+      preLoaderRoute: typeof AbastoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -113,6 +133,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProveedoresRoute: ProveedoresRoute,
   MesasRoute: MesasRoute,
   InsumosRoute: InsumosRoute,
+  AbastoRoute: AbastoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
