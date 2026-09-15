@@ -12,33 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AbastecimientoRouteImport } from './routes/abastecimiento'
 import { Route as AbastoRouteImport } from './routes/abasto'
-import { Route as ProveedoresRouteImport } from './routes/proveedores'
-import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as InsumosRouteImport } from './routes/insumos'
+import { Route as MesasRouteImport } from './routes/mesas'
+import { Route as ProveedoresRouteImport } from './routes/proveedores'
+import { Route as UsuariosRouteImport } from './routes/usuarios'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AbastoRoute = AbastoRouteImport.update({
-  id: '/abasto',
-  path: '/abasto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProveedoresRoute = ProveedoresRouteImport.update({
-  id: '/proveedores',
-  path: '/proveedores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MesasRoute = MesasRouteImport.update({
-  id: '/mesas',
-  path: '/mesas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsumosRoute = InsumosRouteImport.update({
-  id: '/insumos',
-  path: '/insumos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AbastecimientoRoute = AbastecimientoRouteImport.update({
@@ -46,59 +27,98 @@ const AbastecimientoRoute = AbastecimientoRouteImport.update({
   path: '/abastecimiento',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AbastoRoute = AbastoRouteImport.update({
+  id: '/abasto',
+  path: '/abasto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsumosRoute = InsumosRouteImport.update({
+  id: '/insumos',
+  path: '/insumos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesasRoute = MesasRouteImport.update({
+  id: '/mesas',
+  path: '/mesas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProveedoresRoute = ProveedoresRouteImport.update({
+  id: '/proveedores',
+  path: '/proveedores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsuariosRoute = UsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/abasto': typeof AbastoRoute
-  '/proveedores': typeof ProveedoresRoute
-  '/mesas': typeof MesasRoute
-  '/insumos': typeof InsumosRoute
   '/abastecimiento': typeof AbastecimientoRoute
+  '/abasto': typeof AbastoRoute
+  '/insumos': typeof InsumosRoute
+  '/mesas': typeof MesasRoute
+  '/proveedores': typeof ProveedoresRoute
+  '/usuarios': typeof UsuariosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/abasto': typeof AbastoRoute
-  '/proveedores': typeof ProveedoresRoute
-  '/mesas': typeof MesasRoute
-  '/insumos': typeof InsumosRoute
   '/abastecimiento': typeof AbastecimientoRoute
+  '/abasto': typeof AbastoRoute
+  '/insumos': typeof InsumosRoute
+  '/mesas': typeof MesasRoute
+  '/proveedores': typeof ProveedoresRoute
+  '/usuarios': typeof UsuariosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/proveedores': typeof ProveedoresRoute
-  '/mesas': typeof MesasRoute
-  '/insumos': typeof InsumosRoute
-  '/abasto': typeof AbastoRoute
   '/abastecimiento': typeof AbastecimientoRoute
+  '/abasto': typeof AbastoRoute
+  '/insumos': typeof InsumosRoute
+  '/mesas': typeof MesasRoute
+  '/proveedores': typeof ProveedoresRoute
+  '/usuarios': typeof UsuariosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/abasto'
-  fullPaths: '/' | '/proveedores'
-  fullPaths: '/' | '/insumos'
-  fullPaths: '/' | '/mesas'
-  fullPaths: '/' | '/abastecimiento'
+  fullPaths:
+    | '/'
+    | '/abastecimiento'
+    | '/abasto'
+    | '/insumos'
+    | '/mesas'
+    | '/proveedores'
+    | '/usuarios'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/abasto'
-  id: '__root__' | '/' | '/abasto'
-  to: '/' | '/proveedores'
-  id: '__root__' | '/' | '/proveedores'
-  to: '/' | '/insumos'
-  id: '__root__' | '/' | '/insumos'
-  to: '/' | '/mesas'
-  id: '__root__' | '/' | '/mesas'
-  to: '/' | '/abastecimiento'
-  id: '__root__' | '/' | '/abastecimiento'
+  to:
+    | '/'
+    | '/abastecimiento'
+    | '/abasto'
+    | '/insumos'
+    | '/mesas'
+    | '/proveedores'
+    | '/usuarios'
+  id:
+    | '__root__'
+    | '/'
+    | '/abastecimiento'
+    | '/abasto'
+    | '/insumos'
+    | '/mesas'
+    | '/proveedores'
+    | '/usuarios'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProveedoresRoute: typeof ProveedoresRoute
-  MesasRoute: typeof MesasRoute
-  InsumosRoute: typeof InsumosRoute
-  AbastoRoute: typeof AbastoRoute
   AbastecimientoRoute: typeof AbastecimientoRoute
+  AbastoRoute: typeof AbastoRoute
+  InsumosRoute: typeof InsumosRoute
+  MesasRoute: typeof MesasRoute
+  ProveedoresRoute: typeof ProveedoresRoute
+  UsuariosRoute: typeof UsuariosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -110,11 +130,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/proveedores': {
-      id: '/proveedores'
-      path: '/proveedores'
-      fullPath: '/proveedores'
-      preLoaderRoute: typeof ProveedoresRouteImport
+    '/abastecimiento': {
+      id: '/abastecimiento'
+      path: '/abastecimiento'
+      fullPath: '/abastecimiento'
+      preLoaderRoute: typeof AbastecimientoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/abasto': {
+      id: '/abasto'
+      path: '/abasto'
+      fullPath: '/abasto'
+      preLoaderRoute: typeof AbastoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insumos': {
@@ -131,18 +158,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MesasRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/abasto': {
-      id: '/abasto'
-      path: '/abasto'
-      fullPath: '/abasto'
-      preLoaderRoute: typeof AbastoRouteImport
+    '/proveedores': {
+      id: '/proveedores'
+      path: '/proveedores'
+      fullPath: '/proveedores'
+      preLoaderRoute: typeof ProveedoresRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/abastecimiento': {
-      id: '/abastecimiento'
-      path: '/abastecimiento'
-      fullPath: '/abastecimiento'
-      preLoaderRoute: typeof AbastecimientoRouteImport
+    '/usuarios': {
+      id: '/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof UsuariosRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -150,11 +177,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProveedoresRoute: ProveedoresRoute,
-  MesasRoute: MesasRoute,
-  InsumosRoute: InsumosRoute,
-  AbastoRoute: AbastoRoute,
   AbastecimientoRoute: AbastecimientoRoute,
+  AbastoRoute: AbastoRoute,
+  InsumosRoute: InsumosRoute,
+  MesasRoute: MesasRoute,
+  ProveedoresRoute: ProveedoresRoute,
+  UsuariosRoute: UsuariosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

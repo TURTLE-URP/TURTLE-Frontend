@@ -33,6 +33,12 @@ function RootLayout() {
             <a href="/" className="font-semibold text-foreground">
               {appName}
             </a>
+            <Link
+              to="/usuarios"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Usuarios
+            </Link>
             {puedeGestionarProveedores(getMockSesion().rol) && (
               <Link
                 to="/proveedores"
