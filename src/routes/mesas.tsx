@@ -151,8 +151,7 @@ function MesasPage() {
   }
 
   return (
-    <div className="min-h-full bg-slate-50/70 font-sans text-slate-800 antialiased">
-      <div className="mx-auto w-full max-w-7xl space-y-6 px-2 md:px-4">
+    <div className="min-h-full space-y-6 bg-slate-50/70 font-sans text-slate-800 antialiased">
           {/* Header Superior */}
           <div>
             <h1 className="font-serif text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
@@ -254,7 +253,6 @@ function MesasPage() {
               onEliminar={handleEliminarMesa}
             />
           )}
-        </div>
 
         {/* Toast Flotante */}
         {toastMessage && (

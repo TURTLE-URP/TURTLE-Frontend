@@ -20,7 +20,7 @@ function RootLayout() {
     return (
       <ErrorBoundary>
         <div className="flex min-h-screen flex-col bg-background">
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+          <main className="mx-auto w-full max-w-xl flex-1 p-6 md:p-8">
             <Outlet />
           </main>
           <ToastRegion />
@@ -35,7 +35,7 @@ function RootLayout() {
         <header className="border-b border-border bg-background">
           <nav
             aria-label="Barra superior"
-            className="flex h-16 w-full items-center gap-6 px-4"
+            className="flex h-16 w-full items-center gap-6 px-6 md:px-8"
           >
             <Link to="/" className="text-base font-semibold tracking-tight text-foreground">
               {appName}
@@ -66,12 +66,12 @@ function RootLayout() {
 
         <div className="flex min-h-0 flex-1">
           <AppSidebar />
-          <main className="min-w-0 flex-1 px-4 py-8">
+          <main className="min-w-0 flex-1 p-6 md:p-8">
             <Outlet />
           </main>
         </div>
 
-        <footer className="border-t border-border py-4 text-center text-sm text-muted-foreground">
+        <footer className="border-t border-border px-6 py-4 text-center text-sm text-muted-foreground md:px-8">
           {appName} — Turtle Sistema de Restaurante
         </footer>
         <ToastRegion />
