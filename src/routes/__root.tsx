@@ -13,8 +13,11 @@ export const Route = createRootRoute({
 function RootLayout() {
   const appName = useAppStore((state) => state.appName)
   const location = useLocation()
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const session = useAuthStore((state) => state.session)
+  const signOut = useAuthStore((state) => state.signOut)
   const isMesasPage = location.pathname === '/mesas'
-
+  const isLogin = pathname === '/login'
   if (isMesasPage) {
     return (
       <ErrorBoundary>
@@ -22,10 +25,7 @@ function RootLayout() {
       </ErrorBoundary>
     )
   }
-  const pathname = useRouterState({ select: (state) => state.location.pathname })
-  const session = useAuthStore((state) => state.session)
-  const signOut = useAuthStore((state) => state.signOut)
-  const isLogin = pathname === '/login'
+
 
   return (
     <ErrorBoundary>
@@ -52,9 +52,8 @@ function RootLayout() {
                 Proveedores
               </Link>
             )}
-            {/* </Link>
             {isLogin ? null : session ? (
-              <div className="flex items-center gap-3">
+              <div className="ml-auto flex items-center gap-3">
                 <span className="hidden text-sm text-muted-foreground sm:inline">{session.email}</span>
                 <button
                   type="button"
@@ -67,11 +66,11 @@ function RootLayout() {
             ) : (
               <Link
                 to="/login"
-                className="rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
+                className="ml-auto rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
               >
                 Iniciar sesión
               </Link>
-            )} */}
+            )}
           </nav>
         </header>
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
