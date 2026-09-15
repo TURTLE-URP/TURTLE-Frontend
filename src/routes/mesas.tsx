@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState, useMemo } from 'react'
 import { Plus } from '@phosphor-icons/react'
 
-import { TurtleSidebar } from '../features/mesas/components/turtle-sidebar'
 import { MesasKPIs } from '../features/mesas/components/mesas-kpis'
 import { MesaCard } from '../features/mesas/components/mesa-card'
 import { MesasTable } from '../features/mesas/components/mesas-table'
@@ -152,13 +151,8 @@ function MesasPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50/70 font-sans text-slate-800 antialiased">
-      {/* Sidebar con estilo Turtle */}
-      <TurtleSidebar currentRoute="mesas" />
-
-      {/* Contenido Principal */}
-      <main className="flex-1 flex flex-col min-w-0">
-        <div className="p-6 md:p-8 max-w-7xl w-full mx-auto space-y-6">
+    <div className="min-h-full bg-slate-50/70 font-sans text-slate-800 antialiased">
+      <div className="mx-auto w-full max-w-7xl space-y-6 px-2 md:px-4">
           {/* Header Superior */}
           <div>
             <h1 className="font-serif text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
@@ -262,14 +256,12 @@ function MesasPage() {
           )}
         </div>
 
-
         {/* Toast Flotante */}
         {toastMessage && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-5 py-2.5 rounded-full shadow-xl text-xs font-semibold animate-in fade-in slide-in-from-bottom-2">
             {toastMessage}
           </div>
         )}
-      </main>
 
       {/* Diálogo emergente Gestionar Mesa */}
       <GestionarMesaDialog

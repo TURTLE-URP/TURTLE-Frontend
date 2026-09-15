@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { ToastRegion } from '@/features/proveedores/components/toast'
-import { ProveedoresRoute } from './proveedores'
+import { ProveedoresRoute } from '@/routes/proveedores'
 
 function renderPagina() {
   const queryClient = new QueryClient({
