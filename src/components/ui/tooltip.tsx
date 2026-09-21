@@ -1,5 +1,5 @@
 import * as React from "react"
-import * as TooltipPrimitive from "radix-ui/Tooltip"
+import * as TooltipPrimitive from "radix-ui/tooltip"
 import { cn } from "@/lib/utils"
 
 function TooltipProvider({
