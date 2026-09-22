@@ -246,33 +246,7 @@ export function GestionarAlmacenesPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans text-xs">
-      {/* Top Navbar */}
-      <header className="h-12 bg-white border-b border-slate-200 flex items-center justify-between px-6">
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-cyan-600 flex items-center justify-center text-white font-bold text-[10px]">
-              C
-            </div>
-            <span className="font-semibold text-slate-800 text-xs tracking-tight">
-              CEVICHERÍA <span className="font-normal text-slate-500">Áreas de Almacenamiento</span>
-            </span>
-          </div>
-
-          <nav className="flex items-center gap-6 text-slate-500 font-medium">
-            <a href="#" className="hover:text-slate-800">Dashboard</a>
-            <a href="#" className="text-cyan-600 font-semibold border-b-2 border-cyan-600 py-3">Áreas de Almacén</a>
-            <a href="#" className="hover:text-slate-800">Insumos</a>
-            <a href="#" className="hover:text-slate-800">Compras</a>
-            <a href="#" className="hover:text-slate-800">Reportes</a>
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-full bg-cyan-700 text-white flex items-center justify-center font-bold text-[10px]">
-            ADM
-          </div>
-        </div>
-      </header>
+      
 
       {/* Content Layout */}
       <div className="flex">
