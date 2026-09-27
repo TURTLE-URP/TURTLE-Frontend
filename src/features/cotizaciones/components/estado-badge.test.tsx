@@ -7,7 +7,6 @@ describe('EstadoBadge', () => {
     ['aprobada'],
     ['en negociación'],
     ['rechazada'],
-    ['pendiente'],
   ] as const)('muestra el estado %s', (estado) => {
     render(<EstadoBadge estado={estado} />)
     expect(screen.getByText(estado)).toBeInTheDocument()

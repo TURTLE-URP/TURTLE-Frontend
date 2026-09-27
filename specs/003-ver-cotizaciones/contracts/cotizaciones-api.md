@@ -29,7 +29,7 @@ Base URL: `VITE_API_BASE_URL` (currently empty → mock mode).
 
 Query params: `texto` (opcional, trim; match parcial sobre `folio` y
 `proveedorNombre` — FR-003), `estado` (opcional: `aprobada | en negociación |
-rechazada | pendiente`; ausente = todas — FR-004), `desde` / `hasta` (opcional,
+rechazada`; ausente = todas — FR-004), `desde` / `hasta` (opcional,
 ISO date, rango inclusivo sobre `fecha` — FR-004), `pagina` (≥1), `tamano`.
 
 The server applies filtering and returns the matching page. Changing any of

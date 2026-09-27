@@ -18,7 +18,7 @@ Types below are the shared contract consumed by UI logic and tests.
 | `proveedorNombre` | string | obligatorio, trim, 1–120 |
 | `fecha` | string (ISO date) | fecha de la cotización; no editable aquí (vista de lectura) |
 | `solicitudId` | string (uuid) | solicitud vinculada; inmutable aquí |
-| `solicitudEstado` | `'aprobada' \| 'en negociación' \| 'rechazada' \| 'pendiente'` | determina acciones disponibles (§4) |
+| `solicitudEstado` | `'aprobada' \| 'en negociación' \| 'rechazada'` | estado de la solicitud vinculada (los estados son de la solicitud, no de la cotización); determina acciones disponibles (§4) |
 | `total` | number ≥ 0 | monto total, 2 decimales; solo lectura |
 | `moneda` | string (ISO 4217, default `'PEN'`) | solo lectura |
 | `ordenCompraId` | string (uuid) \| null | presente solo si existe OC derivada (típicamente con solicitud `aprobada`) |
@@ -27,6 +27,9 @@ Reglas transversales:
 - Vista de solo lectura: este feature no muta cotizaciones (FR-015: ni siquiera
   expone creación).
 - El `folio` es la clave de negocio para búsqueda (FR-003).
+- Ciclo de vida: la solicitud nace en "borrador"; al enviarse nace la cotización,
+  ya en "en negociación"; de ahí pasa a "aprobada" o "rechazada". El maestro
+  solo contiene cotizaciones en esos tres estados (sesión 2026-09-27).
 
 ## 2. Filtros y envelope de paginación
 

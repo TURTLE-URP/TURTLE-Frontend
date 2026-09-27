@@ -16,7 +16,7 @@ interface CotizacionesFiltersProps {
   onLimpiar: () => void
 }
 
-const ESTADOS: FiltroEstado[] = ['todas', 'aprobada', 'en negociación', 'rechazada', 'pendiente']
+const ESTADOS: FiltroEstado[] = ['todas', 'aprobada', 'en negociación', 'rechazada']
 
 export function CotizacionesFilters({
   texto,

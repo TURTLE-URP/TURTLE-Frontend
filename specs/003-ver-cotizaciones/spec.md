@@ -24,6 +24,7 @@
 - Nota: el enlace al prototipo Figma incluido en el documento fuente no es válido y no se usa como referencia; los criterios de búsqueda/filtrado y las columnas se definieron en esta sesión de clarificación.
 - Q: ¿Mensajes distintos para "maestro vacío" y "sin resultados de búsqueda", o uno solo? → A: Opción A: dos mensajes distintos, el de sin resultados menciona el criterio de búsqueda usado.
 - Q: ¿Cómo debe comportarse la paginación en los bordes y al cambiar criterios? → A: Opción A: botones anterior/siguiente deshabilitados en los bordes y retorno a la página 1 al cambiar búsqueda o filtros.
+- Q: ¿El estado "pendiente" existe para las cotizaciones? → A: No. Ciclo de vida: la solicitud nace en "borrador", al enviarse nace la cotización ya en "en negociación", y de ahí pasa a "aprobada" (se acepta/cierra aprobando) o "rechazada" (tras renegociaciones). Los estados son propios de la solicitud, no de la cotización; el maestro solo muestra cotizaciones en "en negociación", "aprobada" o "rechazada".
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -94,7 +95,7 @@ El Administrador ve en cada fila de la lista las opciones disponibles (cerrar co
 ### Key Entities
 
 - **Cotización**: Registro central del maestro; representa una cotización del proceso de abastecimiento. Atributos visibles en lista y detalle según prototipo (identificador, datos de referencia, estado derivado de su solicitud vinculada). Se relaciona con una Solicitud y, cuando aplica, con una Orden de Compra.
-- **Solicitud vinculada**: Solicitud de abastecimiento que origina la cotización; su estado ("aprobada", "en negociación", otros) determina qué acciones están disponibles sobre la cotización.
+- **Solicitud vinculada**: Solicitud de abastecimiento que origina la cotización; los estados son propios de la solicitud, no de la cotización. Ciclo: "borrador" → enviada (nace la cotización, ya en "en negociación") → "aprobada" o "rechazada". El maestro solo contiene cotizaciones cuya solicitud está en "en negociación", "aprobada" o "rechazada"; ese estado determina qué acciones están disponibles sobre cada fila.
 - **Orden de Compra**: Documento derivado de una cotización cuya solicitud fue aprobada; se consulta en una nueva pestaña desde la fila correspondiente.
 
 ## Success Criteria *(mandatory)*
@@ -115,5 +116,5 @@ El Administrador ve en cada fila de la lista las opciones disponibles (cerrar co
 - Las columnas de la tabla del maestro son: folio, proveedor, fecha, estado, total/monto y acciones. El detalle completo de cada cotización vive en su vista de detalle.
 - Los flujos extendidos (Cerrar Cotización, Ver Orden de Compra, Ver Cotización/detalle) están fuera del alcance de este spec y se especifican por separado; aquí solo se exige la derivación correcta (modal vs. nueva pestaña).
 - La creación de una nueva cotización está fuera del alcance de este spec: la vista del maestro no incluye ningún punto de entrada de creación (decisión del 2026-09-27).
-- Los estados de solicitud relevantes son "aprobada" y "en negociación"; otros estados muestran las acciones restringidas deshabilitadas con la explicación del motivo, sin bloquear el resto de la fila.
+- Los estados de solicitud posibles en el maestro son "en negociación", "aprobada" y "rechazada" (no existe "pendiente"; "borrador" es previo al nacimiento de la cotización). Otros estados muestran las acciones restringidas deshabilitadas con la explicación del motivo, sin bloquear el resto de la fila.
 - La apertura en "nueva pestaña" respeta el comportamiento estándar del navegador; si el navegador la bloquea, se informa al usuario cómo permitirla.

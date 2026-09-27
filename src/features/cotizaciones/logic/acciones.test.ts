@@ -26,13 +26,13 @@ describe('accionesDisponibles', () => {
 
   it('habilita ver Orden solo en aprobada', () => {
     expect(accionesDisponibles(cotizacion('aprobada')).verOrden.habilitada).toBe(true)
-    const bloqueada = accionesDisponibles(cotizacion('pendiente')).verOrden
+    const bloqueada = accionesDisponibles(cotizacion('rechazada')).verOrden
     expect(bloqueada.habilitada).toBe(false)
     expect(bloqueada.motivo).toContain('aprobada')
   })
 
   it('ver detalles siempre está habilitado', () => {
-    for (const estado of ['aprobada', 'en negociación', 'rechazada', 'pendiente'] as const) {
+    for (const estado of ['aprobada', 'en negociación', 'rechazada'] as const) {
       expect(accionesDisponibles(cotizacion(estado)).verDetalle.habilitada).toBe(true)
     }
   })

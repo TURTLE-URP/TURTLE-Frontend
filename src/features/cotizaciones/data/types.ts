@@ -2,7 +2,6 @@ export type EstadoSolicitud =
   | 'aprobada'
   | 'en negociación'
   | 'rechazada'
-  | 'pendiente'
 
 export interface Cotizacion {
   id: string

@@ -13,10 +13,6 @@ const ESTILOS: Record<EstadoSolicitud, { contenedor: string; punto: string }> = 
     contenedor: 'bg-red-100 text-red-800',
     punto: 'bg-red-600',
   },
-  pendiente: {
-    contenedor: 'bg-amber-100 text-amber-800',
-    punto: 'bg-amber-600',
-  },
 }
 
 export function EstadoBadge({ estado }: { estado: EstadoSolicitud }) {
