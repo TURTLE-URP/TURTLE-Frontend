@@ -2,35 +2,30 @@ import { useState } from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import type { Icon } from '@phosphor-icons/react'
 import {
-  Buildings,
-  CaretDown,
-  Chair,
-  ClipboardText,
-  Package,
-  SignOut,
-  SquaresFour,
-  User,
-  UsersThree,
-  Warehouse,
+  BuildingsIcon,
+  CaretDownIcon,
+  ChairIcon,
+  ClipboardTextIcon,
+  FileArchiveIcon,
+  PackageIcon,
+  SignOutIcon,
+  SquaresFourIcon,
+  UserIcon,
+  UsersThreeIcon,
+  WarehouseIcon,
 } from '@phosphor-icons/react'
 import { getMockSesion } from '@/features/proveedores/data/mock-session'
 import { puedeGestionarProveedores } from '@/features/proveedores/logic/access'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth-store'
+import type { LinkProps } from '@tanstack/react-router'
 
-type AppPath =
-  | '/'
-  | '/mesas'
-  | '/insumos'
-  | '/abastecimiento'
-  | '/abasto'
-  | '/usuarios'
-  | '/proveedores'
-
-type GroupId = 'gestion' | 'operacion'
+// Extrae el string union exacto de la propiedad 'to'
+type RouteTo = LinkProps['to']
+type GroupId = 'gestion' | 'operacion' | 'maestros'
 
 interface NavItem {
-  to: AppPath
+  to: RouteTo
   label: string
   icon: Icon
   gated?: 'proveedores'
@@ -49,24 +44,29 @@ const NAV_GROUPS: NavGroup[] = [
     id: 'gestion',
     label: 'Gestión',
     items: [
-      { to: '/insumos', label: 'Insumos', icon: Package },
-      { to: '/proveedores', label: 'Proveedores', icon: Buildings, gated: 'proveedores' },
-      { to: '/', label: 'Almacenes', icon: Warehouse },
-      { to: '/usuarios', label: 'Personal', icon: UsersThree },
-      { to: '/mesas', label: 'Mesas', icon: Chair },
+      { to: '/insumos', label: 'Insumos', icon: PackageIcon },
+      { to: '/proveedores', label: 'Proveedores', icon: BuildingsIcon, gated: 'proveedores' },
+      { to: '/', label: 'Almacenes', icon: WarehouseIcon },
+      { to: '/usuarios', label: 'Personal', icon: UsersThreeIcon },
+      { to: '/mesas', label: 'Mesas', icon: ChairIcon },
     ],
   },
   {
     id: 'operacion',
     label: 'Operación en almacén',
     items: [
-      { to: '/abastecimiento', label: 'Cotiz. de Abasto', icon: SquaresFour },
-      { to: '/abasto', label: 'Órdenes de Abasto', icon: ClipboardText },
+      { to: '/abastecimiento', label: 'Cotiz. de Abasto', icon: SquaresFourIcon },
+      { to: '/abasto', label: 'Órdenes de Abasto', icon: ClipboardTextIcon },
     ],
+  },
+  {
+    id: 'maestros',
+    label: 'Catálogos',
+    items: [{ to: '/catalogos/cotizaciones', label: 'Cotizaciones', icon: FileArchiveIcon }],
   },
 ]
 
-function isActive(pathname: string, to: AppPath) {
+function isActive(pathname: string, to: RouteTo) {
   return pathname === to
 }
 
@@ -98,6 +98,7 @@ export function AppSidebar() {
   const [openGroups, setOpenGroups] = useState<Record<GroupId, boolean>>({
     gestion: false,
     operacion: false,
+    maestros: false,
   })
 
   function toggleGroup(id: GroupId) {
@@ -105,11 +106,7 @@ export function AppSidebar() {
   }
 
   const userName = session ? displayNameFromEmail(session.email) : 'Invitado'
-  const userRole = session
-    ? canProveedores
-      ? 'Administrador'
-      : 'Invitado'
-    : 'Sin sesión'
+  const userRole = session ? (canProveedores ? 'Administrador' : 'Invitado') : 'Sin sesión'
   const userInitial = session ? initialsFromEmail(session.email) : '?'
 
   return (
@@ -141,7 +138,7 @@ export function AppSidebar() {
                 className="flex w-full items-center justify-between rounded-md px-1 py-1 text-left text-[11px] font-semibold tracking-[0.16em] text-muted-foreground uppercase transition-colors hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
               >
                 <span>{group.label}</span>
-                <CaretDown
+                <CaretDownIcon
                   size={14}
                   className={cn('shrink-0 transition-transform duration-200', open && 'rotate-180')}
                 />
@@ -199,7 +196,7 @@ export function AppSidebar() {
               aria-label="Cerrar sesión"
               className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
             >
-              <SignOut size={18} />
+              <SignOutIcon size={18} />
             </button>
           </div>
         ) : (
@@ -211,7 +208,7 @@ export function AppSidebar() {
               aria-hidden="true"
               className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted"
             >
-              <User size={18} />
+              <UserIcon size={18} />
             </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-foreground">Invitado</p>
