@@ -1,4 +1,4 @@
-import { PencilSimple, Trash } from '@phosphor-icons/react'
+import { PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import {
@@ -76,7 +76,7 @@ export function ProveedoresTable({
                         aria-label="Ver/Editar"
                         onClick={() => onEditar(proveedor)}
                       >
-                        <PencilSimple className="text-primary" />
+                        <PencilSimpleIcon className="text-primary" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Ver/Editar</TooltipContent>
@@ -90,7 +90,7 @@ export function ProveedoresTable({
                         aria-label="Eliminar"
                         onClick={() => onEliminar(proveedor)}
                       >
-                        <Trash className="text-destructive" />
+                        <TrashIcon className="text-destructive" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Eliminar proveedor</TooltipContent>

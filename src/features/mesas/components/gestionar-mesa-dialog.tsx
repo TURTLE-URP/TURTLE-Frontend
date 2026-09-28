@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import {
-  X,
-  Clock,
-  CookingPot,
-  CreditCard,
-  Money,
-  DeviceMobile,
-  CheckCircle,
-  WarningCircle,
-  ShieldCheck,
+  XIcon,
+  ClockIcon,
+  CookingPotIcon,
+  CreditCardIcon,
+  MoneyIcon,
+  DeviceMobileIcon,
+  CheckCircleIcon,
+  WarningCircleIcon,
+  ShieldCheckIcon,
 } from '@phosphor-icons/react'
 import type { Mesa, PedidoLocal } from '../types/mesa'
 
@@ -133,7 +133,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <XIcon className="w-5 h-5" />
           </button>
         </div>
 
@@ -165,7 +165,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
                     Hora Recepción
                   </span>
                   <span className="font-semibold text-slate-800 text-xs flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <ClockIcon className="w-3.5 h-3.5 text-slate-400" />
                     {pedido.horaInicio} ({pedido.tiempoMinutos}m)
                   </span>
                 </div>
@@ -181,7 +181,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <CookingPot className="w-4 h-4 text-emerald-600" />
+                    <CookingPotIcon className="w-4 h-4 text-emerald-600" />
                     Comanda de la Mesa
                   </span>
                   <span
@@ -251,7 +251,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
               {mostrarConfirmacionPago ? (
                 <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 space-y-3 animate-in fade-in">
                   <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <ShieldCheckIcon className="w-4 h-4 text-emerald-600" />
                     <span>Cobro y Cierre de Cuenta</span>
                   </div>
 
@@ -270,7 +270,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
                               : 'border-slate-200 bg-white/70 text-slate-600'
                           }`}
                         >
-                          <Money className="w-4 h-4 mx-auto mb-0.5" />
+                          <MoneyIcon className="w-4 h-4 mx-auto mb-0.5" />
                           Efectivo
                         </button>
                         <button
@@ -282,7 +282,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
                               : 'border-slate-200 bg-white/70 text-slate-600'
                           }`}
                         >
-                          <CreditCard className="w-4 h-4 mx-auto mb-0.5" />
+                          <CreditCardIcon className="w-4 h-4 mx-auto mb-0.5" />
                           Tarjeta
                         </button>
                         <button
@@ -294,7 +294,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
                               : 'border-slate-200 bg-white/70 text-slate-600'
                           }`}
                         >
-                          <DeviceMobile className="w-4 h-4 mx-auto mb-0.5" />
+                          <DeviceMobileIcon className="w-4 h-4 mx-auto mb-0.5" />
                           Yape/Plin
                         </button>
                       </div>
@@ -344,7 +344,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
                       onClick={handleProcesarPagoYLiberar}
                       className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <CheckCircle className="w-4 h-4" />
+                      <CheckCircleIcon className="w-4 h-4" />
                       Confirmar Pago (S/ {pedido.total.toFixed(2)}) y Desocupar Mesa
                     </button>
                   </div>
@@ -417,7 +417,7 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
 
               {superaAforo && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-xs text-red-700 font-medium animate-in fade-in">
-                  <WarningCircle className="w-4 h-4 text-red-600 shrink-0" />
+                  <WarningCircleIcon className="w-4 h-4 text-red-600 shrink-0" />
                   <span>
                     La cantidad ingresada ({comensales} comensales) supera la capacidad máxima de la Mesa {mesa.numero} ({mesa.capacidad} personas).
                   </span>

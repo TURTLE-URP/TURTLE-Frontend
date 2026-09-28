@@ -1,8 +1,8 @@
 import {
-  CaretDoubleLeft,
-  CaretDoubleRight,
-  CaretLeft,
-  CaretRight,
+  CaretDoubleLeftIcon,
+  CaretDoubleRightIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
 } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { paginasVisibles } from '../logic/filters'
@@ -32,7 +32,7 @@ export function ProveedoresPagination({
           disabled={!puedeAnterior}
           onClick={() => onPaginaChange(1)}
         >
-          <CaretDoubleLeft />
+          <CaretDoubleLeftIcon />
         </Button>
         <Button
           type="button"
@@ -42,7 +42,7 @@ export function ProveedoresPagination({
           disabled={!puedeAnterior}
           onClick={() => onPaginaChange(pagina - 1)}
         >
-          <CaretLeft />
+          <CaretLeftIcon />
         </Button>
         {paginasVisibles(pagina, totalPaginas).map((numero) =>
           numero === pagina ? (
@@ -76,7 +76,7 @@ export function ProveedoresPagination({
           disabled={!puedeSiguiente}
           onClick={() => onPaginaChange(pagina + 1)}
         >
-          <CaretRight />
+          <CaretRightIcon />
         </Button>
         <Button
           type="button"
@@ -86,7 +86,7 @@ export function ProveedoresPagination({
           disabled={!puedeSiguiente}
           onClick={() => onPaginaChange(totalPaginas)}
         >
-          <CaretDoubleRight />
+          <CaretDoubleRightIcon />
         </Button>
       </nav>
     </div>

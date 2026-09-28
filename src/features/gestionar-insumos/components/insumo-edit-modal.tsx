@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { X, Plus, CalendarBlank } from '@phosphor-icons/react';
+import { XIcon, PlusIcon, CalendarBlankIcon } from '@phosphor-icons/react';
 
 import { insumoSchema } from '../logic/schema';
 import type { InsumoFormValues } from '../logic/schema';
@@ -106,7 +106,7 @@ export function InsumoEditModal({
             onClick={handleClose}
             className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
           >
-            <X size={18} />
+            <XIcon size={18} />
           </button>
         </div>
 
@@ -223,7 +223,7 @@ export function InsumoEditModal({
                   {...register('fechaVencimiento')}
                   className="pr-8"
                 />
-                <CalendarBlank
+                <CalendarBlankIcon
                   size={16}
                   className="absolute right-2.5 top-2.5 text-gray-400 pointer-events-none"
                 />
@@ -249,7 +249,7 @@ export function InsumoEditModal({
                 onClick={handleAddEtiqueta}
                 className="px-3"
               >
-                <Plus size={16} />
+                <PlusIcon size={16} />
               </Button>
             </div>
             {etiquetas.length > 0 && (
@@ -265,7 +265,7 @@ export function InsumoEditModal({
                       onClick={() => handleRemoveEtiqueta(tag)}
                       className="hover:text-emerald-900"
                     >
-                      <X size={12} />
+                      <XIcon size={12} />
                     </button>
                   </span>
                 ))}

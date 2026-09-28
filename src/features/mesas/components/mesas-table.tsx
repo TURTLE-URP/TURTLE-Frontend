@@ -1,5 +1,5 @@
 import React from 'react'
-import { Eye, PencilSimple, Trash, Users, MapPin, CaretLeft, CaretRight } from '@phosphor-icons/react'
+import { EyeIcon, PencilSimpleIcon, TrashIcon, UsersIcon, MapPinIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
 import type { Mesa } from '../types/mesa'
 
 interface MesasTableProps {
@@ -66,7 +66,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
                     {/* Capacidad */}
                     <td className="py-4 px-4 text-slate-600">
                       <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md">
-                        <Users className="w-3.5 h-3.5 text-slate-500" />
+                        <UsersIcon className="w-3.5 h-3.5 text-slate-500" />
                         {mesa.capacidad} personas
                       </span>
                     </td>
@@ -74,7 +74,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
                     {/* Ubicación */}
                     <td className="py-4 px-4 text-slate-600">
                       <div className="flex items-center gap-1.5 text-xs">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <MapPinIcon className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                         <span>Piso {mesa.piso} · {mesa.zona}</span>
                       </div>
                     </td>
@@ -120,7 +120,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
                           className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
                           title="Gestionar mesa y pedido"
                         >
-                          <Eye className="w-4 h-4" weight="bold" />
+                          <EyeIcon className="w-4 h-4" weight="bold" />
                         </button>
 
                         {/* Editar */}
@@ -130,7 +130,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
                           className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
                           title="Editar capacidad / datos"
                         >
-                          <PencilSimple className="w-4 h-4" weight="bold" />
+                          <PencilSimpleIcon className="w-4 h-4" weight="bold" />
                         </button>
 
                         {/* Eliminar */}
@@ -140,7 +140,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
                           className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
                           title="Eliminar mesa"
                         >
-                          <Trash className="w-4 h-4" weight="bold" />
+                          <TrashIcon className="w-4 h-4" weight="bold" />
                         </button>
                       </div>
                     </td>
@@ -177,7 +177,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            <CaretLeft className="w-3.5 h-3.5" />
+            <CaretLeftIcon className="w-3.5 h-3.5" />
             Anterior
           </button>
 
@@ -188,7 +188,7 @@ export const MesasTable: React.FC<MesasTableProps> = ({
             className="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-emerald-600 text-white font-medium hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs"
           >
             Siguiente
-            <CaretRight className="w-3.5 h-3.5" />
+            <CaretRightIcon className="w-3.5 h-3.5" />
           </button>
         </div>
 

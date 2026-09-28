@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { Eye, EyeSlash, SignIn, SpinnerGap } from '@phosphor-icons/react'
+import { EyeIcon, EyeSlashIcon, SignInIcon, SpinnerGapIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { AuthSession } from '../../../stores/auth-store'
@@ -109,7 +109,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               className="absolute top-1/2 right-2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:outline-none"
               aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             >
-              {showPassword ? <EyeSlash size={18} /> : <Eye size={18} />}
+              {showPassword ? <EyeSlashIcon size={18} /> : <EyeIcon size={18} />}
             </button>
           </div>
           {passwordError ? (
@@ -132,7 +132,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         disabled={submitting}
         className="mt-6 h-11 w-full rounded-xl text-sm font-semibold"
       >
-        {submitting ? <SpinnerGap size={18} className="animate-spin" /> : <SignIn size={18} />}
+        {submitting ? <SpinnerGapIcon size={18} className="animate-spin" /> : <SignInIcon size={18} />}
         {submitting ? 'Ingresando…' : 'Iniciar sesión'}
       </Button>
     </form>

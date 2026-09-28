@@ -1,5 +1,5 @@
 import React from 'react'
-import { Users, Clock } from '@phosphor-icons/react'
+import { UsersIcon, ClockIcon } from '@phosphor-icons/react'
 import type { Mesa } from '../types/mesa'
 
 interface MesaCardProps {
@@ -50,7 +50,7 @@ export const MesaCard: React.FC<MesaCardProps> = ({ mesa, onGestionar }) => {
         {/* Capacity and details */}
         <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
           <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-            <Users className="w-4 h-4 text-slate-400 shrink-0" />
+            <UsersIcon className="w-4 h-4 text-slate-400 shrink-0" />
             <span>Capacidad: {mesa.capacidad} personas</span>
           </div>
 
@@ -58,7 +58,7 @@ export const MesaCard: React.FC<MesaCardProps> = ({ mesa, onGestionar }) => {
           {isOcupada && mesa.pedidoActual ? (
             <div className="pt-1">
               <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+                <ClockIcon className="w-4 h-4 text-slate-400 shrink-0" />
                 <span>
                   {mesa.pedidoActual.horaInicio} · {mesa.pedidoActual.comensales} personas
                 </span>

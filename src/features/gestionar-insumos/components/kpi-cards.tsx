@@ -1,4 +1,4 @@
-import { Package, CheckCircle, Warning, WarningCircle } from '@phosphor-icons/react';
+import { PackageIcon, CheckCircleIcon, WarningIcon, WarningCircleIcon } from '@phosphor-icons/react';
 import type { KpiInsumos } from '../logic/types';
 
 interface Props {
@@ -15,7 +15,7 @@ export function KpiCards({ kpis }: Props) {
           <span className="text-[11px] text-muted-foreground">registrados</span>
         </div>
         <div className="p-2.5 rounded-lg bg-muted text-foreground">
-          <Package size={22} />
+          <PackageIcon size={22} />
         </div>
       </div>
 
@@ -26,7 +26,7 @@ export function KpiCards({ kpis }: Props) {
           <span className="text-[11px] text-emerald-600 font-medium">disponibles</span>
         </div>
         <div className="p-2.5 rounded-lg bg-emerald-50 text-emerald-600">
-          <CheckCircle size={22} />
+          <CheckCircleIcon size={22} />
         </div>
       </div>
 
@@ -37,7 +37,7 @@ export function KpiCards({ kpis }: Props) {
           <span className="text-[11px] text-amber-600 font-medium">alertas activas</span>
         </div>
         <div className="p-2.5 rounded-lg bg-amber-50 text-amber-600">
-          <Warning size={22} />
+          <WarningIcon size={22} />
         </div>
       </div>
 
@@ -48,7 +48,7 @@ export function KpiCards({ kpis }: Props) {
           <span className="text-[11px] text-rose-600 font-medium">requieren acción</span>
         </div>
         <div className="p-2.5 rounded-lg bg-rose-50 text-rose-600">
-          <WarningCircle size={22} />
+          <WarningCircleIcon size={22} />
         </div>
       </div>
     </div>

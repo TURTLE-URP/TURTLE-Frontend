@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MagnifyingGlass, CaretLeft, CaretRight } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import type { Insumo } from '../logic/types';
 import type { InsumoFormValues } from '../logic/schema';
 import { InsumosTable } from './insumo-table';
@@ -72,7 +72,7 @@ export function GestionarInsumosPage() {
       <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
         {/* Campo de búsqueda */}
         <div className="relative w-full md:max-w-xs">
-          <MagnifyingGlass
+          <MagnifyingGlassIcon
             size={18}
             className="absolute left-3 top-2.5 text-muted-foreground pointer-events-none"
           />
@@ -151,7 +151,7 @@ export function GestionarInsumosPage() {
       className="p-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       title="Página anterior"
     >
-      <CaretLeft size={16} />
+      <CaretLeftIcon size={16} />
     </button>
 
     <span className="font-medium text-foreground">
@@ -165,7 +165,7 @@ export function GestionarInsumosPage() {
       className="p-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       title="Página siguiente"
     >
-      <CaretRight size={16} />
+      <CaretRightIcon size={16} />
     </button>
   </div>
 </div>

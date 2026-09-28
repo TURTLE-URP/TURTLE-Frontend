@@ -1,4 +1,4 @@
-import { PencilSimple, Prohibit, CheckCircle } from '@phosphor-icons/react';
+import { PencilSimpleIcon, ProhibitIcon, CheckCircleIcon } from '@phosphor-icons/react';
 import type { Insumo } from '../logic/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -85,7 +85,7 @@ export function InsumosTable({ insumos, onInactivar, onActivar, onEditar }: Prop
                         className="p-1 text-gray-500 hover:text-emerald-600 transition-colors"
                         title="Editar Insumo"                      
                       >
-                        <PencilSimple size={18} />
+                        <PencilSimpleIcon size={18} />
                       </button>
                       {item.estado === 'Activo' ? (
                       <button
@@ -94,7 +94,7 @@ export function InsumosTable({ insumos, onInactivar, onActivar, onEditar }: Prop
                         onClick={() => onInactivar(item.id)}
                         className="p-1.5 text-muted-foreground hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                       >
-                        <Prohibit size={16} />
+                        <ProhibitIcon size={16} />
                       </button>
 ) : (
   <button
@@ -103,7 +103,7 @@ export function InsumosTable({ insumos, onInactivar, onActivar, onEditar }: Prop
     onClick={() => onActivar(item.id)}
     className="p-1.5 text-muted-foreground hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors"
   >
-    <CheckCircle size={16} />
+    <CheckCircleIcon size={16} />
   </button>
 )}
                     </div>

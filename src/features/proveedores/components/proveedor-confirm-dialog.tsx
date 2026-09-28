@@ -1,4 +1,4 @@
-import { WarningCircle } from '@phosphor-icons/react'
+import { WarningCircleIcon } from '@phosphor-icons/react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,7 +35,7 @@ export function ProveedorConfirmDialog({
       <AlertDialogContent>
         <div className="flex items-start gap-4">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-            <WarningCircle className="size-5 text-destructive" weight="fill" />
+            <WarningCircleIcon className="size-5 text-destructive" weight="fill" />
           </div>
           <div className="flex-1 space-y-2">
             <AlertDialogHeader>

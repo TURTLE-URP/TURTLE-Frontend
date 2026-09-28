@@ -1,16 +1,16 @@
 import { useState, useMemo, type FormEvent } from 'react'
 import {
-  Plus,
-  PencilSimple,
-  Prohibit,
-  MagnifyingGlass,
-  X,
-  Warning,
-  CheckCircle,
-  CaretDown,
-  Warehouse,
-  ThermometerCold,
-  Info,
+  PlusIcon,
+  PencilSimpleIcon,
+  ProhibitIcon,
+  MagnifyingGlassIcon,
+  XIcon,
+  WarningIcon,
+  CheckCircleIcon,
+  CaretDownIcon,
+  WarehouseIcon,
+  ThermometerColdIcon,
+  InfoIcon,
 } from '@phosphor-icons/react'
 
 import type { AlmacenArea, FormErrors } from '../types/almacen'
@@ -322,7 +322,7 @@ export function GestionarAlmacenesPage() {
               onClick={handleOpenCreate}
               className="bg-cyan-600 hover:bg-cyan-700 text-white font-medium px-3.5 py-2 rounded shadow-sm flex items-center gap-1.5 transition-colors"
             >
-              <Plus size={14} weight="bold" />
+              <PlusIcon size={14} weight="bold" />
               <span>Registrar Nueva Área</span>
             </button>
           </div>
@@ -337,11 +337,11 @@ export function GestionarAlmacenesPage() {
               }`}
             >
               <div className="flex items-center gap-2">
-                {mensaje.tipo === 'ok' ? <CheckCircle size={16} /> : <Warning size={16} />}
+                {mensaje.tipo === 'ok' ? <CheckCircleIcon size={16} /> : <WarningIcon size={16} />}
                 <span>{mensaje.texto}</span>
               </div>
               <button onClick={() => setMensaje(null)} className="text-slate-400 hover:text-slate-600">
-                <X size={14} />
+                <XIcon size={14} />
               </button>
             </div>
           )}
@@ -376,7 +376,7 @@ export function GestionarAlmacenesPage() {
           {/* Search & Filters */}
           <div className="flex justify-between items-center bg-white border border-slate-200 rounded p-2">
             <div className="relative flex-1 max-w-lg">
-              <MagnifyingGlass size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
+              <MagnifyingGlassIcon size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Buscar por área, insumo resguardado, ubicación o responsable..."
@@ -419,7 +419,7 @@ export function GestionarAlmacenesPage() {
                     <td className="py-3 px-4">
                       <div className="flex items-start gap-2.5">
                         <div className="w-7 h-7 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 shrink-0 mt-0.5">
-                          <Warehouse size={14} />
+                          <WarehouseIcon size={14} />
                         </div>
                         <div className="space-y-1">
                           <div className="font-semibold text-slate-800">{item.nombre}</div>
@@ -454,7 +454,7 @@ export function GestionarAlmacenesPage() {
                     <td className="py-3 px-4 align-top">
                       {item.requiereTemperatura ? (
                         <span className="inline-flex items-center gap-1 text-indigo-600 font-medium font-mono">
-                          <ThermometerCold size={14} />
+                          <ThermometerColdIcon size={14} />
                           {item.temperaturaObjetivo}°C
                         </span>
                       ) : (
@@ -486,14 +486,14 @@ export function GestionarAlmacenesPage() {
                           className="p-1 hover:text-slate-700 hover:bg-slate-100 rounded"
                           title="Editar Área"
                         >
-                          <PencilSimple size={14} />
+                          <PencilSimpleIcon size={14} />
                         </button>
                         <button
                           onClick={() => handleToggleEstado(item)}
                           className="p-1 hover:text-rose-600 hover:bg-rose-50 rounded"
                           title={item.estado === 'Activo' ? 'Desactivar Área' : 'Activar Área'}
                         >
-                          <Prohibit size={14} />
+                          <ProhibitIcon size={14} />
                         </button>
                       </div>
                     </td>
@@ -517,7 +517,7 @@ export function GestionarAlmacenesPage() {
                 onClick={() => setIsModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 p-1"
               >
-                <X size={18} />
+                <XIcon size={18} />
               </button>
             </div>
 
@@ -525,7 +525,7 @@ export function GestionarAlmacenesPage() {
             {!almacenEdit && (
               <div className="bg-cyan-50/60 border border-cyan-100 p-3 rounded-lg space-y-1.5">
                 <label className="block font-semibold text-cyan-900 text-xs flex items-center gap-1.5">
-                  <Info size={14} className="text-cyan-600" /> Cargar Plantilla de Cevichería:
+                  <InfoIcon size={14} className="text-cyan-600" /> Cargar Plantilla de Cevichería:
                 </label>
                 <div className="relative">
                   <select
@@ -540,7 +540,7 @@ export function GestionarAlmacenesPage() {
                       </option>
                     ))}
                   </select>
-                  <CaretDown size={14} className="absolute right-2.5 top-2.5 text-cyan-600 pointer-events-none" />
+                  <CaretDownIcon size={14} className="absolute right-2.5 top-2.5 text-cyan-600 pointer-events-none" />
                 </div>
               </div>
             )}
@@ -596,7 +596,7 @@ export function GestionarAlmacenesPage() {
                       <option value="Temperatura Ambiente">Temperatura Ambiente</option>
                       <option value="Suministros">Suministros</option>
                     </select>
-                    <CaretDown size={14} className="absolute right-2.5 top-3.5 text-slate-400 pointer-events-none" />
+                    <CaretDownIcon size={14} className="absolute right-2.5 top-3.5 text-slate-400 pointer-events-none" />
                   </div>
                 </div>
 

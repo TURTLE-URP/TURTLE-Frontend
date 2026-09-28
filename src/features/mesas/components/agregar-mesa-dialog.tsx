@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { X, Users, Chair } from '@phosphor-icons/react'
+import { XIcon, UsersIcon, ChairIcon } from '@phosphor-icons/react'
 import type { Mesa } from '../types/mesa'
 
 interface AgregarMesaDialogProps {
@@ -67,7 +67,7 @@ export const AgregarMesaDialog: React.FC<AgregarMesaDialogProps> = ({
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-              <Chair className="w-5 h-5" />
+              <ChairIcon className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-slate-900">
@@ -83,7 +83,7 @@ export const AgregarMesaDialog: React.FC<AgregarMesaDialogProps> = ({
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <XIcon className="w-5 h-5" />
           </button>
         </div>
 
@@ -106,7 +106,7 @@ export const AgregarMesaDialog: React.FC<AgregarMesaDialogProps> = ({
                       : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                   }`}
                 >
-                  <Users className="w-4 h-4 text-emerald-600" />
+                  <UsersIcon className="w-4 h-4 text-emerald-600" />
                   <span>{cap} personas</span>
                 </button>
               ))}

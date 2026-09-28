@@ -1,9 +1,9 @@
 import React from 'react'
 import {
-  MagnifyingGlass,
-  ArrowsClockwise,
-  SquaresFour,
-  Table,
+  MagnifyingGlassIcon,
+  ArrowsClockwiseIcon,
+  SquaresFourIcon,
+  TableIcon,
 } from '@phosphor-icons/react'
 import type { VistaModo } from '../types/mesa'
 
@@ -41,7 +41,7 @@ export const MesasKPIs: React.FC<MesasKPIsProps> = ({
         <div className="flex flex-wrap items-center gap-3 flex-1 min-w-0">
           {/* 1. Buscador primero */}
           <div className="relative flex-1 min-w-[200px] max-w-xs sm:max-w-sm">
-            <MagnifyingGlass className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <MagnifyingGlassIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Buscar mesa o cliente..."
@@ -76,7 +76,7 @@ export const MesasKPIs: React.FC<MesasKPIsProps> = ({
             className="p-2 border border-slate-200/90 bg-white hover:bg-slate-50 rounded-xl text-slate-600 hover:text-slate-900 transition-all shadow-2xs cursor-pointer active:scale-95"
             title="Sincronizar mesas"
           >
-            <ArrowsClockwise className="w-4 h-4 text-slate-600" />
+            <ArrowsClockwiseIcon className="w-4 h-4 text-slate-600" />
           </button>
 
           {/* 4. Cambio de vista */}
@@ -91,7 +91,7 @@ export const MesasKPIs: React.FC<MesasKPIsProps> = ({
               }`}
               title="Vista de Salón (Tarjetas)"
             >
-              <SquaresFour className="w-4 h-4" />
+              <SquaresFourIcon className="w-4 h-4" />
             </button>
             <button
               type="button"
@@ -103,7 +103,7 @@ export const MesasKPIs: React.FC<MesasKPIsProps> = ({
               }`}
               title="Vista de Gestión (Tabla CUS)"
             >
-              <Table className="w-4 h-4" />
+              <TableIcon className="w-4 h-4" />
             </button>
           </div>
         </div>

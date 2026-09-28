@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CaretDown, CaretUp, Plus, Trash, WarningCircle } from '@phosphor-icons/react'
+import { CaretDownIcon, CaretUpIcon, PlusIcon, TrashIcon, WarningCircleIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { useToastStore } from '@/stores/toast-store'
 import {
@@ -126,9 +126,9 @@ function ContactoGrupo({
           aria-expanded={expandido}
         >
           {expandido ? (
-            <CaretUp className="size-4 shrink-0 text-muted-foreground" />
+            <CaretUpIcon className="size-4 shrink-0 text-muted-foreground" />
           ) : (
-            <CaretDown className="size-4 shrink-0 text-muted-foreground" />
+            <CaretDownIcon className="size-4 shrink-0 text-muted-foreground" />
           )}
           <span className="truncate">{nombreResumen}</span>
           {!expandido && contacto.telefono.trim() ? (
@@ -143,7 +143,7 @@ function ContactoGrupo({
             onClick={onEliminar}
             aria-label={`Eliminar contacto ${index + 1}`}
           >
-            <Trash className="text-destructive" />
+            <TrashIcon className="text-destructive" />
           </Button>
         ) : null}
       </div>
@@ -462,7 +462,7 @@ export function ProveedorFormDialog({
                 onClick={agregarContacto}
                 className="mt-2"
               >
-                <Plus className="mr-1 size-4" />
+                <PlusIcon className="mr-1 size-4" />
                 Agregar contacto
               </Button>
             ) : null}
@@ -514,7 +514,7 @@ export function ProveedorFormDialog({
       <AlertDialogContent>
         <div className="flex items-start gap-4">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-            <WarningCircle className="size-5 text-destructive" weight="fill" />
+            <WarningCircleIcon className="size-5 text-destructive" weight="fill" />
           </div>
           <div className="flex-1 space-y-2">
             <AlertDialogHeader>
