@@ -1,65 +1,81 @@
-import type { ReactNode } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { MovementTypeBadge } from './movement-type-badge'
+import { PrinterIcon } from '@phosphor-icons/react'
+import { Button } from '@/components/ui/button'
 import { formatMovementDate, formatMovementTime } from '../logic/format-date'
+import { movementTypeLabel } from '../logic/movement-type'
 import type { KardexMovement } from '../types'
 
-export interface MovementDetailModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+export interface MovementDetailPanelProps {
   movement: KardexMovement | null
   insumoNombre: string
   unidadMedida: string
 }
 
-function DetailRow({ label, value }: { label: string; value: ReactNode }) {
+function DetailField({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-border py-2.5 last:border-b-0">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium text-foreground">{value}</span>
+    <div className="flex flex-col gap-1">
+      <span className="text-[11px] font-medium text-slate-500">{label}</span>
+      <div className="min-h-10 rounded-md border border-amber-200 bg-white px-3 py-2 text-sm text-slate-800">
+        {value}
+      </div>
     </div>
   )
 }
 
-/** Full detail of a single Kardex movement, opened by clicking its table row. */
-export function MovementDetailModal({
-  open,
-  onOpenChange,
+/** Persistent read-only detail for the currently selected Kardex movement. */
+export function MovementDetailPanel({
   movement,
   insumoNombre,
   unidadMedida,
-}: MovementDetailModalProps) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Detalle del movimiento</DialogTitle>
-          <DialogDescription>{insumoNombre}</DialogDescription>
-        </DialogHeader>
+}: MovementDetailPanelProps) {
+  const balanceBefore = movement
+    ? movement.tipo === 'entrada'
+      ? movement.saldoResultante - movement.cantidad
+      : movement.saldoResultante + movement.cantidad
+    : null
 
-        {movement && (
-          <div className="flex flex-col">
-            <DetailRow label="Tipo" value={<MovementTypeBadge type={movement.tipo} />} />
-            <DetailRow label="Cantidad" value={`${movement.cantidad} ${unidadMedida}`} />
-            <DetailRow
-              label="Fecha y hora"
-              value={`${formatMovementDate(movement.fecha)} · ${formatMovementTime(movement.fecha)}`}
-            />
-            <DetailRow label="Responsable" value={movement.responsable} />
-            <DetailRow label="Documento" value={movement.documento} />
-            <DetailRow
-              label="Motivo"
-              value={<span className="text-right">{movement.motivo}</span>}
-            />
+  return (
+    <aside
+      aria-label="Detalle del movimiento seleccionado"
+      className="flex min-h-96 flex-col rounded-xl border border-amber-300 bg-amber-50 p-4"
+    >
+      <div className="mb-4">
+        <h2 className="text-base font-semibold text-amber-800">
+          Detalle del movimiento
+          {movement ? ` · ${movementTypeLabel(movement.tipo).toUpperCase()}` : ''}
+        </h2>
+        <p className="mt-1 text-xs text-muted-foreground">Solo lectura · trazabilidad completa</p>
+      </div>
+
+      {movement && balanceBefore !== null ? (
+        <div className="flex flex-1 flex-col gap-2.5">
+          <DetailField
+            label="Fecha / hora"
+            value={`${formatMovementDate(movement.fecha)} ${formatMovementTime(movement.fecha)}`}
+          />
+          <DetailField
+            label="Tipo / cantidad"
+            value={`${movementTypeLabel(movement.tipo).toUpperCase()} · ${movement.tipo === 'entrada' ? '+' : '-'}${movement.cantidad} ${unidadMedida}`}
+          />
+          <DetailField
+            label="Saldo anterior → nuevo"
+            value={`${balanceBefore} ${unidadMedida} → ${movement.saldoResultante} ${unidadMedida}`}
+          />
+          <DetailField label="Insumo" value={insumoNombre} />
+          <DetailField label="Documento / comprobante" value={movement.documento} />
+          <DetailField label="Motivo" value={movement.motivo} />
+          <DetailField label="Responsable" value={movement.responsable} />
+          <div className="mt-auto pt-2">
+            <Button type="button" onClick={() => window.print()} className="w-full sm:w-auto">
+              <PrinterIcon aria-hidden="true" />
+              Exportar PDF
+            </Button>
           </div>
-        )}
-      </DialogContent>
-    </Dialog>
+        </div>
+      ) : (
+        <p className="m-auto max-w-xs text-center text-sm text-muted-foreground">
+          Selecciona un movimiento para consultar su detalle.
+        </p>
+      )}
+    </aside>
   )
 }

@@ -1,79 +1,76 @@
-import { MovementTypeBadge } from './movement-type-badge'
 import { formatMovementDate, formatMovementTime } from '../logic/format-date'
+import { movementTypeLabel } from '../logic/movement-type'
 import type { KardexMovement } from '../types'
 
 export interface KardexTableProps {
   movements: KardexMovement[]
   unidadMedida: string
+  selectedMovementId: string | null
   onSelectMovement: (movement: KardexMovement) => void
 }
 
 /**
  * Renders the movement history for one insumo. Each row is clickable and
- * opens the full detail of that movement (see MovementDetailModal).
+ * updates the persistent detail panel for that movement.
  */
-export function KardexTable({ movements, unidadMedida, onSelectMovement }: KardexTableProps) {
+export function KardexTable({
+  movements,
+  unidadMedida,
+  selectedMovementId,
+  onSelectMovement,
+}: KardexTableProps) {
   if (movements.length === 0) {
     return (
-      <div className="rounded-none border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-        Este insumo todavía no registra movimientos.
+      <div className="m-auto rounded-lg border border-dashed border-slate-300 px-8 py-10 text-center text-sm text-muted-foreground">
+        No hay movimientos para los filtros seleccionados.
       </div>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-none border border-border">
-      <table className="w-full border-collapse text-left text-sm">
-        <thead>
-          <tr className="border-b border-border bg-muted/50 text-xs text-muted-foreground uppercase">
-            <th scope="col" className="px-4 py-2.5 font-medium">
-              Fecha y hora
-            </th>
-            <th scope="col" className="px-4 py-2.5 font-medium">
-              Tipo
-            </th>
-            <th scope="col" className="px-4 py-2.5 font-medium">
-              Cantidad
-            </th>
-            <th scope="col" className="px-4 py-2.5 font-medium">
-              Motivo
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {movements.map((movement) => (
-            <tr
-              key={movement.id}
-              tabIndex={0}
-              role="button"
-              aria-label={`Ver detalle del movimiento del ${formatMovementDate(movement.fecha)}`}
+    <ul className="flex flex-col gap-2 overflow-y-auto pr-1">
+      {movements.map((movement) => {
+        const isSelected = movement.id === selectedMovementId
+        const balanceBefore =
+          movement.tipo === 'entrada'
+            ? movement.saldoResultante - movement.cantidad
+            : movement.saldoResultante + movement.cantidad
+        const tone = {
+          entrada: 'border-green-200 bg-green-50 hover:border-green-300',
+          salida: 'border-amber-300 bg-orange-50 hover:border-amber-400',
+          merma: 'border-rose-300 bg-rose-50 hover:border-rose-400',
+        }[movement.tipo]
+
+        return (
+          <li key={movement.id}>
+            <button
+              type="button"
+              aria-pressed={isSelected}
+              aria-label={`Ver detalle: ${movementTypeLabel(movement.tipo)}, ${movement.cantidad} ${unidadMedida}, ${formatMovementDate(movement.fecha)}`}
               onClick={() => onSelectMovement(movement)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault()
-                  onSelectMovement(movement)
-                }
-              }}
-              className="cursor-pointer border-b border-border last:border-b-0 hover:bg-muted/30 focus-visible:bg-muted/30 focus-visible:outline-none"
+              className={`w-full rounded-xl border px-3 py-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${tone} ${isSelected ? 'border-slate-800 ring-1 ring-slate-800' : ''}`}
             >
-              <td className="px-4 py-3 text-muted-foreground">
-                <span className="text-foreground">{formatMovementDate(movement.fecha)}</span>
-                {' · '}
-                {formatMovementTime(movement.fecha)}
-              </td>
-              <td className="px-4 py-3">
-                <MovementTypeBadge type={movement.tipo} />
-              </td>
-              <td className="px-4 py-3 font-medium text-foreground">
-                {movement.cantidad} {unidadMedida}
-              </td>
-              <td className="px-4 py-3 max-w-xs truncate text-muted-foreground">
-                {movement.motivo}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold text-slate-800">
+                {isSelected && <span className="uppercase">Seleccionado</span>}
+                <span>
+                  {formatMovementDate(movement.fecha)} {formatMovementTime(movement.fecha)}
+                </span>
+                <span>{movementTypeLabel(movement.tipo).toUpperCase()}</span>
+                <span>
+                  {movement.tipo === 'entrada' ? '+' : '-'}
+                  {movement.cantidad} {unidadMedida}
+                </span>
+                <span className="font-normal text-slate-600">
+                  {balanceBefore} → {movement.saldoResultante} {unidadMedida}
+                </span>
+              </span>
+              <span className="mt-1 block truncate text-xs text-slate-500">
+                {movement.motivo} · {movement.documento}
+              </span>
+            </button>
+          </li>
+        )
+      })}
+    </ul>
   )
 }
