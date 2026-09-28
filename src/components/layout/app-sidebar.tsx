@@ -6,6 +6,7 @@ import {
   CaretDownIcon,
   ChairIcon,
   ClipboardTextIcon,
+  FileArchiveIcon,
   PackageIcon,
   SignOutIcon,
   SquaresFourIcon,
@@ -17,20 +18,14 @@ import { getMockSesion } from '@/features/proveedores/data/mock-session'
 import { puedeGestionarProveedores } from '@/features/proveedores/logic/access'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth-store'
+import type { LinkProps } from '@tanstack/react-router'
 
-type AppPath =
-  | '/'
-  | '/mesas'
-  | '/insumos'
-  | '/abastecimiento'
-  | '/abasto'
-  | '/usuarios'
-  | '/proveedores'
-
-type GroupId = 'gestion' | 'operacion'
+// Extrae el string union exacto de la propiedad 'to'
+type RouteTo = LinkProps['to']
+type GroupId = 'gestion' | 'operacion' | 'maestros'
 
 interface NavItem {
-  to: AppPath
+  to: RouteTo
   label: string
   icon: Icon
   gated?: 'proveedores'
@@ -64,9 +59,14 @@ const NAV_GROUPS: NavGroup[] = [
       { to: '/abasto', label: 'Órdenes de Abasto', icon: ClipboardTextIcon },
     ],
   },
+  {
+    id: 'maestros',
+    label: 'Catálogos',
+    items: [{ to: '/catalogos/cotizaciones', label: 'Cotizaciones', icon: FileArchiveIcon }],
+  },
 ]
 
-function isActive(pathname: string, to: AppPath) {
+function isActive(pathname: string, to: RouteTo) {
   return pathname === to
 }
 
@@ -98,6 +98,7 @@ export function AppSidebar() {
   const [openGroups, setOpenGroups] = useState<Record<GroupId, boolean>>({
     gestion: false,
     operacion: false,
+    maestros: false,
   })
 
   function toggleGroup(id: GroupId) {
@@ -105,11 +106,7 @@ export function AppSidebar() {
   }
 
   const userName = session ? displayNameFromEmail(session.email) : 'Invitado'
-  const userRole = session
-    ? canProveedores
-      ? 'Administrador'
-      : 'Invitado'
-    : 'Sin sesión'
+  const userRole = session ? (canProveedores ? 'Administrador' : 'Invitado') : 'Sin sesión'
   const userInitial = session ? initialsFromEmail(session.email) : '?'
 
   return (
