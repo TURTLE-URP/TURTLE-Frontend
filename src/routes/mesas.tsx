@@ -156,82 +156,33 @@ export const Route = createFileRoute('/mesas')({
 //     showToast(`Mesa ${mesaAEliminar.numero} eliminada del sistema`)
 //   }
 
-//   return (
-//     <div className="min-h-full space-y-6 bg-slate-50/70 font-sans text-slate-800 antialiased">
-//           {/* Header Superior */}
-//           <div>
-//             <h1 className="font-serif text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
-//               Estado de Mesas
-//             </h1>
-//             <p className="text-xs text-slate-500 mt-1 font-medium">
-//               Consulta y gestión de las mesas del restaurante
-//             </p>
-//           </div>
+  return (
+    <div className="min-h-full space-y-6 bg-slate-50/70 font-sans text-slate-800 antialiased">
+          {/* Header Superior */}
+          <div>
+            <h1 className="font-serif text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              Estado de Mesas
+            </h1>
+            <p className="text-xs text-slate-500 mt-1 font-medium">
+              Anfitrión / mozo · Tiempo real
+            </p>
+          </div>
 
-//           {/* Barra Integrada: Buscador, Pisos, Refrescar, Vista y Disponibilidad 4/6 */}
-//           <MesasKPIs
-//             total={totalMesasPiso}
-//             disponibles={disponiblesPiso}
-//             ocupadas={ocupadasPiso}
-//             pisoActivo={pisoActivo}
-//             busqueda={busqueda}
-//             onBusquedaChange={setBusqueda}
-//             onPisoChange={setPisoActivo}
-//             onActualizar={() => showToast('Lista de mesas sincronizada')}
-//             vistaModo={vistaModo}
-//             onVistaModoChange={setVistaModo}
-//           />
-
-//           {/* Barra de Filtros de Estado y Leyenda */}
-//           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-//             <div className="flex items-center gap-2">
-//               <button
-//                 type="button"
-//                 onClick={() => setFiltroEstado('todas')}
-//                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-//                   filtroEstado === 'todas'
-//                     ? 'bg-emerald-600 text-white shadow-xs'
-//                     : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
-//                 }`}
-//               >
-//                 Todas ({totalMesasPiso})
-//               </button>
-
-//               <button
-//                 type="button"
-//                 onClick={() => setFiltroEstado('desocupadas')}
-//                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-//                   filtroEstado === 'desocupadas'
-//                     ? 'bg-emerald-600 text-white shadow-xs'
-//                     : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
-//                 }`}
-//               >
-//                 Desocupadas ({disponiblesPiso})
-//               </button>
-
-//               <button
-//                 type="button"
-//                 onClick={() => setFiltroEstado('ocupadas')}
-//                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-//                   filtroEstado === 'ocupadas'
-//                     ? 'bg-emerald-600 text-white shadow-xs'
-//                     : 'text-slate-600 hover:text-slate-900 bg-white border border-slate-200'
-//                 }`}
-//               >
-//                 Ocupadas ({ocupadasPiso})
-//               </button>
-//             </div>
-
-//             {/* Botón + Nueva Mesa */}
-//             <button
-//               type="button"
-//               onClick={handleAbrirCrear}
-//               className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs shadow-emerald-600/20 active:scale-95 cursor-pointer self-start sm:self-auto"
-//             >
-//               <PlusIcon className="w-4 h-4" weight="bold" />
-//               <span>Nueva Mesa</span>
-//             </button>
-//           </div>
+          {/* Barra Integrada: Buscador, Pisos, Refrescar, Vista y Disponibilidad 4/6 */}
+          <MesasKPIs
+  total={totalMesasPiso}
+  disponibles={disponiblesPiso}
+  ocupadas={ocupadasPiso}
+  pisoActivo={pisoActivo}
+  busqueda={busqueda}
+  onBusquedaChange={setBusqueda}
+  onPisoChange={setPisoActivo}
+  onActualizar={() => showToast('Lista de mesas sincronizada')}
+  vistaModo={vistaModo}
+  onVistaModoChange={setVistaModo}
+  filtroEstado={filtroEstado}
+  onFiltroEstadoChange={setFiltroEstado}
+/>
 
 //           {/* Área de Visualización: Cuadrícula o Tabla */}
 //           {vistaModo === 'cuadricula' ? (
