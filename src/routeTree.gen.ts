@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as AbastecimientoRouteImport } from './routes/abastecimiento'
 import { Route as AbastoRouteImport } from './routes/abasto'
 import { Route as InsumosRouteImport } from './routes/insumos'
@@ -21,6 +22,11 @@ import { Route as UsuariosRouteImport } from './routes/usuarios'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesasRoute = MesasRouteImport.update({
+  id: '/mesas',
+  path: '/mesas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AbastecimientoRoute = AbastecimientoRouteImport.update({
@@ -61,6 +67,7 @@ const UsuariosRoute = UsuariosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/mesas': typeof MesasRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
   '/insumos': typeof InsumosRoute
@@ -78,10 +85,12 @@ export interface FileRoutesByTo {
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
+  '/mesas': typeof MesasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/mesas': typeof MesasRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
   '/insumos': typeof InsumosRoute
@@ -93,7 +102,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/' | '/mesas'
     | '/abastecimiento'
     | '/abasto'
     | '/insumos'
@@ -103,7 +112,7 @@ export interface FileRouteTypes {
     | '/usuarios'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/' | '/mesas'
     | '/abastecimiento'
     | '/abasto'
     | '/insumos'
@@ -113,7 +122,7 @@ export interface FileRouteTypes {
     | '/usuarios'
   id:
     | '__root__'
-    | '/'
+    | '/' | '/mesas'
     | '/abastecimiento'
     | '/abasto'
     | '/insumos'
@@ -132,6 +141,7 @@ export interface RootRouteChildren {
   MesasRoute: typeof MesasRoute
   ProveedoresRoute: typeof ProveedoresRoute
   UsuariosRoute: typeof UsuariosRoute
+  MesasRoute: typeof MesasRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsuariosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mesas': {
+      id: '/mesas'
+      path: '/mesas'
+      fullPath: '/mesas'
+      preLoaderRoute: typeof MesasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   MesasRoute: MesasRoute,
   ProveedoresRoute: ProveedoresRoute,
   UsuariosRoute: UsuariosRoute,
+  MesasRoute: MesasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
