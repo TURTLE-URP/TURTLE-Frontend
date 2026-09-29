@@ -18,6 +18,7 @@ export function GestionarInsumosPage() {
     filtros,
     setFiltros,
     registrarInsumo,
+    editarInsumo,
     inactivarInsumo,
     activarInsumo,
   } = useInsumos();
@@ -41,7 +42,7 @@ export function GestionarInsumosPage() {
   };
 
   const handleEditarSubmit = (data: InsumoFormValues) => {
-    console.log('Insumo editado:', insumoSeleccionado?.id, data);
+    if (insumoSeleccionado) editarInsumo(insumoSeleccionado.id, data);
     setModalEditarOpen(false);
   };
 

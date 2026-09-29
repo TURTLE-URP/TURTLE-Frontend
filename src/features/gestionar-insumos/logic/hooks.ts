@@ -1,7 +1,14 @@
 // src/features/gestionar-insumos/logic/api/hooks.ts
 import { useState } from 'react';
 import type { Insumo, InsumoFiltros, KpiInsumos } from './types';
+import type { InsumoFormValues } from './schema';
 import { MOCK_INSUMOS } from './mock';
+
+
+// TODO: el prefijo saldrá del módulo de configuración de sistema.
+const CODIGO_PREFIJO = 'INS';
+const generarCodigo = (correlativo: number) =>
+  `${CODIGO_PREFIJO}-${String(correlativo).padStart(4, '0')}`;
 
 export function useInsumos() {
   const [insumos, setInsumos] = useState<Insumo[]>(MOCK_INSUMOS);
@@ -39,23 +46,33 @@ export function useInsumos() {
     criticos: insumos.filter((i) => i.nivelStock === 'Critico' && i.estado === 'Activo').length,
   };
 
-  const registrarInsumo = (nuevo: Omit<Insumo, 'id' | 'codigo' | 'nivelStock' | 'estado'>) => {
+ const registrarInsumo = (nuevo: InsumoFormValues) => {
     const nextId = (insumos.length + 1).toString();
-    const nextCode = `INS-${nextId.padStart(4, '0')}`;
-    
-    let nivelStock: Insumo['nivelStock'] = 'OK';
-    if (nuevo.stockActual === 0) nivelStock = 'Critico';
-    else if (nuevo.stockActual <= nuevo.stockMinimo) nivelStock = 'Bajo';
 
+    // Stock y nivel de stock se gestionarán desde Almacén; por ahora inician en 0.
     const insumoCreado: Insumo = {
       ...nuevo,
+      etiquetas: nuevo.etiquetas ?? [],
       id: nextId,
-      codigo: nextCode,
+      codigo: generarCodigo(insumos.length + 1),
       estado: 'Activo',
-      nivelStock,
+      stockActual: 0,
+      stockMinimo: 0,
+      stockAbasto: 0,
+      nivelStock: 'OK',
     };
 
-    setInsumos([insumoCreado, ...insumos]);
+    setInsumos((prev) => [insumoCreado, ...prev]);
+  };
+
+  const editarInsumo = (id: string, datos: InsumoFormValues) => {
+    setInsumos((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, ...datos, etiquetas: datos.etiquetas ?? [] }
+          : item
+      )
+    );
   };
 
   const inactivarInsumo = (id: string) => {
@@ -80,6 +97,7 @@ export function useInsumos() {
     filtros,
     setFiltros,
     registrarInsumo,
+    editarInsumo,      // <- nuevo
     inactivarInsumo,
     activarInsumo,
   };

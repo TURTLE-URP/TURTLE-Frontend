@@ -16,7 +16,9 @@ export interface Insumo {
   codigo: string;
   nombre: string;
   descripcion?: string;
-  categoria: CategoriaInsumo;
+  categoria?: CategoriaInsumo;
+  etiquetas: string[];
+  diasVencimiento?: number;
   unidadMedida: string;
   stockActual: number;
   stockMinimo: number;

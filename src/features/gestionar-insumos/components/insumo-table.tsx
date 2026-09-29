@@ -44,7 +44,7 @@ export function InsumosTable({ insumos, onInactivar, onActivar, onEditar }: Prop
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-normal text-xs bg-background">
-                      {item.categoria}
+                      {item.categoria ?? '—'}
                     </Badge>
                   </TableCell>
                   <TableCell>
