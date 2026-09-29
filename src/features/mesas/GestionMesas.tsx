@@ -133,7 +133,9 @@ export function GestionMesas() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 border-t-4 border-rose-500">
-            <h3 className="text-xl font-bold text-rose-600 mb-4">Desactivar (baja lógica)</h3>
+            <h3 className="text-xl font-bold text-rose-600 mb-4">
+              Desactivar mesa {mesaSeleccionada?.codigo} (baja lógica)
+            </h3>
             
             <div className="mb-4">
               <label className="block text-sm font-medium text-slate-700 mb-1">Motivo *</label>
