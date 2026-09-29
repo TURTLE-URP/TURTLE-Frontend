@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: InsumoFormValues) => void;
+  onSubmit: (data: any) => void;
 }
 
 export function InsumoFormModal({ open, onOpenChange, onSubmit }: Props) {
