@@ -21,6 +21,8 @@ export function GestionarInsumosPage() {
     editarInsumo,
     inactivarInsumo,
     activarInsumo,
+    etiquetasDisponibles,
+    agregarEtiqueta,
   } = useInsumos();
 
   const [modalRegistrarOpen, setModalRegistrarOpen] = useState(false);
@@ -177,6 +179,8 @@ export function GestionarInsumosPage() {
         open={modalRegistrarOpen}
         onOpenChange={setModalRegistrarOpen}
         onSubmit={registrarInsumo}
+        etiquetasDisponibles={etiquetasDisponibles}
+        onCrearEtiqueta={agregarEtiqueta}
       />
 
       <InsumoEditModal
@@ -184,6 +188,8 @@ export function GestionarInsumosPage() {
         onOpenChange={setModalEditarOpen}
         insumo={insumoSeleccionado}
         onSubmit={handleEditarSubmit}
+        etiquetasDisponibles={etiquetasDisponibles}
+        onCrearEtiqueta={agregarEtiqueta}
       />
     </div>
   );

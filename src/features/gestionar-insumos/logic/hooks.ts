@@ -1,8 +1,9 @@
 // src/features/gestionar-insumos/logic/api/hooks.ts
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Insumo, InsumoFiltros, KpiInsumos } from './types';
 import type { InsumoFormValues } from './schema';
 import { MOCK_INSUMOS } from './mock';
+import { normalizar } from './etiquetas';
 
 
 // TODO: el prefijo saldrá del módulo de configuración de sistema.
@@ -19,11 +20,29 @@ export function useInsumos() {
     estado: 'Todos',
   });
 
+  const [etiquetasExtra, setEtiquetasExtra] = useState<string[]>([]);
+  const etiquetasDisponibles = useMemo(() => {
+    const vistas = new Map<string, string>();
+    [...insumos.flatMap((i) => i.etiquetas ?? []), ...etiquetasExtra].forEach((t) => {
+      const clave = normalizar(t);
+      if (clave && !vistas.has(clave)) vistas.set(clave, t);
+    });
+    return [...vistas.values()].sort((a, b) => a.localeCompare(b, 'es'));
+  }, [insumos, etiquetasExtra]);
+
+  const agregarEtiqueta = (etiqueta: string) => {
+    const nueva = etiqueta.trim();
+    if (!nueva) return;
+    setEtiquetasExtra((prev) =>
+      prev.some((t) => normalizar(t) === normalizar(nueva)) ? prev : [...prev, nueva],
+    );
+  };
+
   const insumosFiltrados = insumos.filter((item) => {
     const coincideBusqueda =
       item.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
       item.codigo.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
-      item.proveedor.toLowerCase().includes(filtros.busqueda.toLowerCase());
+      (item.proveedor ?? '').toLowerCase().includes(filtros.busqueda.toLowerCase());
 
     const coincideCategoria =
       filtros.categoria === 'Todos' || item.categoria === filtros.categoria;
@@ -97,8 +116,10 @@ export function useInsumos() {
     filtros,
     setFiltros,
     registrarInsumo,
-    editarInsumo,      // <- nuevo
+    editarInsumo,
     inactivarInsumo,
     activarInsumo,
+    etiquetasDisponibles,   // <- nuevo
+    agregarEtiqueta,        // <- nuevo
   };
 }

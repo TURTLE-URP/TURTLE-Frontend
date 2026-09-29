@@ -14,9 +14,11 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: InsumoFormValues) => void;
+  etiquetasDisponibles?: string[];
+  onCrearEtiqueta?: (etiqueta: string) => void;
 }
 
-export function InsumoFormModal({ open, onOpenChange, onSubmit }: Props) {
+export function InsumoFormModal({ open, onOpenChange, onSubmit, etiquetasDisponibles, onCrearEtiqueta }: Props) {
   const [etiquetas, setEtiquetas] = useState<string[]>([]);
 
   const {
@@ -69,7 +71,8 @@ export function InsumoFormModal({ open, onOpenChange, onSubmit }: Props) {
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="mt-4 space-y-4">
           <InsumoFields register={register} errors={errors} />
-          <EtiquetasInput value={etiquetas} onChange={setEtiquetas} />
+          <EtiquetasInput value={etiquetas} onChange={setEtiquetas} etiquetasDisponibles={etiquetasDisponibles} onCrearEtiqueta={onCrearEtiqueta}
+/>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
             <Button type="button" variant="outline" onClick={handleClose}>
