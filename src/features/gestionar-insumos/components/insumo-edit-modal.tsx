@@ -34,7 +34,6 @@ export function InsumoEditModal({ open, onOpenChange, insumo, onSubmit, etiqueta
       nombre: '',
       descripcion: '',
       unidadMedida: 'kg',
-      diasVencimiento: '',
       etiquetas: [],
     },
   });
@@ -46,7 +45,6 @@ export function InsumoEditModal({ open, onOpenChange, insumo, onSubmit, etiqueta
         nombre: insumo.nombre,
         descripcion: insumo.descripcion ?? '',
         unidadMedida: insumo.unidadMedida,
-        diasVencimiento: insumo.diasVencimiento?.toString() ?? '',
         etiquetas: insumo.etiquetas,
       });
       setEtiquetas(insumo.etiquetas ?? []);

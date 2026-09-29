@@ -19,7 +19,6 @@ export interface Insumo {
   proveedor?: string;
   categoria?: CategoriaInsumo;
   etiquetas: string[];
-  diasVencimiento?: number;
   unidadMedida: string;
   stockActual: number;
   stockMinimo: number;

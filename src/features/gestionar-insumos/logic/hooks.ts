@@ -119,7 +119,7 @@ export function useInsumos() {
     editarInsumo,
     inactivarInsumo,
     activarInsumo,
-    etiquetasDisponibles,   // <- nuevo
-    agregarEtiqueta,        // <- nuevo
+    etiquetasDisponibles, 
+    agregarEtiqueta,
   };
 }

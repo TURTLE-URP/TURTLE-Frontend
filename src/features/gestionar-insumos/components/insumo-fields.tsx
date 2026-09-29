@@ -35,7 +35,6 @@ export function InsumoFields({ register, errors }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
           <Label className="text-xs font-medium text-gray-700">Unidad de medida *</Label>
           <select
             {...register('unidadMedida')}
@@ -47,23 +46,6 @@ export function InsumoFields({ register, errors }: Props) {
             <option value="unidad">unidad</option>
             <option value="litro">litro</option>
           </select>
-        </div>
-
-        <div>
-          <Label className="text-xs font-medium text-gray-700">
-            Días para vencimiento <span className="text-red-500">(opcional)</span>
-          </Label>
-          <Input
-            type="number"
-            min={1}
-            step={1}
-            {...register('diasVencimiento')}
-            className="mt-1"
-          />
-          {err('diasVencimiento') && (
-            <p className="text-[11px] text-red-500 mt-1">{err('diasVencimiento')}</p>
-          )}
-        </div>
       </div>
     </>
   );

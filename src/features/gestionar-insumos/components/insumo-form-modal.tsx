@@ -32,7 +32,6 @@ export function InsumoFormModal({ open, onOpenChange, onSubmit, etiquetasDisponi
       nombre: '',
       descripcion: '',
       unidadMedida: 'kg',
-      diasVencimiento: '',
       etiquetas: [],
     },
   });
