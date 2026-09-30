@@ -17,6 +17,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as ProveedoresRouteImport } from './routes/proveedores'
 import { Route as UsuariosRouteImport } from './routes/usuarios'
+import { Route as DetalleInsumoInsumoIdRouteImport } from './routes/detalle-insumo.$insumoId'
+import { Route as PreviewEliminarInsumoRouteImport } from './routes/preview.eliminar-insumo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +60,16 @@ const UsuariosRoute = UsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DetalleInsumoInsumoIdRoute = DetalleInsumoInsumoIdRouteImport.update({
+  id: '/detalle-insumo/$insumoId',
+  path: '/detalle-insumo/$insumoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreviewEliminarInsumoRoute = PreviewEliminarInsumoRouteImport.update({
+  id: '/preview/eliminar-insumo',
+  path: '/preview/eliminar-insumo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +80,8 @@ export interface FileRoutesByFullPath {
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
+  '/detalle-insumo/$insumoId': typeof DetalleInsumoInsumoIdRoute
+  '/preview/eliminar-insumo': typeof PreviewEliminarInsumoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +92,8 @@ export interface FileRoutesByTo {
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
+  '/detalle-insumo/$insumoId': typeof DetalleInsumoInsumoIdRoute
+  '/preview/eliminar-insumo': typeof PreviewEliminarInsumoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +105,8 @@ export interface FileRoutesById {
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
+  '/detalle-insumo/$insumoId': typeof DetalleInsumoInsumoIdRoute
+  '/preview/eliminar-insumo': typeof PreviewEliminarInsumoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +119,8 @@ export interface FileRouteTypes {
     | '/mesas'
     | '/proveedores'
     | '/usuarios'
+    | '/detalle-insumo/$insumoId'
+    | '/preview/eliminar-insumo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +131,8 @@ export interface FileRouteTypes {
     | '/mesas'
     | '/proveedores'
     | '/usuarios'
+    | '/detalle-insumo/$insumoId'
+    | '/preview/eliminar-insumo'
   id:
     | '__root__'
     | '/'
@@ -121,6 +143,8 @@ export interface FileRouteTypes {
     | '/mesas'
     | '/proveedores'
     | '/usuarios'
+    | '/detalle-insumo/$insumoId'
+    | '/preview/eliminar-insumo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +156,8 @@ export interface RootRouteChildren {
   MesasRoute: typeof MesasRoute
   ProveedoresRoute: typeof ProveedoresRoute
   UsuariosRoute: typeof UsuariosRoute
+  DetalleInsumoInsumoIdRoute: typeof DetalleInsumoInsumoIdRoute
+  PreviewEliminarInsumoRoute: typeof PreviewEliminarInsumoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsuariosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/detalle-insumo/$insumoId': {
+      id: '/detalle-insumo/$insumoId'
+      path: '/detalle-insumo/$insumoId'
+      fullPath: '/detalle-insumo/$insumoId'
+      preLoaderRoute: typeof DetalleInsumoInsumoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preview/eliminar-insumo': {
+      id: '/preview/eliminar-insumo'
+      path: '/preview/eliminar-insumo'
+      fullPath: '/preview/eliminar-insumo'
+      preLoaderRoute: typeof PreviewEliminarInsumoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +244,8 @@ const rootRouteChildren: RootRouteChildren = {
   MesasRoute: MesasRoute,
   ProveedoresRoute: ProveedoresRoute,
   UsuariosRoute: UsuariosRoute,
+  DetalleInsumoInsumoIdRoute: DetalleInsumoInsumoIdRoute,
+  PreviewEliminarInsumoRoute: PreviewEliminarInsumoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

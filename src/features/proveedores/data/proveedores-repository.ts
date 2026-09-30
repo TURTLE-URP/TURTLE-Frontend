@@ -49,8 +49,11 @@ export interface ProveedoresRepository {
 export function createProveedoresRepository(): ProveedoresRepository {
   const baseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? ''
   if (baseUrl) {
-    throw new Error(
-      'El adapter HTTP no está implementado todavía: deja VITE_API_BASE_URL vacío para usar el mock.',
+    // El adapter HTTP de proveedores aún no existe: se sigue usando el mock
+    // para no romper el resto de la app (ej. detalle-insumo) cuando se
+    // configura VITE_API_BASE_URL para las features que ya usan API real.
+    console.warn(
+      '[proveedores] Adapter HTTP no implementado todavía: usando mock aunque VITE_API_BASE_URL esté configurado.',
     )
   }
   return new MockProveedoresRepository()
