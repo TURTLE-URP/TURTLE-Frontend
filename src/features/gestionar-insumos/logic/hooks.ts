@@ -15,8 +15,8 @@ export function useInsumos() {
   const insumosFiltrados = insumos.filter((item) => {
     const coincideBusqueda =
       item.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
-      item.codigo.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
-      item.proveedor.toLowerCase().includes(filtros.busqueda.toLowerCase());
+      item.codigo.toLowerCase().includes(filtros.busqueda.toLowerCase()) /*||
+      item.proveedor.toLowerCase().includes(filtros.busqueda.toLowerCase());*/
 
     const coincideCategoria =
       filtros.categoria === 'Todos' || item.categoria === filtros.categoria;
