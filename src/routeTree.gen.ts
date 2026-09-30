@@ -10,24 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as AbastecimientoRouteImport } from './routes/abastecimiento'
 import { Route as AbastoRouteImport } from './routes/abasto'
 import { Route as InsumosRouteImport } from './routes/insumos'
+import { Route as KardexRouteImport } from './routes/kardex'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as ProveedoresRouteImport } from './routes/proveedores'
 import { Route as UsuariosRouteImport } from './routes/usuarios'
-import { Route as KardexRouteImport } from './routes/kardex'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MesasRoute = MesasRouteImport.update({
-  id: '/mesas',
-  path: '/mesas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AbastecimientoRoute = AbastecimientoRouteImport.update({
@@ -43,6 +37,11 @@ const AbastoRoute = AbastoRouteImport.update({
 const InsumosRoute = InsumosRouteImport.update({
   id: '/insumos',
   path: '/insumos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KardexRoute = KardexRouteImport.update({
+  id: '/kardex',
+  path: '/kardex',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -65,79 +64,71 @@ const UsuariosRoute = UsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => rootRouteImport,
 } as any)
-const KardexRoute = KardexRouteImport.update({
-  id: '/kardex',
-  path: '/kardex',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/mesas': typeof MesasRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
   '/insumos': typeof InsumosRoute
+  '/kardex': typeof KardexRoute
   '/login': typeof LoginRoute
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
-  '/kardex': typeof KardexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
   '/insumos': typeof InsumosRoute
+  '/kardex': typeof KardexRoute
   '/login': typeof LoginRoute
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
-  '/mesas': typeof MesasRoute
-  '/kardex': typeof KardexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/mesas': typeof MesasRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
   '/insumos': typeof InsumosRoute
+  '/kardex': typeof KardexRoute
   '/login': typeof LoginRoute
   '/mesas': typeof MesasRoute
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
-  '/kardex': typeof KardexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/' | '/kardex' 
-    | '/mesas'
+    | '/'
     | '/abastecimiento'
     | '/abasto'
     | '/insumos'
+    | '/kardex'
     | '/login'
     | '/mesas'
     | '/proveedores'
     | '/usuarios'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/' | '/kardex' 
-    | '/mesas'
+    | '/'
     | '/abastecimiento'
     | '/abasto'
     | '/insumos'
+    | '/kardex'
     | '/login'
     | '/mesas'
     | '/proveedores'
     | '/usuarios'
   id:
     | '__root__'
-    | '/' | '/kardex' 
-    | '/mesas'
+    | '/'
     | '/abastecimiento'
     | '/abasto'
     | '/insumos'
+    | '/kardex'
     | '/login'
     | '/mesas'
     | '/proveedores'
@@ -149,12 +140,11 @@ export interface RootRouteChildren {
   AbastecimientoRoute: typeof AbastecimientoRoute
   AbastoRoute: typeof AbastoRoute
   InsumosRoute: typeof InsumosRoute
+  KardexRoute: typeof KardexRoute
   LoginRoute: typeof LoginRoute
   MesasRoute: typeof MesasRoute
   ProveedoresRoute: typeof ProveedoresRoute
   UsuariosRoute: typeof UsuariosRoute
-  MesasRoute: typeof MesasRoute
-  KardexRoute: typeof KardexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -187,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsumosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kardex': {
+      id: '/kardex'
+      path: '/kardex'
+      fullPath: '/kardex'
+      preLoaderRoute: typeof KardexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -215,20 +212,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsuariosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mesas': {
-      id: '/mesas'
-      path: '/mesas'
-      fullPath: '/mesas'
-      preLoaderRoute: typeof MesasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kardex': {
-      id: '/kardex'
-      path: '/kardex'
-      fullPath: '/kardex'
-      preLoaderRoute: typeof KardexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -237,12 +220,11 @@ const rootRouteChildren: RootRouteChildren = {
   AbastecimientoRoute: AbastecimientoRoute,
   AbastoRoute: AbastoRoute,
   InsumosRoute: InsumosRoute,
+  KardexRoute: KardexRoute,
   LoginRoute: LoginRoute,
   MesasRoute: MesasRoute,
   ProveedoresRoute: ProveedoresRoute,
   UsuariosRoute: UsuariosRoute,
-  MesasRoute: MesasRoute,
-  KardexRoute: KardexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
