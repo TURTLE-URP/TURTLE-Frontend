@@ -1,7 +1,8 @@
 import { ArrowClockwise, Check, Warning, X } from '@phosphor-icons/react'
 import { AlertDialog, AlertDialogContent } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { useEvaluacionEliminarInsumo } from '../logic/hooks'
+import { useToastStore } from '@/stores/toast-store'
+import { useEliminarInsumo, useEvaluacionEliminarInsumo, useInsumoResumen } from '../logic/hooks'
 import type { InsumoAEliminar } from '../logic/types'
 
 interface Props {
@@ -56,9 +57,29 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
     isFetching,
     refetch,
   } = useEvaluacionEliminarInsumo(insumoId, open)
+  const { data: resumen } = useInsumoResumen(insumoId, open)
+  const eliminar = useEliminarInsumo()
+  const notificar = useToastStore((s) => s.notificar)
 
   const bloqueos = evaluacion?.criterios.filter((c) => !c.cumple).length ?? 0
-  const puedeEliminar = !isLoading && !isError && bloqueos === 0
+  const puedeEliminar = !isLoading && !isError && bloqueos === 0 && !eliminar.isPending
+
+  const codigo = resumen?.codigo || insumo?.codigo || ''
+  const nombre = resumen?.nombre || insumo?.nombre || ''
+  const stockTotal = resumen?.stockTotal ?? 0
+  const numAlmacenes = resumen?.numAlmacenes ?? 0
+  const unidad = resumen?.unidad || ''
+
+  function confirmarEliminacion() {
+    if (!puedeEliminar) return
+    eliminar.mutate(insumoId, {
+      onSuccess: () => {
+        notificar('success', 'Insumo eliminado.')
+        onConfirmar()
+      },
+      onError: () => notificar('error', 'No se pudo eliminar el insumo.'),
+    })
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -80,14 +101,8 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
         <div className="p-5 space-y-4">
           {/* Resumen del insumo */}
           <div className="rounded-lg border border-sky-200 bg-sky-50 px-3 py-2.5 text-sm text-sky-900">
-            <span className="font-semibold">{insumo?.codigo}</span> {insumo?.nombre}
-            {evaluacion && (evaluacion.stockTotal > 0 || evaluacion.numAlmacenes > 0) ? (
-              <>
-                {' '}
-                • {evaluacion.stockTotal} kg en {evaluacion.numAlmacenes} almacenes
-              </>
-            ) : null}{' '}
-            • ¿Estás seguro?
+            <span className="font-semibold">{codigo}</span> • {nombre} • {stockTotal} {unidad} en{' '}
+            {numAlmacenes} almacenes • ¿Estás seguro?
           </div>
 
           {/* Criterios evaluados */}
@@ -152,9 +167,9 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
             type="button"
             disabled={!puedeEliminar}
             className="flex-1 bg-rose-600 hover:bg-rose-700 text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-rose-600"
-            onClick={onConfirmar}
+            onClick={confirmarEliminacion}
           >
-            Eliminar
+            {eliminar.isPending ? 'Eliminando…' : 'Eliminar'}
           </Button>
         </div>
       </AlertDialogContent>

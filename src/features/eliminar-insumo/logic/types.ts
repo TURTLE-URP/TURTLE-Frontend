@@ -14,6 +14,18 @@ export interface EvaluacionEliminarInsumo {
 }
 
 /**
+ * Resumen del insumo para el encabezado del modal, jalado de
+ * `GET /supplies/{id}`.
+ */
+export interface InsumoResumenDelete {
+  codigo: string
+  nombre: string
+  stockTotal: number
+  numAlmacenes: number
+  unidad: string
+}
+
+/**
  * Datos mínimos que el modal necesita del insumo. A propósito no se importa
  * el tipo `Insumo` de la feature gestionar-insumos: cualquier objeto que
  * tenga estos 3 campos sirve, así el modal no depende de esa otra feature.
