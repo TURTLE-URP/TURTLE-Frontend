@@ -1,7 +1,7 @@
 import {
   PencilSimpleIcon,
-  ProhibitIcon,
-  CheckCircleIcon,
+  TrashIcon,
+  EyeIcon,
 } from '@phosphor-icons/react';
 
 import type { Insumo } from '../logic/types';
@@ -19,15 +19,15 @@ import { Badge } from '@/components/ui/badge';
 
 interface Props {
   insumos: Insumo[];
-  onInactivar: (id: string) => void;
-  onActivar: (id: string) => void;
+  onEliminar: (id: string) => void;
+  onVerDetalle: (insumo: Insumo) => void;
   onEditar: (insumo: Insumo) => void;
 }
 
 export function InsumosTable({
   insumos,
-  onInactivar,
-  onActivar,
+  onEliminar,
+  onVerDetalle,
   onEditar,
 }: Props) {
   return (
@@ -114,6 +114,15 @@ export function InsumosTable({
                   <div className="flex items-center justify-end gap-1">
                     <button
                       type="button"
+                      onClick={() => onVerDetalle(item)}
+                      className="p-1 text-gray-500 hover:text-sky-600 transition-colors"
+                      title="Ver Detalles"
+                    >
+                      <EyeIcon size={18} />
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => onEditar(item)}
                       className="p-1 text-gray-500 hover:text-emerald-600 transition-colors"
                       title="Editar Insumo"
@@ -121,25 +130,14 @@ export function InsumosTable({
                       <PencilSimpleIcon size={18} />
                     </button>
 
-                    {item.estado === 'Activo' ? (
-                      <button
-                        type="button"
-                        title="Inactivar Insumo"
-                        onClick={() => onInactivar(item.id)}
-                        className="p-1.5 text-muted-foreground hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
-                      >
-                        <ProhibitIcon size={16} />
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        title="Activar Insumo"
-                        onClick={() => onActivar(item.id)}
-                        className="p-1.5 text-muted-foreground hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors"
-                      >
-                        <CheckCircleIcon size={16} />
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      title="Eliminar Insumo"
+                      onClick={() => onEliminar(item.id)}
+                      className="p-1.5 text-muted-foreground hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                    >
+                      <TrashIcon size={16} />
+                    </button>
                   </div>
                 </TableCell>
               </TableRow>
