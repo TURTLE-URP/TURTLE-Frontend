@@ -1,39 +1,54 @@
-import type { EvaluacionEliminarInsumo } from './types'
+import { request } from '@/lib/http/http'
+import { useAuthStore } from '@/stores/auth-store'
+import type { CriterioEliminacion, EvaluacionEliminarInsumo } from './types'
+import type { EliminableApi } from '@/features/detalle-insumo/logic/types'
 
-function evaluacionPorDefecto(insumoId: string): EvaluacionEliminarInsumo {
+function requireBaseUrl(): string {
+  const baseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? ''
+  if (!baseUrl) {
+    throw new Error('VITE_API_BASE_URL no configurado. Configura la URL del API (ej. http://localhost:3000).')
+  }
+  return baseUrl
+}
+
+function authHeaders(): HeadersInit {
+  const token = useAuthStore.getState().session?.token
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+const TITULOS_CRITERIO: Record<string, string> = {
+  stock_en_cero: 'Stock en cero en todos los almacenes',
+  sin_ordenes_pendientes: 'Sin órdenes de abasto pendientes',
+  sin_recetas_activas: 'Sin recetas activas',
+}
+
+function mapCriterio(criterio: string, cumple: boolean, detalle: string): CriterioEliminacion {
   return {
-    insumoId,
-    stockTotal: 41,
-    numAlmacenes: 2,
-    criterios: [
-      {
-        id: 'stock-almacenes',
-        titulo: 'Stock en todos los almacenes (41)',
-        cumple: false,
-        detalle: 'Actualmente: 33 kg en Cocina y 8 kg en Piso 1',
-      },
-      {
-        id: 'ordenes-abasto-pendientes',
-        titulo: 'Órdenes de abasto emitidas en estado pendiente (0)',
-        cumple: true,
-      },
-      {
-        id: 'recetas-activas',
-        titulo: 'Recetas activas (2)',
-        cumple: false,
-        detalle: 'Usado en: Pan (120g), Queque (200g)',
-      },
-    ],
+    id: criterio,
+    titulo: TITULOS_CRITERIO[criterio] ?? criterio,
+    cumple,
+    ...(detalle ? { detalle } : {}),
   }
 }
 
 /**
- * TODO: reemplazar por la llamada real al endpoint que evalúa si un insumo
- * puede eliminarse (stock en almacenes, órdenes de abasto pendientes,
- * recetas activas...). La firma (insumoId -> Promise<EvaluacionEliminarInsumo>)
- * ya queda lista para el swap; nada más en el modal necesita cambiar.
+ * Evalúa si un insumo puede eliminarse usando GET /supplies/{id}/eliminable.
+ * Sin VITE_API_BASE_URL lanza error (sin fallback a mock).
  */
-export async function fetchEvaluacionEliminarInsumo(insumoId: string): Promise<EvaluacionEliminarInsumo> {
-  await new Promise((resolve) => setTimeout(resolve, 300))
-  return evaluacionPorDefecto(insumoId)
+export async function fetchEvaluacionEliminarInsumo(
+  insumoId: string,
+  signal?: AbortSignal,
+): Promise<EvaluacionEliminarInsumo> {
+  const baseUrl = requireBaseUrl()
+  const raw = await request<EliminableApi>(`/supplies/${insumoId}/eliminable`, {
+    baseUrl,
+    headers: authHeaders(),
+    signal,
+  })
+  return {
+    insumoId: String(raw.id_insumo ?? insumoId),
+    stockTotal: 0,
+    numAlmacenes: 0,
+    criterios: (raw.criterios ?? []).map((c) => mapCriterio(c.criterio, c.cumple, c.detalle)),
+  }
 }

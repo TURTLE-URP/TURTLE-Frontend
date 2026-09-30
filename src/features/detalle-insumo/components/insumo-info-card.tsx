@@ -1,9 +1,7 @@
-import type { InsumoDetalle } from '../logic/types'
+import { useInsumoDetalle } from '../logic/queries'
 
 interface Props {
-  insumo: InsumoDetalle | undefined
-  isLoading: boolean
-  isError: boolean
+  insumoId: string
 }
 
 function Campo({ label, value }: { label: string; value: string }) {
@@ -15,7 +13,9 @@ function Campo({ label, value }: { label: string; value: string }) {
   )
 }
 
-export function InsumoInfoCard({ insumo, isLoading, isError }: Props) {
+export function InsumoInfoCard({ insumoId }: Props) {
+  const { data: insumo, isLoading, isError, refetch } = useInsumoDetalle(insumoId)
+
   return (
     <section>
       <h2 className="text-sm font-semibold text-foreground mb-2">Detalles de Insumo</h2>
@@ -23,16 +23,24 @@ export function InsumoInfoCard({ insumo, isLoading, isError }: Props) {
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Cargando detalles del insumo…</p>
         ) : isError || !insumo ? (
-          <p className="text-sm text-rose-600">No se pudieron cargar los detalles de este insumo.</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm text-rose-600">
+              No se pudieron cargar los detalles de este insumo. Verifica VITE_API_BASE_URL.
+            </p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="text-xs font-semibold text-foreground underline shrink-0"
+            >
+              Reintentar
+            </button>
+          </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Campo label="Nombre" value={insumo.nombre} />
             <Campo label="Código" value={insumo.codigo} />
             <Campo label="Categoría" value={insumo.categoria} />
-            <Campo
-              label="Estado"
-              value={insumo.estado}
-            />
+            <Campo label="Estado" value={insumo.estado} />
             <Campo label="Stock actual" value={`${insumo.stockActual} ${insumo.unidadMedida}`} />
             <Campo label="Stock mínimo" value={`${insumo.stockMinimo} ${insumo.unidadMedida}`} />
             <Campo label="Unidad de medida" value={insumo.unidadMedida} />

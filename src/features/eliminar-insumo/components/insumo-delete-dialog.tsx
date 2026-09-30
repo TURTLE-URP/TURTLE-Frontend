@@ -68,7 +68,7 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
           {/* Resumen del insumo */}
           <div className="rounded-lg border border-sky-200 bg-sky-50 px-3 py-2.5 text-sm text-sky-900">
             <span className="font-semibold">{insumo?.codigo}</span> {insumo?.nombre}
-            {evaluacion ? (
+            {evaluacion && (evaluacion.stockTotal > 0 || evaluacion.numAlmacenes > 0) ? (
               <>
                 {' '}
                 • {evaluacion.stockTotal} kg en {evaluacion.numAlmacenes} almacenes

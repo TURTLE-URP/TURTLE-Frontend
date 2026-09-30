@@ -4,7 +4,7 @@ import { fetchEvaluacionEliminarInsumo } from './api'
 export function useEvaluacionEliminarInsumo(insumoId: string | undefined, habilitado: boolean) {
   return useQuery({
     queryKey: ['evaluacion-eliminar-insumo', insumoId],
-    queryFn: () => fetchEvaluacionEliminarInsumo(insumoId as string),
+    queryFn: ({ signal }) => fetchEvaluacionEliminarInsumo(insumoId as string, signal),
     enabled: habilitado && !!insumoId,
   })
 }
