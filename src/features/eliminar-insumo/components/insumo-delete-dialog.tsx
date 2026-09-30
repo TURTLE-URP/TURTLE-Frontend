@@ -27,7 +27,8 @@ interface Props {
  * para el encabezado, todo vía la prop `insumo`. El botón Refrescar
  * vuelve a pedir la evaluación (`refetch`).
  *
- * Integración desde gestionar-insumos (o donde esté el botón real):
+ * Integración desde gestionar-insumos (o donde esté el botón real).
+ * El dialog hace el DELETE internamente; `onConfirmar` solo cierra/limpia:
  *
  *   import { InsumoDeleteDialog } from '@/features/eliminar-insumo/components/insumo-delete-dialog'
  *
@@ -38,11 +39,10 @@ interface Props {
  *     open={!!insumoAEliminar}
  *     insumo={insumoAEliminar}
  *     onOpenChange={(open) => !open && setInsumoAEliminar(null)}
- *     onConfirmar={() => {
- *       if (insumoAEliminar) eliminarInsumo(insumoAEliminar.id) // borrado real, aún por crear
- *       setInsumoAEliminar(null)
- *     }}
+ *     onConfirmar={() => setInsumoAEliminar(null)}
  *   />
+ *
+ * Ver `README.md` de la feature para la guía completa.
  *
  * `insumo` acepta cualquier objeto con { id, codigo, nombre } — no hace
  * falta importar el tipo `Insumo` de gestionar-insumos. Si se omite,
