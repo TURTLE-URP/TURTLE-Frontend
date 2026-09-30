@@ -6,15 +6,25 @@ import type { InsumoAEliminar } from '../logic/types'
 
 interface Props {
   open: boolean
-  insumo: InsumoAEliminar | null
+  /**
+   * Datos del insumo. Solo el `id` es necesario: con él se pide la
+   * evaluación a `GET /supplies/{id}/eliminable`. Si no se pasa,
+   * se usa el insumo `'1'` por defecto. `codigo` y `nombre` solo
+   * se usan para pintar el encabezado.
+   */
+  insumo?: InsumoAEliminar | null
   onOpenChange: (open: boolean) => void
   onConfirmar: () => void
 }
 
 /**
- * Modal "¿Eliminar insumo?": evalúa (por ahora con datos mock) si el insumo
- * cumple los 3 criterios para poder eliminarse definitivamente, y solo
- * habilita el botón "Eliminar" cuando los 3 pasan.
+ * Modal "¿Eliminar insumo?": pide la evaluación a
+ * `GET /supplies/{id}/eliminable` con TanStack Query y solo habilita el
+ * botón "Eliminar" cuando los 3 criterios pasan.
+ *
+ * Recibe el `id` (por defecto `'1'`) y, opcionalmente, `codigo`/`nombre`
+ * para el encabezado, todo vía la prop `insumo`. El botón Refrescar
+ * vuelve a pedir la evaluación (`refetch`).
  *
  * Integración desde gestionar-insumos (o donde esté el botón real):
  *
@@ -34,15 +44,18 @@ interface Props {
  *   />
  *
  * `insumo` acepta cualquier objeto con { id, codigo, nombre } — no hace
- * falta importar el tipo `Insumo` de gestionar-insumos.
+ * falta importar el tipo `Insumo` de gestionar-insumos. Si se omite,
+ * se evalúa el insumo `'1'`.
  */
 export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: Props) {
+  const insumoId = insumo?.id ?? '1'
   const {
     data: evaluacion,
     isLoading,
     isError,
+    isFetching,
     refetch,
-  } = useEvaluacionEliminarInsumo(insumo?.id, open)
+  } = useEvaluacionEliminarInsumo(insumoId, open)
 
   const bloqueos = evaluacion?.criterios.filter((c) => !c.cumple).length ?? 0
   const puedeEliminar = !isLoading && !isError && bloqueos === 0
@@ -120,9 +133,11 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
               <button
                 type="button"
                 onClick={() => refetch()}
-                className="flex items-center gap-1 text-xs font-semibold text-rose-700 hover:text-rose-900 transition-colors shrink-0"
+                disabled={isFetching}
+                className="flex items-center gap-1 text-xs font-semibold text-rose-700 hover:text-rose-900 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <ArrowClockwise size={13} /> Reintentar
+                <ArrowClockwise size={13} className={isFetching ? 'animate-spin' : undefined} />
+                {isFetching ? 'Actualizando…' : 'Refrescar'}
               </button>
             </div>
           ) : null}
