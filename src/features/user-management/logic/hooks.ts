@@ -15,6 +15,10 @@ export function useUsuarios() {
     estado: 'Todos',
   });
   const [notice, setNotice] = useState<string>('');
+  // Credenciales que devuelve el backend SOLO en el momento de crear el
+  // trabajador (plainPassword). No hay integración de correo todavía, así
+  // que esta es la única oportunidad de mostrárselas al admin.
+  const [credenciales, setCredenciales] = useState<{ email: string; password: string } | null>(null);
 
   // Paginación
   const [paginaActual, setPaginaActual] = useState(1);
@@ -52,7 +56,6 @@ export function useUsuarios() {
 
   // Cargar lista de trabajadores desde el backend
   const fetchUsuarios = useCallback(async () => {
-    
     if (!useAuthStore.getState().session?.token) {
       // Sin sesión no tiene sentido llamar al backend: evita el 401 en
       // consola que salía en cada mount mientras el usuario ni siquiera
@@ -162,14 +165,25 @@ export function useUsuarios() {
         role: data.role,
       };
 
-      await WorkersApi.create(dto);
-      setNotice('Trabajador registrado exitosamente');
+      const creado = await WorkersApi.create(dto);
+      // El backend solo devuelve la contraseña en texto plano aquí, esta
+      // única vez (la guarda hasheada). Como todavía no hay envío por
+      // correo, es la única oportunidad de que el admin la vea.
+      if (creado?.plainPassword) {
+        setCredenciales({ email: creado.email ?? data.email, password: creado.plainPassword });
+      } else {
+        // Caso raro (el backend cambió y ya no manda plainPassword): al
+        // menos confirmar que la creación sí funcionó.
+        setNotice('Trabajador registrado exitosamente');
+      }
       await fetchUsuarios(); // Recargar datos del backend
     } catch (err: any) {
       console.error(err);
       setNotice(err.message || 'Error al invitar trabajador');
     }
   };
+
+  const cerrarCredenciales = () => setCredenciales(null);
 
   // Baja lógica de un trabajador
   const eliminarUsuario = async (id: number) => {
@@ -225,6 +239,8 @@ export function useUsuarios() {
     kpis,
     notice,
     setNotice,
+    credenciales,
+    cerrarCredenciales,
     paginaActual,
     setPaginaActual,
     totalPaginas,

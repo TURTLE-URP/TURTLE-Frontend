@@ -6,6 +6,7 @@ import { UsuarioKpiCards } from './usuario-kpi-cards';
 import { UsuarioTable } from './usuario-table';
 import { UsuarioInviteModal } from './usuario-invite-modal';
 import { UsuarioEditModal } from './usuario-edit-modal';
+import { UsuarioCredentialsModal } from './usuario-credentials-modal';
 
 import type { ManagedUser } from '../logic/types';
 
@@ -21,6 +22,8 @@ export function UserManagementPage() {
     kpis,
     notice,
     setNotice,
+    credenciales,
+    cerrarCredenciales,
     paginaActual,
     setPaginaActual,
     totalPaginas,
@@ -183,6 +186,13 @@ const handleSaveEdit = async (data: any) => {
           name: selectedUserToEdit?.name.split(' ')[0] || '',
           lastName: selectedUserToEdit?.name.split(' ').slice(1).join(' ') || '',
         }}
+      />
+
+      {/* Modal de credenciales generadas (solo aparece tras crear un trabajador) */}
+      <UsuarioCredentialsModal
+        isOpen={credenciales !== null}
+        data={credenciales}
+        onClose={cerrarCredenciales}
       />
     </div>
   );
