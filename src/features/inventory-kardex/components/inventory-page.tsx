@@ -113,7 +113,7 @@ export interface InsumosListProps {
   onExport?: () => void
 }
 
-export function InsumosList({
+export function InventoryPage({
   insumos = MOCK_INSUMOS,
   onKardex,
   onEdit,
