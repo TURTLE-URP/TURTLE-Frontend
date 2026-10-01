@@ -10,12 +10,10 @@ import { KardexTable } from './kardex-table'
 import { MovementDetailPanel } from './movement-detail-modal'
 import { getMovementsForInsumo } from '../logic/kardex-selectors'
 import { INSUMOS_FIXTURE } from '../fixtures/insumos.fixtures'
-// 1. ELIMINAMOS la importación del fixture de movimientos y TRAEMOS tu nuevo hook
 import { useKardex } from '../logic/use-kardex' 
 import type { MovementType } from '../types'
 
 export function InventoryKardexPage() {
-  // 2. LLAMAMOS AL HOOK: Esto traerá los datos en tiempo real (polling cada 3s)
   const { data: apiMovements, isLoading, isError } = useKardex()
 
   const [selectedInsumoId, setSelectedInsumoId] = useState<string | null>(
@@ -34,20 +32,17 @@ export function InventoryKardexPage() {
     [selectedInsumoId],
   )
 
-  // 3. ACTUALIZAMOS EL FILTRO: Usamos apiMovements en lugar de KARDEX_MOVEMENTS_FIXTURE
   const movements = useMemo(
     () =>
-      selectedInsumo && apiMovements
-        ? getMovementsForInsumo(apiMovements, selectedInsumo.id, {
-            tipo: movementType,
-          }).filter((movement) => {
+      selectedInsumo
+        ? getMovementsForInsumo(apiMovements || [], selectedInsumo.id, { tipo: movementType }).filter((movement) => {
             const movementDate = movement.fecha.slice(0, 10)
             return (
               (!startDate || movementDate >= startDate) && (!endDate || movementDate <= endDate)
             )
           })
         : [],
-    [selectedInsumo, movementType, startDate, endDate, apiMovements], // <- Añadimos apiMovements a las dependencias
+    [selectedInsumo, movementType, startDate, endDate, apiMovements],
   )
 
   const totalPaginas = Math.ceil(movements.length / ITEMS_POR_PAGINA) || 1
@@ -61,13 +56,12 @@ export function InventoryKardexPage() {
     movementsPaginados[0] ??
     null
 
-  // 4. ACTUALIZAMOS LOS KPIs: Usamos apiMovements también aquí
   const allMovements = useMemo(
     () =>
-      selectedInsumo && apiMovements
-        ? getMovementsForInsumo(apiMovements, selectedInsumo.id, { tipo: 'todos' })
+      selectedInsumo
+        ? getMovementsForInsumo(apiMovements || [], selectedInsumo.id, { tipo: 'todos' })
         : [],
-    [selectedInsumo, apiMovements], // <- Añadimos apiMovements a las dependencias
+    [selectedInsumo, apiMovements],
   )
   const kpiEntradas = allMovements.filter((m) => m.tipo === 'entrada').length
   const kpiSalidas = allMovements.filter((m) => m.tipo === 'salida').length
@@ -220,7 +214,6 @@ export function InventoryKardexPage() {
           </div>
           <div className="p-4 flex flex-col gap-3">
             
-            {/* 5. MANEJO DE ESTADOS DE LA API (Cargando y Error) */}
             {isLoading ? (
               <p className="m-auto text-sm text-muted-foreground py-12">
                 Conectando con el servidor en tiempo real...

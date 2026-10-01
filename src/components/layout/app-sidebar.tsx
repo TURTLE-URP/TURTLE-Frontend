@@ -14,10 +14,10 @@ import {
   UsersThreeIcon,
   WarehouseIcon,
 } from '@phosphor-icons/react'
-import { getMockSesion } from '@/features/proveedores/data/mock-session'
-import { puedeGestionarProveedores } from '@/features/proveedores/logic/access'
-import { cn } from '@/lib/utils'
-import { useAuthStore } from '@/stores/auth-store'
+import { getMockSesion } from '@/modules/proveedores/lib/mock-session'
+import { puedeGestionarProveedores } from '@/modules/proveedores/lib/access'
+import { cn } from '@/shared/lib/utils'
+import { useAuthStore } from '@/shared/stores/auth-store'
 
 type AppPath =
   | '/'

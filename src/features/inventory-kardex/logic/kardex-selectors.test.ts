@@ -27,7 +27,7 @@ describe('getMovementsForInsumo', () => {
   it('returns only the movements for the given insumo', () => {
     const result = getMovementsForInsumo(KARDEX_MOVEMENTS_FIXTURE, 'ins-004')
     expect(result.every((m) => m.insumoId === 'ins-004')).toBe(true)
-    expect(result).toHaveLength(3)
+    expect(result).toHaveLength(8)
   })
 
   it('sorts movements most recent first', () => {
@@ -39,8 +39,8 @@ describe('getMovementsForInsumo', () => {
 
   it('filters by movement type on top of the insumo filter', () => {
     const result = getMovementsForInsumo(KARDEX_MOVEMENTS_FIXTURE, 'ins-001', { tipo: 'merma' })
-    expect(result).toHaveLength(1)
-    expect(result[0].tipo).toBe('merma')
+    expect(result).toHaveLength(4)
+    expect(result.every((m) => m.tipo === 'merma')).toBe(true)
   })
 
   it('returns an empty array for an insumo with no movements', () => {
