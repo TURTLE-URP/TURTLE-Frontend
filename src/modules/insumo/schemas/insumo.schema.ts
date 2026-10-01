@@ -3,7 +3,7 @@ import { z } from 'zod'
 /**
  * Form de insumo = DTO del backend.
  * Solo existen los campos que el Swagger expone en Create/UpdateSupplyDto.
- * `id_unidad_base` es numérico temporal hasta que exista catálogo de unidades.
+ * `id_unidad_base` se elige del catálogo GET /supplies/units/base.
  */
 export const insumoSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio'),

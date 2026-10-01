@@ -11,6 +11,7 @@ import type {
   SupplyAlertasResponseEntity,
   SupplyDeletedEntity,
   SupplyResponseEntity,
+  SupplyUnitResponseEntity,
   UpdateMedidaDto,
   UpdateSupplyDto,
   UpsertAlertaAlmacenDto,
@@ -109,6 +110,16 @@ export async function updateInsumo(id: string, input: ActualizarInsumoInput): Pr
 /** DELETE /supplies/{id} — borrado lógico, devuelve {id, message}. */
 export async function deleteInsumoBackend(id: string): Promise<SupplyDeletedEntity> {
   return safeRequest<SupplyDeletedEntity>({ method: 'DELETE', url: `/supplies/${id}` })
+}
+
+/** GET /supplies/units/base?search= — catálogo de unidades (array directo). */
+export async function fetchUnidadesBase(search?: string, signal?: AbortSignal) {
+  return safeRequest<SupplyUnitResponseEntity[]>({
+    method: 'GET',
+    url: '/supplies/units/base',
+    params: { ...(search ? { search } : {}) },
+    signal,
+  })
 }
 
 // ---------------------------------------------------------------------------

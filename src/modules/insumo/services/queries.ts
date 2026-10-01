@@ -8,6 +8,7 @@ import {
   fetchInsumoDetalle,
   fetchInsumos,
   fetchMedidas,
+  fetchUnidadesBase,
   removeAlertaAlmacen,
   removeAlertaGlobal,
   updateInsumo,
@@ -37,6 +38,15 @@ export function useInsumosList(search?: string, page?: number) {
   return useQuery({
     queryKey: insumosKeys.list(search, page),
     queryFn: ({ signal }) => fetchInsumos({ search, page, signal }),
+  })
+}
+
+/** Catálogo de unidades base para los selects (se cachea; cambia poco). */
+export function useUnidadesBase() {
+  return useQuery({
+    queryKey: ['insumos', 'unidades-base'],
+    queryFn: ({ signal }) => fetchUnidadesBase(undefined, signal),
+    staleTime: 5 * 60_000,
   })
 }
 

@@ -8,6 +8,7 @@ import type { InsumoFormValues } from '../schemas/insumo.schema';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
+import { UnidadBaseSelect } from './unidad-base-select';
 
 interface Props {
   open: boolean;
@@ -27,7 +28,7 @@ export function InsumoFormModal({ open, onOpenChange, onSubmit, isPending }: Pro
     defaultValues: {
       nombre: '',
       descripcion: '',
-      id_unidad_base: 1,
+      id_unidad_base: '' as unknown as number,
     },
   });
 
@@ -91,19 +92,12 @@ export function InsumoFormModal({ open, onOpenChange, onSubmit, isPending }: Pro
 
           <div>
             <Label className="text-xs font-medium text-gray-700">
-              ID unidad base *
+              Unidad base *
             </Label>
-            <Input
-              type="number"
+            <UnidadBaseSelect
               {...register('id_unidad_base')}
-              className="mt-1"
+              error={errors.id_unidad_base?.message}
             />
-            {errors.id_unidad_base && (
-              <p className="text-[11px] text-red-500 mt-1">{errors.id_unidad_base.message}</p>
-            )}
-            <p className="text-[11px] text-gray-400 mt-1">
-              Temporal: será un catálogo cuando exista el endpoint de unidades.
-            </p>
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
