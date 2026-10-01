@@ -74,8 +74,8 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
   function confirmarEliminacion() {
     if (!puedeEliminar) return
     eliminar.mutate(insumoId, {
-      onSuccess: () => {
-        notificar('success', 'Insumo eliminado.')
+      onSuccess: (respuesta) => {
+        notificar('success', respuesta.message || 'Insumo eliminado.')
         onConfirmar()
       },
       onError: () => notificar('error', 'No se pudo eliminar el insumo.'),

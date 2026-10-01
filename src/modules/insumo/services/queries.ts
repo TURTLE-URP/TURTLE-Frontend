@@ -3,6 +3,7 @@ import {
   createInsumo,
   createMedida,
   deleteInsumoBackend,
+  deleteMedida,
   fetchAlertas,
   fetchInsumoDetalle,
   fetchInsumos,
@@ -10,9 +11,11 @@ import {
   removeAlertaAlmacen,
   removeAlertaGlobal,
   updateInsumo,
+  updateMedida,
   upsertAlertaAlmacen,
   upsertAlertaGlobal,
   type ActualizarInsumoInput,
+  type ActualizarMedidaInput,
   type CrearInsumoInput,
 } from './insumo.api'
 import type {
@@ -94,6 +97,27 @@ export function useCrearMedida(insumoId: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (input: CrearMedidaInput) => createMedida(insumoId, input),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: insumoKeys.medidas(insumoId) })
+    },
+  })
+}
+
+export function useActualizarMedida(insumoId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ medidaId, input }: { medidaId: string; input: ActualizarMedidaInput }) =>
+      updateMedida(insumoId, medidaId, input),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: insumoKeys.medidas(insumoId) })
+    },
+  })
+}
+
+export function useEliminarMedida(insumoId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (medidaId: string) => deleteMedida(insumoId, medidaId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: insumoKeys.medidas(insumoId) })
     },

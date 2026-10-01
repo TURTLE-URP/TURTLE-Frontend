@@ -1,5 +1,5 @@
 import { safeRequest } from '@/shared/api/safe-request'
-import type { EliminableResponse, SupplyResponse } from '../interfaces/insumo.dto'
+import type { EliminableResponseEntity, SupplyResponse } from '../interfaces/insumo.dto'
 import type {
   CriterioEliminacion,
   EvaluacionEliminarInsumo,
@@ -54,13 +54,13 @@ export async function fetchEvaluacionEliminarInsumo(
   insumoId: string,
   signal?: AbortSignal,
 ): Promise<EvaluacionEliminarInsumo> {
-  const raw = await safeRequest<EliminableResponse>({
+  const raw = await safeRequest<EliminableResponseEntity>({
     method: 'GET',
     url: `/supplies/${insumoId}/eliminable`,
     signal,
   })
   return {
-    insumoId: String(raw.id_insumo ?? insumoId),
+    insumoId: String(raw.idInsumo ?? insumoId),
     stockTotal: 0,
     numAlmacenes: 0,
     criterios: (raw.criterios ?? []).map((c) => mapCriterio(c.criterio, c.cumple, c.detalle)),

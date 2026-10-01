@@ -1,14 +1,17 @@
 import { safePagination, safeRequest } from '@/shared/api/safe-request'
 import type {
-  AlertasResponse,
-  AlertaAlmacenResponse,
-  AlertaGlobalResponse,
+  AlertaAlmacenResponseEntity,
+  AlertaDeletedEntity,
+  AlertaGlobalResponseEntity,
   CreateMedidaDto,
   CreateSupplyDto,
-  EliminableResponse,
-  MedidaResponse,
+  EliminableResponseEntity,
+  MedidaDeletedEntity,
+  MedidaResponseEntity,
+  SupplyAlertasResponseEntity,
   SupplyDeletedEntity,
   SupplyResponseEntity,
+  UpdateMedidaDto,
   UpdateSupplyDto,
   UpsertAlertaAlmacenDto,
   UpsertAlertaGlobalDto,
@@ -27,11 +30,6 @@ import type {
 // TODO(auth): reemplazar por el id real del usuario en sesión cuando el
 // backend lo provea. Valor temporal acordado.
 const USUARIO_SISTEMA_ID = 999999
-
-function toNumber(value: unknown, fallback = 0): number {
-  const n = typeof value === 'string' ? Number(value) : (value as number)
-  return Number.isFinite(n) ? n : fallback
-}
 
 function toStringId(value: unknown, fallback: string): string {
   if (typeof value === 'string' && value) return value
@@ -150,27 +148,26 @@ export async function fetchInsumoDetalle(insumoId: string, signal?: AbortSignal)
 // Medidas alternas: GET / POST /supplies/{id}/medidas
 // ---------------------------------------------------------------------------
 
-function mapMedida(raw: MedidaResponse, fallbackId: string): MedidaAlterna {
-  const factor = toNumber(raw.factor_a_base ?? raw.factorABase, 0)
-  const esBase = factor === 1
+function mapMedida(raw: MedidaResponseEntity): MedidaAlterna {
+  const esBase = raw.factorABase === 1
   return {
-    id: toStringId(raw.id, fallbackId),
-    nombre: typeof raw.nombre === 'string' ? raw.nombre : '',
-    abreviatura: typeof raw.abreviatura === 'string' ? raw.abreviatura : '',
-    factorABase: factor,
-    uso: typeof raw.uso === 'string' ? raw.uso : '',
+    id: toStringId(raw.id, `medida-${raw.id}`),
+    nombre: raw.nombre,
+    abreviatura: raw.abreviatura,
+    factorABase: raw.factorABase,
+    uso: raw.uso ?? '',
     ...(esBase ? { esBase: true as const } : {}),
   }
 }
 
+/** GET /supplies/{id}/medidas — devuelve array directo. */
 export async function fetchMedidas(insumoId: string, signal?: AbortSignal): Promise<MedidaAlterna[]> {
-  const data = await safeRequest<MedidaResponse[] | { items?: MedidaResponse[] }>({
+  const data = await safeRequest<MedidaResponseEntity[]>({
     method: 'GET',
     url: `/supplies/${insumoId}/medidas`,
     signal,
   })
-  const lista = Array.isArray(data) ? data : (data.items ?? [])
-  return lista.map((m, i) => mapMedida(m, `medida-${i}`))
+  return data.map(mapMedida)
 }
 
 export async function createMedida(insumoId: string, input: CrearMedidaInput): Promise<MedidaAlterna> {
@@ -180,12 +177,47 @@ export async function createMedida(insumoId: string, input: CrearMedidaInput): P
     factor_a_base: input.factorABase,
     ...(input.uso ? { uso: input.uso as UsoMedidaDto } : {}),
   }
-  const raw = await safeRequest<MedidaResponse>({
+  const raw = await safeRequest<MedidaResponseEntity>({
     method: 'POST',
     url: `/supplies/${insumoId}/medidas`,
     data: payload,
   })
-  return mapMedida(raw, `medida-${Date.now()}`)
+  return mapMedida(raw)
+}
+
+export type ActualizarMedidaInput = Partial<{
+  nombre: string
+  abreviatura: string
+  factorABase: number
+  uso: UsoMedidaDto
+}>
+
+/** PATCH /supplies/{id}/medidas/{medidaId}. */
+export async function updateMedida(
+  insumoId: string,
+  medidaId: string,
+  input: ActualizarMedidaInput,
+): Promise<MedidaAlterna> {
+  const payload: UpdateMedidaDto = {
+    ...(input.nombre !== undefined ? { nombre: input.nombre } : {}),
+    ...(input.abreviatura !== undefined ? { abreviatura: input.abreviatura } : {}),
+    ...(input.factorABase !== undefined ? { factor_a_base: input.factorABase } : {}),
+    ...(input.uso !== undefined ? { uso: input.uso } : {}),
+  }
+  const raw = await safeRequest<MedidaResponseEntity>({
+    method: 'PATCH',
+    url: `/supplies/${insumoId}/medidas/${medidaId}`,
+    data: payload,
+  })
+  return mapMedida(raw)
+}
+
+/** DELETE /supplies/{id}/medidas/{medidaId} — devuelve {id, message}. */
+export async function deleteMedida(insumoId: string, medidaId: string): Promise<MedidaDeletedEntity> {
+  return safeRequest<MedidaDeletedEntity>({
+    method: 'DELETE',
+    url: `/supplies/${insumoId}/medidas/${medidaId}`,
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -193,7 +225,7 @@ export async function createMedida(insumoId: string, input: CrearMedidaInput): P
 // ---------------------------------------------------------------------------
 
 export async function fetchEliminable(insumoId: string, signal?: AbortSignal) {
-  return safeRequest<EliminableResponse>({
+  return safeRequest<EliminableResponseEntity>({
     method: 'GET',
     url: `/supplies/${insumoId}/eliminable`,
     signal,
@@ -221,55 +253,41 @@ export function esAlcanceGlobal(alcance: string): boolean {
   return alcance.trim().toUpperCase() === 'GLOBAL'
 }
 
-function mapAlertaGlobal(raw: AlertaGlobalResponse): AlertaStock {
-  const minimo = toNumber(raw.stock_min ?? raw.stockMin ?? raw.minimo, 0)
-  const reponer: unknown =
-    raw.stock_deseado ?? raw.stockDeseado ?? raw.cantidad_reponer ?? raw.cantidadAReponer
+function mapAlertaGlobal(raw: AlertaGlobalResponseEntity): AlertaStock {
   return {
-    id: 'global',
+    id: `global-${raw.id}`,
     alcance: 'GLOBAL',
-    minimo,
-    ...(reponer === null || reponer === undefined || reponer === ''
+    minimo: raw.stockMin,
+    ...(raw.stockDeseado === null || raw.stockDeseado === undefined
       ? {}
-      : { cantidadAReponer: toNumber(reponer, 0) }),
+      : { cantidadAReponer: raw.stockDeseado }),
     esGlobal: true,
   }
 }
 
-function mapAlertaAlmacen(raw: AlertaAlmacenResponse, index: number): AlertaStock {
-  const idAlmacen = toNumber(raw.id_almacen ?? raw.almacenId ?? raw.id, NaN)
-  const idValido = Number.isFinite(idAlmacen) ? idAlmacen : index + 1
-  const minimo = toNumber(raw.minimo_alerta ?? raw.minimo, 0)
-  const reponer: unknown = raw.cantidad_reponer ?? raw.cantidadAReponer
+function mapAlertaAlmacen(raw: AlertaAlmacenResponseEntity): AlertaStock {
   return {
-    id: `alm-${idValido}`,
-    alcance: formatoAlcanceAlmacen(idValido),
-    minimo,
-    ...(reponer === null || reponer === undefined || reponer === ''
+    id: `alm-${raw.idAlmacen}`,
+    alcance: raw.codigoAlmacen,
+    minimo: raw.minimoAlerta,
+    ...(raw.cantidadReponer === null || raw.cantidadReponer === undefined
       ? {}
-      : { cantidadAReponer: toNumber(reponer, 0) }),
-    idAlmacen: idValido,
+      : { cantidadAReponer: raw.cantidadReponer }),
+    idAlmacen: raw.idAlmacen,
     esGlobal: false,
   }
 }
 
-function listaAlmacenes(raw: AlertasResponse): AlertaAlmacenResponse[] {
-  if (Array.isArray(raw.porAlmacen)) return raw.porAlmacen
-  if (Array.isArray(raw.por_almacen)) return raw.por_almacen
-  if (Array.isArray(raw.almacenes)) return raw.almacenes
-  if (Array.isArray(raw.alertas)) return raw.alertas
-  return []
-}
-
+/** GET /supplies/{id}/alertas — {global: …|null, porAlmacen: […]}. */
 export async function fetchAlertas(insumoId: string, signal?: AbortSignal): Promise<AlertaStock[]> {
-  const data = await safeRequest<AlertasResponse>({
+  const data = await safeRequest<SupplyAlertasResponseEntity>({
     method: 'GET',
     url: `/supplies/${insumoId}/alertas`,
     signal,
   })
   const filas: AlertaStock[] = []
   if (data.global) filas.push(mapAlertaGlobal(data.global))
-  listaAlmacenes(data).forEach((a, i) => filas.push(mapAlertaAlmacen(a, i)))
+  data.porAlmacen.forEach((a) => filas.push(mapAlertaAlmacen(a)))
   return filas
 }
 
@@ -285,8 +303,11 @@ export async function upsertAlertaGlobal(
   await safeRequest<void>({ method: 'PUT', url: `/supplies/${insumoId}/alertas/global`, data: payload })
 }
 
-export async function removeAlertaGlobal(insumoId: string): Promise<void> {
-  await safeRequest<void>({ method: 'DELETE', url: `/supplies/${insumoId}/alertas/global` })
+export async function removeAlertaGlobal(insumoId: string): Promise<AlertaDeletedEntity> {
+  return safeRequest<AlertaDeletedEntity>({
+    method: 'DELETE',
+    url: `/supplies/${insumoId}/alertas/global`,
+  })
 }
 
 export async function upsertAlertaAlmacen(
@@ -302,8 +323,11 @@ export async function upsertAlertaAlmacen(
   await safeRequest<void>({ method: 'PUT', url: `/supplies/${insumoId}/alertas/almacen`, data: payload })
 }
 
-export async function removeAlertaAlmacen(insumoId: string, almacenId: number): Promise<void> {
-  await safeRequest<void>({
+export async function removeAlertaAlmacen(
+  insumoId: string,
+  almacenId: number,
+): Promise<AlertaDeletedEntity> {
+  return safeRequest<AlertaDeletedEntity>({
     method: 'DELETE',
     url: `/supplies/${insumoId}/alertas/almacen/${almacenId}`,
   })

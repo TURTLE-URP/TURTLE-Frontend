@@ -24,7 +24,7 @@ export interface UpdateSupplyDto {
 }
 
 // ---------------------------------------------------------------------------
-// Medidas: POST /supplies/{id}/medidas
+// Medidas: POST /supplies/{id}/medidas, PATCH/DELETE /supplies/{id}/medidas/{medidaId}
 // ---------------------------------------------------------------------------
 
 export type UsoMedidaDto = 'todo' | 'receta' | 'productos_proveedor'
@@ -34,6 +34,26 @@ export interface CreateMedidaDto {
   abreviatura: string
   factor_a_base: number
   uso?: UsoMedidaDto
+}
+
+export interface UpdateMedidaDto {
+  nombre?: string
+  abreviatura?: string
+  factor_a_base?: number
+  uso?: UsoMedidaDto
+}
+
+export interface MedidaResponseEntity {
+  id: number
+  nombre: string
+  abreviatura: string
+  factorABase: number
+  uso?: UsoMedidaDto | null
+}
+
+export interface MedidaDeletedEntity {
+  id: number
+  message: string
 }
 
 // ---------------------------------------------------------------------------
@@ -102,53 +122,46 @@ export type SupplyResponse = Record<string, unknown> & Partial<SupplyResponseEnt
   activo?: boolean
 }
 
-export type MedidaResponse = Record<string, unknown> & {
-  id?: number | string
-  nombre?: string
-  abreviatura?: string
-  factor_a_base?: number | string
-  factorABase?: number | string
-  uso?: string
+export interface AlertaGlobalResponseEntity {
+  id: number
+  stockMin: number
+  stockDeseado?: number | null
 }
 
-export interface CriterioEliminableResponse {
-  criterio: string
+export interface AlertaAlmacenResponseEntity {
+  id: number
+  idAlmacen: number
+  codigoAlmacen: string
+  nombreAlmacen: string
+  minimoAlerta: number
+  cantidadReponer?: number | null
+}
+
+export interface SupplyAlertasResponseEntity {
+  global: AlertaGlobalResponseEntity | null
+  porAlmacen: AlertaAlmacenResponseEntity[]
+}
+
+export interface AlertaDeletedEntity {
+  idInsumo: number
+  idAlmacen?: number | null
+  message: string
+}
+
+export type CriterioEliminable = 'stock_en_cero' | 'sin_ordenes_pendientes' | 'sin_recetas_activas'
+
+export interface CriterioEliminableEntity {
+  criterio: CriterioEliminable
   cumple: boolean
   detalle: string
 }
 
-export type EliminableResponse = Record<string, unknown> & {
-  id_insumo?: number
-  codigo?: string
-  nombre?: string
-  eliminable?: boolean
-  criterios?: CriterioEliminableResponse[]
+export interface EliminableResponseEntity {
+  idInsumo: number
+  codigo: string
+  nombre: string
+  eliminable: boolean
+  criterios: CriterioEliminableEntity[]
 }
 
-export type AlertaGlobalResponse = Record<string, unknown> & {
-  stock_min?: number
-  stockMin?: number
-  minimo?: number
-  stock_deseado?: number | null
-  stockDeseado?: number | null
-  cantidad_reponer?: number | null
-  cantidadAReponer?: number | null
-}
 
-export type AlertaAlmacenResponse = Record<string, unknown> & {
-  id_almacen?: number
-  almacenId?: number
-  id?: number
-  minimo_alerta?: number
-  minimo?: number
-  cantidad_reponer?: number | null
-  cantidadAReponer?: number | null
-}
-
-export type AlertasResponse = Record<string, unknown> & {
-  global?: AlertaGlobalResponse | null
-  porAlmacen?: AlertaAlmacenResponse[]
-  por_almacen?: AlertaAlmacenResponse[]
-  almacenes?: AlertaAlmacenResponse[]
-  alertas?: AlertaAlmacenResponse[]
-}

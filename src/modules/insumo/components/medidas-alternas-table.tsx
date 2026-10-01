@@ -5,8 +5,9 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { useToastStore } from '@/shared/stores/toast-store'
 import { medidaAlternaSchema, USOS_MEDIDA } from '../schemas/insumo.schema'
-import { useCrearMedida, useMedidas } from '../services/queries'
+import { useActualizarMedida, useCrearMedida, useEliminarMedida, useMedidas } from '../services/queries'
 import type { MedidaAlterna } from '../interfaces/insumo.types'
+import { ConfirmDeleteDialog } from './confirm-delete-dialog'
 
 interface Props {
   insumoId: string
@@ -26,11 +27,17 @@ const BORRADOR_VACIO: Borrador = { nombre: '', abreviatura: '', factorABase: '',
 export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSeleccionar }: Props) {
   const { data: medidas = [], isLoading, isError, refetch } = useMedidas(insumoId)
   const crearMedida = useCrearMedida(insumoId)
+  const actualizarMedida = useActualizarMedida(insumoId)
+  const eliminarMedida = useEliminarMedida(insumoId)
   const notificar = useToastStore((s) => s.notificar)
 
   const [agregando, setAgregando] = useState(false)
+  const [editandoId, setEditandoId] = useState<string | null>(null)
   const [borrador, setBorrador] = useState<Borrador>(BORRADOR_VACIO)
   const [errores, setErrores] = useState<Record<string, string>>({})
+  const [medidaAEliminar, setMedidaAEliminar] = useState<MedidaAlterna | null>(null)
+
+  const guardando = crearMedida.isPending || actualizarMedida.isPending
 
   function cambiarCampo(campo: keyof Borrador, valor: string) {
     setBorrador((prev) => ({ ...prev, [campo]: valor }))
@@ -38,7 +45,20 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
 
   function cancelar() {
     setAgregando(false)
+    setEditandoId(null)
     setBorrador(BORRADOR_VACIO)
+    setErrores({})
+  }
+
+  function editar(medida: MedidaAlterna) {
+    setAgregando(false)
+    setEditandoId(medida.id)
+    setBorrador({
+      nombre: medida.nombre,
+      abreviatura: medida.abreviatura,
+      factorABase: String(medida.factorABase),
+      uso: medida.uso,
+    })
     setErrores({})
   }
 
@@ -53,6 +73,21 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
       )
       return
     }
+    if (editandoId !== null) {
+      actualizarMedida.mutate(
+        { medidaId: editandoId, input: resultado.data },
+        {
+          onSuccess: () => {
+            notificar('success', 'Medida alterna actualizada.')
+            cancelar()
+          },
+          onError: () => {
+            notificar('error', 'No se pudo actualizar la medida alterna.')
+          },
+        },
+      )
+      return
+    }
     crearMedida.mutate(resultado.data, {
       onSuccess: () => {
         notificar('success', 'Medida alterna creada.')
@@ -60,6 +95,19 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
       },
       onError: () => {
         notificar('error', 'No se pudo crear la medida alterna.')
+      },
+    })
+  }
+
+  function confirmarEliminacion() {
+    if (!medidaAEliminar) return
+    eliminarMedida.mutate(medidaAEliminar.id, {
+      onSuccess: (respuesta) => {
+        notificar('success', respuesta.message || 'Medida alterna eliminada.')
+        setMedidaAEliminar(null)
+      },
+      onError: () => {
+        notificar('error', 'No se pudo eliminar la medida alterna.')
       },
     })
   }
@@ -92,7 +140,7 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
                     setBorrador(BORRADOR_VACIO)
                     setErrores({})
                   }}
-                  disabled={agregando || isLoading}
+                  disabled={agregando || editandoId !== null || isLoading}
                   className="w-full py-2 text-xs font-semibold text-foreground bg-muted/40 hover:bg-muted/70 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
                 >
                   <Plus size={14} /> Agregar Medida
@@ -194,6 +242,80 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
               !isError &&
               medidas.map((medida) => {
                 const seleccionada = medidaSeleccionadaId === medida.id
+                if (editandoId === medida.id) {
+                  return (
+                    <TableRow key={medida.id} className="bg-muted/20">
+                      <TableCell>
+                        <Input
+                          autoFocus
+                          value={borrador.nombre}
+                          onChange={(e) => cambiarCampo('nombre', e.target.value)}
+                          placeholder="Ej. saco"
+                          aria-invalid={!!errores.nombre}
+                          className="h-8 text-center"
+                        />
+                        {errores.nombre ? (
+                          <p className="text-[11px] text-rose-600 mt-1 text-center">{errores.nombre}</p>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={borrador.abreviatura}
+                          onChange={(e) => cambiarCampo('abreviatura', e.target.value)}
+                          placeholder="Ej. saco"
+                          aria-invalid={!!errores.abreviatura}
+                          className="h-8 text-center"
+                        />
+                        {errores.abreviatura ? (
+                          <p className="text-[11px] text-rose-600 mt-1 text-center">{errores.abreviatura}</p>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          type="number"
+                          step="any"
+                          min="0"
+                          value={borrador.factorABase}
+                          onChange={(e) => cambiarCampo('factorABase', e.target.value)}
+                          placeholder="Ej. 0.25"
+                          aria-invalid={!!errores.factorABase}
+                          className="h-8 text-center"
+                        />
+                        {errores.factorABase ? (
+                          <p className="text-[11px] text-rose-600 mt-1 text-center">{errores.factorABase}</p>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        <select
+                          value={borrador.uso}
+                          onChange={(e) => cambiarCampo('uso', e.target.value)}
+                          aria-invalid={!!errores.uso}
+                          className="h-8 w-full rounded-md border border-input bg-background px-2 text-center text-sm"
+                        >
+                          <option value="">Selecciona</option>
+                          {USOS_MEDIDA.map((uso) => (
+                            <option key={uso} value={uso}>
+                              {uso}
+                            </option>
+                          ))}
+                        </select>
+                        {errores.uso ? (
+                          <p className="text-[11px] text-rose-600 mt-1 text-center">{errores.uso}</p>
+                        ) : null}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <Button type="button" size="sm" onClick={confirmar} disabled={guardando}>
+                            <Check size={14} /> {guardando ? 'Guardando…' : 'Confirmar'}
+                          </Button>
+                          <Button type="button" size="sm" variant="outline" onClick={cancelar}>
+                            <X size={14} /> Cancelar
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                }
                 return (
                   <TableRow
                     key={medida.id}
@@ -210,7 +332,7 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
                       {medida.factorABase}
                       {medida.esBase ? <span className="text-muted-foreground"> (BASE)</span> : null}
                     </TableCell>
-                    <TableCell className="text-center text-sm">{medida.uso}</TableCell>
+                    <TableCell className="text-center text-sm">{medida.uso || '-'}</TableCell>
                     <TableCell className="text-center">
                       <div
                         className="flex items-center justify-center gap-1"
@@ -218,17 +340,19 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
                       >
                         <button
                           type="button"
-                          title="Edición no disponible en el API por ahora"
-                          disabled
-                          className="p-1 text-gray-300 cursor-not-allowed"
+                          title="Editar medida"
+                          onClick={() => editar(medida)}
+                          disabled={agregando || editandoId !== null}
+                          className="p-1 text-gray-500 hover:text-emerald-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <PencilSimple size={16} />
                         </button>
                         <button
                           type="button"
-                          title="Eliminación no disponible en el API por ahora"
-                          disabled
-                          className="p-1 text-gray-300 cursor-not-allowed"
+                          title="Eliminar medida"
+                          onClick={() => setMedidaAEliminar(medida)}
+                          disabled={agregando || editandoId !== null}
+                          className="p-1 text-gray-500 hover:text-rose-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <X size={16} />
                         </button>
@@ -248,6 +372,14 @@ export function MedidasAlternasTable({ insumoId, medidaSeleccionadaId, onSelecci
           </TableBody>
         </Table>
       </div>
+
+      <ConfirmDeleteDialog
+        abierto={medidaAEliminar !== null}
+        titulo="Eliminar medida alterna"
+        descripcion={`¿Deseas eliminar la medida "${medidaAEliminar?.nombre ?? ''}"? Esta acción no se podrá deshacer.`}
+        onCerrar={() => setMedidaAEliminar(null)}
+        onConfirmar={confirmarEliminacion}
+      />
     </section>
   )
 }
