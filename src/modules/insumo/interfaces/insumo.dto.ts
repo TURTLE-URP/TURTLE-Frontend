@@ -62,7 +62,6 @@ export interface MedidaDeletedEntity {
 
 export interface UpsertAlertaGlobalDto {
   stock_min: number
-  usuario_id: number
   stock_deseado?: number
 }
 
@@ -73,7 +72,6 @@ export interface UpsertAlertaGlobalDto {
 export interface UpsertAlertaAlmacenDto {
   id_almacen: number
   minimo_alerta: number
-  usuario_id: number
   cantidad_reponer?: number
 }
 

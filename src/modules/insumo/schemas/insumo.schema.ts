@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
 /**
- * Form de insumo = DTO del backend sin auditoría.
+ * Form de insumo = DTO del backend.
  * Solo existen los campos que el Swagger expone en Create/UpdateSupplyDto.
- * `created_by / updated_by` los inyecta el service, no van en el form.
  * `id_unidad_base` es numérico temporal hasta que exista catálogo de unidades.
  */
 export const insumoSchema = z.object({

@@ -27,10 +27,6 @@ import type {
   UpsertAlertaGlobalInput,
 } from '../interfaces/insumo.types'
 
-// TODO(auth): reemplazar por el id real del usuario en sesión cuando el
-// backend lo provea. Valor temporal acordado.
-const USUARIO_SISTEMA_ID = 999999
-
 function toStringId(value: unknown, fallback: string): string {
   if (typeof value === 'string' && value) return value
   if (typeof value === 'number' && Number.isFinite(value)) return String(value)
@@ -298,7 +294,6 @@ export async function upsertAlertaGlobal(
   const payload: UpsertAlertaGlobalDto = {
     stock_min: input.minimo,
     ...(input.cantidadAReponer === undefined ? {} : { stock_deseado: input.cantidadAReponer }),
-    usuario_id: USUARIO_SISTEMA_ID,
   }
   await safeRequest<void>({ method: 'PUT', url: `/supplies/${insumoId}/alertas/global`, data: payload })
 }
@@ -318,7 +313,6 @@ export async function upsertAlertaAlmacen(
     id_almacen: input.idAlmacen,
     minimo_alerta: input.minimo,
     ...(input.cantidadAReponer === undefined ? {} : { cantidad_reponer: input.cantidadAReponer }),
-    usuario_id: USUARIO_SISTEMA_ID,
   }
   await safeRequest<void>({ method: 'PUT', url: `/supplies/${insumoId}/alertas/almacen`, data: payload })
 }
