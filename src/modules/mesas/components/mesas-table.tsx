@@ -97,13 +97,9 @@ export const MesasTable: React.FC<MesasTableProps> = ({
                     {/* Pedido / Cliente Actual */}
                     <td className="py-4 px-4">
                       {isOcupada && mesa.pedidoActual ? (
-                        <div>
-                          <div className="font-medium text-slate-800 text-xs">
-                            {mesa.pedidoActual.cliente}
-                          </div>
-                          <div className="text-[11px] text-slate-500">
-                            {mesa.pedidoActual.idPedido} · Total: <strong className="text-slate-700 font-semibold">S/ {mesa.pedidoActual.total.toFixed(2)}</strong>
-                          </div>
+                        <div className="font-medium text-slate-800 text-xs">
+                          {mesa.pedidoActual.horaInicio} · {mesa.pedidoActual.cliente} ·{' '}
+                          {mesa.pedidoActual.idPedido}
                         </div>
                       ) : (
                         <span className="text-slate-400 text-xs">— Sin comensales —</span>

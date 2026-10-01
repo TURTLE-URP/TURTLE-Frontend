@@ -48,7 +48,9 @@ export function useUsuarios() {
       email: email,
       role: trabajador.rol || trabajador.role || 'Trabajador',
       status: isActivo ? 'Activo' : 'Suspendido',
-      lastAccess: worker.updatedAt ? new Date(worker.updatedAt).toLocaleDateString() : 'No disponible',
+      lastAccess: worker.updated_at || worker.updatedAt
+        ? new Date(worker.updated_at || worker.updatedAt).toLocaleDateString()
+        : 'No disponible',
       initials: initials,
       color: isActivo ? 'bg-[#e0f2fe] text-[#0284c7]' : 'bg-[#f1f5f9] text-[#64748b]',
     };
@@ -134,14 +136,13 @@ export function useUsuarios() {
     const currentUser = users.find((u) => u.id === id);
     if (!currentUser) return;
 
-    const newActivoState = currentUser.status !== 'Activo';
-
     try {
-      await WorkersApi.updateActivo(id, newActivoState);
+      const updated = await WorkersApi.updateActivo(id);
+      const isActivo = updated?.activo ?? currentUser.status !== 'Activo';
       setUsers((prev) =>
         prev.map((u) =>
           u.id === id
-            ? { ...u, status: newActivoState ? 'Activo' : 'Suspendido' }
+            ? { ...u, status: isActivo ? 'Activo' : 'Suspendido' }
             : u
         )
       );
@@ -200,8 +201,6 @@ export function useUsuarios() {
   // Actualizar datos de un trabajador (Edición)
   const actualizarUsuario = async (id: number, data: { name: string; lastName: string; role?: string }) => {
     try {
-      // UpdateWorkerDto real solo acepta name/lastName — no tiene "rol"
-      // editable por este endpoint (por diseño del backend).
       const dto = {
         name: data.name,
         lastName: data.lastName,

@@ -21,7 +21,6 @@ import { cn } from '@/shared/lib/utils'
 import { useAuthStore } from '@/shared/stores/auth-store'
 import type { LinkProps } from '@tanstack/react-router'
 
-// Extrae el string union exacto de la propiedad 'to'
 type RouteTo = LinkProps['to']
 type GroupId = 'gestion' | 'operacion' | 'maestros'
 
@@ -50,6 +49,7 @@ const NAV_GROUPS: NavGroup[] = [
       { to: '/proveedores', label: 'Proveedores', icon: BuildingsIcon, gated: 'proveedores' },
       { to: '/', label: 'Almacenes', icon: WarehouseIcon },
       { to: '/usuarios', label: 'Personal', icon: UsersThreeIcon },
+      { to: '/gestion-mesas', label: 'Gestión de mesas', icon: ChairIcon },
       { to: '/mesas', label: 'Mesas', icon: ChairIcon },
     ],
   },

@@ -10,14 +10,14 @@ import {
   WarningCircleIcon,
   ShieldCheckIcon,
 } from '@phosphor-icons/react'
-import type { Mesa, PedidoLocal } from '../interfaces/mesa'
+import type { DatosOcuparMesa, Mesa } from '../interfaces/mesa'
 
 interface GestionarMesaDialogProps {
   mesa: Mesa | null
   isOpen: boolean
   onClose: () => void
   onLiberarMesa: (id: number) => void
-  onOcuparMesa: (id: number, nuevoPedido: PedidoLocal) => void
+  onOcuparMesa: (id: number, datos: DatosOcuparMesa) => void
 }
 
 export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
@@ -55,31 +55,12 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
       return
     }
 
-    // Paso 4: Creación de pedido y ocupación automática
-    const nuevoPedido: PedidoLocal = {
-      idPedido: `PED-${Math.floor(1000 + Math.random() * 9000)}`,
+    onOcuparMesa(mesa.id, {
       cliente: nuevoCliente.trim(),
-      dni: nuevoDni.trim() || 'No especificado',
-      horaInicio: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      dni: nuevoDni.trim(),
       comensales: Number(comensales),
-      mozo: mozo,
-      tiempoMinutos: 5,
-      subtotal: 42.37,
-      igv: 7.63,
-      total: 50.0,
-      estadoComanda: 'en_preparacion',
-      items: [
-        {
-          id: 'item-new-1',
-          nombre: 'Plato del Día Ejecutivo',
-          cantidad: Number(comensales),
-          precio: 25.0,
-          categoria: 'Plato de Fondo',
-        },
-      ],
-    }
-
-    onOcuparMesa(mesa.id, nuevoPedido)
+      mozo: mozo.trim(),
+    })
     setNuevoCliente('')
     setNuevoDni('')
     onClose()
@@ -151,6 +132,9 @@ export const GestionarMesaDialog: React.FC<GestionarMesaDialogProps> = ({
                     {pedido.cliente}
                   </span>
                   <span className="text-[10px] text-slate-500">DNI: {pedido.dni || '—'}</span>
+                  <span className="text-[10px] font-semibold text-slate-600 block">
+                    {pedido.idPedido}
+                  </span>
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase text-slate-400 block">

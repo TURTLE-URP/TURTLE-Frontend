@@ -57,14 +57,12 @@ export const MesaCard: React.FC<MesaCardProps> = ({ mesa, onGestionar }) => {
           {/* If Ocupada, show client and time */}
           {isOcupada && mesa.pedidoActual ? (
             <div className="pt-1">
-              <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                <ClockIcon className="w-4 h-4 text-slate-400 shrink-0" />
-                <span>
-                  {mesa.pedidoActual.horaInicio} · {mesa.pedidoActual.comensales} personas
+              <div className="flex items-start gap-2 text-sm font-semibold text-slate-800">
+                <ClockIcon className="mt-0.5 w-4 h-4 text-slate-400 shrink-0" />
+                <span className="min-w-0 leading-snug">
+                  {mesa.pedidoActual.horaInicio} · {mesa.pedidoActual.cliente} ·{' '}
+                  {mesa.pedidoActual.idPedido}
                 </span>
-              </div>
-              <div className="mt-1 text-sm font-semibold text-slate-800 truncate">
-                {mesa.pedidoActual.cliente}
               </div>
             </div>
           ) : (

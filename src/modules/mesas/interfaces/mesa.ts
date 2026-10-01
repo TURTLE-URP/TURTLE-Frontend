@@ -8,6 +8,13 @@ export interface ItemComanda {
   categoria: 'Entrada' | 'Plato de Fondo' | 'Bebida' | 'Postre'
 }
 
+export interface DatosOcuparMesa {
+  cliente: string
+  dni: string
+  comensales: number
+  mozo: string
+}
+
 export interface PedidoLocal {
   idPedido: string
   cliente: string

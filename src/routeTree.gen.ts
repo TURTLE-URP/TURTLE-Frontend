@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AbastecimientoRouteImport } from './routes/abastecimiento'
 import { Route as AbastoRouteImport } from './routes/abasto'
+import { Route as GestionMesasRouteImport } from './routes/gestion-mesas'
 import { Route as InsumosRouteImport } from './routes/insumos'
 import { Route as InventarioRouteImport } from './routes/inventario'
 import { Route as KardexRouteImport } from './routes/kardex'
@@ -35,6 +36,11 @@ const AbastecimientoRoute = AbastecimientoRouteImport.update({
 const AbastoRoute = AbastoRouteImport.update({
   id: '/abasto',
   path: '/abasto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GestionMesasRoute = GestionMesasRouteImport.update({
+  id: '/gestion-mesas',
+  path: '/gestion-mesas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsumosRoute = InsumosRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
+  '/gestion-mesas': typeof GestionMesasRoute
   '/insumos': typeof InsumosRoute
   '/inventario': typeof InventarioRoute
   '/kardex': typeof KardexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
+  '/gestion-mesas': typeof GestionMesasRoute
   '/insumos': typeof InsumosRoute
   '/inventario': typeof InventarioRoute
   '/kardex': typeof KardexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/abastecimiento': typeof AbastecimientoRoute
   '/abasto': typeof AbastoRoute
+  '/gestion-mesas': typeof GestionMesasRoute
   '/insumos': typeof InsumosRoute
   '/inventario': typeof InventarioRoute
   '/kardex': typeof KardexRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/'
     | '/abastecimiento'
     | '/abasto'
+    | '/gestion-mesas'
     | '/insumos'
     | '/inventario'
     | '/kardex'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/'
     | '/abastecimiento'
     | '/abasto'
+    | '/gestion-mesas'
     | '/insumos'
     | '/inventario'
     | '/kardex'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/'
     | '/abastecimiento'
     | '/abasto'
+    | '/gestion-mesas'
     | '/insumos'
     | '/inventario'
     | '/kardex'
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AbastecimientoRoute: typeof AbastecimientoRoute
   AbastoRoute: typeof AbastoRoute
+  GestionMesasRoute: typeof GestionMesasRoute
   InsumosRoute: typeof InsumosRoute
   InventarioRoute: typeof InventarioRoute
   KardexRoute: typeof KardexRoute
@@ -208,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/abasto'
       fullPath: '/abasto'
       preLoaderRoute: typeof AbastoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gestion-mesas': {
+      id: '/gestion-mesas'
+      path: '/gestion-mesas'
+      fullPath: '/gestion-mesas'
+      preLoaderRoute: typeof GestionMesasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insumos': {
@@ -280,6 +300,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AbastecimientoRoute: AbastecimientoRoute,
   AbastoRoute: AbastoRoute,
+  GestionMesasRoute: GestionMesasRoute,
   InsumosRoute: InsumosRoute,
   InventarioRoute: InventarioRoute,
   KardexRoute: KardexRoute,
