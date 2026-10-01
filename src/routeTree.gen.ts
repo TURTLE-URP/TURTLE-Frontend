@@ -19,8 +19,7 @@ import { Route as MesasRouteImport } from './routes/mesas'
 import { Route as ProveedoresRouteImport } from './routes/proveedores'
 import { Route as UsuariosRouteImport } from './routes/usuarios'
 import { Route as CatalogosCotizacionesRouteImport } from './routes/catalogos/cotizaciones'
-import { Route as DetalleInsumoInsumoIdRouteImport } from './routes/detalle-insumo.$insumoId'
-import { Route as PreviewEliminarInsumoRouteImport } from './routes/preview.eliminar-insumo'
+import { Route as InsumoInsumoIdVerDetallesRouteImport } from './routes/insumo.$insumoId.ver-detalles'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -72,16 +71,12 @@ const CatalogosCotizacionesRoute = CatalogosCotizacionesRouteImport.update({
   path: '/catalogos/cotizaciones',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DetalleInsumoInsumoIdRoute = DetalleInsumoInsumoIdRouteImport.update({
-  id: '/detalle-insumo/$insumoId',
-  path: '/detalle-insumo/$insumoId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PreviewEliminarInsumoRoute = PreviewEliminarInsumoRouteImport.update({
-  id: '/preview/eliminar-insumo',
-  path: '/preview/eliminar-insumo',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const InsumoInsumoIdVerDetallesRoute =
+  InsumoInsumoIdVerDetallesRouteImport.update({
+    id: '/insumo/$insumoId/ver-detalles',
+    path: '/insumo/$insumoId/ver-detalles',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,8 +89,7 @@ export interface FileRoutesByFullPath {
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
   '/catalogos/cotizaciones': typeof CatalogosCotizacionesRoute
-  '/detalle-insumo/$insumoId': typeof DetalleInsumoInsumoIdRoute
-  '/preview/eliminar-insumo': typeof PreviewEliminarInsumoRoute
+  '/insumo/$insumoId/ver-detalles': typeof InsumoInsumoIdVerDetallesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -108,8 +102,7 @@ export interface FileRoutesByTo {
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
   '/catalogos/cotizaciones': typeof CatalogosCotizacionesRoute
-  '/detalle-insumo/$insumoId': typeof DetalleInsumoInsumoIdRoute
-  '/preview/eliminar-insumo': typeof PreviewEliminarInsumoRoute
+  '/insumo/$insumoId/ver-detalles': typeof InsumoInsumoIdVerDetallesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -123,8 +116,7 @@ export interface FileRoutesById {
   '/proveedores': typeof ProveedoresRoute
   '/usuarios': typeof UsuariosRoute
   '/catalogos/cotizaciones': typeof CatalogosCotizacionesRoute
-  '/detalle-insumo/$insumoId': typeof DetalleInsumoInsumoIdRoute
-  '/preview/eliminar-insumo': typeof PreviewEliminarInsumoRoute
+  '/insumo/$insumoId/ver-detalles': typeof InsumoInsumoIdVerDetallesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -139,8 +131,7 @@ export interface FileRouteTypes {
     | '/proveedores'
     | '/usuarios'
     | '/catalogos/cotizaciones'
-    | '/detalle-insumo/$insumoId'
-    | '/preview/eliminar-insumo'
+    | '/insumo/$insumoId/ver-detalles'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,8 +144,7 @@ export interface FileRouteTypes {
     | '/proveedores'
     | '/usuarios'
     | '/catalogos/cotizaciones'
-    | '/detalle-insumo/$insumoId'
-    | '/preview/eliminar-insumo'
+    | '/insumo/$insumoId/ver-detalles'
   id:
     | '__root__'
     | '/'
@@ -167,8 +157,7 @@ export interface FileRouteTypes {
     | '/proveedores'
     | '/usuarios'
     | '/catalogos/cotizaciones'
-    | '/detalle-insumo/$insumoId'
-    | '/preview/eliminar-insumo'
+    | '/insumo/$insumoId/ver-detalles'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,8 +171,7 @@ export interface RootRouteChildren {
   ProveedoresRoute: typeof ProveedoresRoute
   UsuariosRoute: typeof UsuariosRoute
   CatalogosCotizacionesRoute: typeof CatalogosCotizacionesRoute
-  DetalleInsumoInsumoIdRoute: typeof DetalleInsumoInsumoIdRoute
-  PreviewEliminarInsumoRoute: typeof PreviewEliminarInsumoRoute
+  InsumoInsumoIdVerDetallesRoute: typeof InsumoInsumoIdVerDetallesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -258,18 +246,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogosCotizacionesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/detalle-insumo/$insumoId': {
-      id: '/detalle-insumo/$insumoId'
-      path: '/detalle-insumo/$insumoId'
-      fullPath: '/detalle-insumo/$insumoId'
-      preLoaderRoute: typeof DetalleInsumoInsumoIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/preview/eliminar-insumo': {
-      id: '/preview/eliminar-insumo'
-      path: '/preview/eliminar-insumo'
-      fullPath: '/preview/eliminar-insumo'
-      preLoaderRoute: typeof PreviewEliminarInsumoRouteImport
+    '/insumo/$insumoId/ver-detalles': {
+      id: '/insumo/$insumoId/ver-detalles'
+      path: '/insumo/$insumoId/ver-detalles'
+      fullPath: '/insumo/$insumoId/ver-detalles'
+      preLoaderRoute: typeof InsumoInsumoIdVerDetallesRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -286,8 +267,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProveedoresRoute: ProveedoresRoute,
   UsuariosRoute: UsuariosRoute,
   CatalogosCotizacionesRoute: CatalogosCotizacionesRoute,
-  DetalleInsumoInsumoIdRoute: DetalleInsumoInsumoIdRoute,
-  PreviewEliminarInsumoRoute: PreviewEliminarInsumoRoute,
+  InsumoInsumoIdVerDetallesRoute: InsumoInsumoIdVerDetallesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

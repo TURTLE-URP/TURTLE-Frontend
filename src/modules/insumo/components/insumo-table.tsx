@@ -4,7 +4,7 @@ import {
   EyeIcon,
 } from '@phosphor-icons/react';
 
-import type { Insumo } from '../interfaces/types';
+import type { Insumo } from '../interfaces/insumo.types';
 
 import {
   Table,

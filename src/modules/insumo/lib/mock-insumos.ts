@@ -1,4 +1,4 @@
-import type { Insumo } from '../interfaces/types';
+import type { Insumo } from '../interfaces/insumo.types';
 
 export const MOCK_INSUMOS: Insumo[] = [
   {

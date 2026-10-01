@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { XIcon, PlusIcon, CalendarBlankIcon } from '@phosphor-icons/react';
 
-import { insumoSchema } from '../schemas/schema';
-import type { InsumoFormValues } from '../schemas/schema';
-import type { Insumo } from '../interfaces/types';
+import { insumoSchema } from '../schemas/insumo.schema';
+import type { InsumoFormValues } from '../schemas/insumo.schema';
+import type { Insumo } from '../interfaces/insumo.types';
 
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';

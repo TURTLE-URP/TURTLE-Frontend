@@ -1,6 +1,6 @@
 import axiosInstance from '@/shared/api/axios.config'
-import type { EliminableApi } from '@/modules/detalle-insumo/interfaces/types'
-import type { CriterioEliminacion, EvaluacionEliminarInsumo, InsumoResumenDelete } from '../interfaces/types'
+import type { EliminableApi } from '@/modules/insumo/interfaces/insumo.types'
+import type { CriterioEliminacion, EvaluacionEliminarInsumo, InsumoResumenDelete } from '../interfaces/insumo.types'
 
 const TITULOS_CRITERIO: Record<string, string> = {
   stock_en_cero: 'Stock en cero en todos los almacenes',

@@ -1,6 +1,6 @@
 import { XIcon } from '@phosphor-icons/react';
 
-import type { Insumo } from '../interfaces/types';
+import type { Insumo } from '../interfaces/insumo.types';
 
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';

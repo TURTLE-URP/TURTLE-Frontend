@@ -1,4 +1,4 @@
-import type { AlertaStock, MedidaAlterna } from '../interfaces/types'
+import type { AlertaStock, MedidaAlterna } from '../interfaces/insumo.types'
 
 export const MOCK_MEDIDAS_ALTERNAS: MedidaAlterna[] = [
   { id: 'base', nombre: 'Kilogramo', abreviatura: 'Kg', factorABase: 1, uso: 'Todo', esBase: true },

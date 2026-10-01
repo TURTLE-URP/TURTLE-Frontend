@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { CaretLeft } from '@phosphor-icons/react'
-import type { MedidaAlterna } from '../interfaces/types'
+import type { MedidaAlterna } from '../interfaces/insumo.types'
 import { InsumoInfoCard } from '../components/insumo-info-card'
 import { MedidasAlternasTable } from '../components/medidas-alternas-table'
 import { AlertasStockTable } from '../components/alertas-stock-table'
@@ -12,7 +12,7 @@ interface Props {
   insumoId: string
 }
 
-export function DetalleInsumoPage({ insumoId }: Props) {
+export function InsumoDetallePage({ insumoId }: Props) {
   const [medidaSeleccionada, setMedidaSeleccionada] = useState<MedidaAlterna | null>(null)
 
   return (
@@ -21,7 +21,7 @@ export function DetalleInsumoPage({ insumoId }: Props) {
         to="/insumos"
         className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
       >
-        <CaretLeft size={14} /> Volver a Gestión de Insumos
+        <CaretLeft size={14} /> Volver a Insumos
       </Link>
 
       <InsumoInfoCard insumoId={insumoId} />

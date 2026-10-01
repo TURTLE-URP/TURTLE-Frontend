@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 
 import {
   MagnifyingGlassIcon,
@@ -6,21 +7,21 @@ import {
   CaretRightIcon,
 } from '@phosphor-icons/react';
 
-import type { Insumo } from '../interfaces/types';
-import type { InsumoFormValues } from '../schemas/schema';
+import type { Insumo } from '../interfaces/insumo.types';
+import type { InsumoFormValues } from '../schemas/insumo.schema';
 
 import { InsumosTable } from '../components/insumo-table';
 import { InsumoFormModal } from '../components/insumo-form-modal';
 import { InsumoEditModal } from '../components/insumo-edit-modal';
-import { InsumoDetailModal } from '../components/insumo-detail-modal';
+import { InsumoDeleteDialog } from '../components/insumo-delete-dialog';
 
-import { useInsumos } from '../hooks/hooks';
+import { useInsumos } from '../hooks/use-insumos';
 
 import { Input } from '@/shared/components/ui/input';
 import { Switch } from '@/shared/components/ui/switch';
 import { Label } from '@/shared/components/ui/label';
 
-export function GestionarInsumosPage() {
+export function InsumosPage() {
   const {
     insumos,
     kpis,
@@ -34,10 +35,12 @@ export function GestionarInsumosPage() {
 
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
 
-  const [insumoDetalle, setInsumoDetalle] = useState<Insumo | null>(null);
-
   const [insumoSeleccionado, setInsumoSeleccionado] =
     useState<Insumo | null>(null);
+
+  const [insumoAEliminar, setInsumoAEliminar] = useState<Insumo | null>(null);
+
+  const navigate = useNavigate();
 
   const [paginaActual, setPaginaActual] = useState(1);
 
@@ -66,9 +69,13 @@ export function GestionarInsumosPage() {
     setModalEditarOpen(false);
   };
 
-  const handleEliminar = (id: string) => {
-    if (!confirm('¿Seguro que quieres eliminar este insumo? Esta acción no se puede deshacer.')) return;
-    eliminarInsumo(id);
+  const handleVerDetalle = (insumo: Insumo) => {
+    void navigate({ to: '/insumo/$insumoId/ver-detalles', params: { insumoId: insumo.id } });
+  };
+
+  const handleConfirmarEliminar = () => {
+    if (insumoAEliminar) eliminarInsumo(insumoAEliminar.id);
+    setInsumoAEliminar(null);
   };
 
   // Si eliminas el último insumo de una página, vuelve a una página válida
@@ -192,8 +199,10 @@ export function GestionarInsumosPage() {
       {/* TABLA */}
       <InsumosTable
         insumos={insumosPaginados}
-        onEliminar={handleEliminar}
-        onVerDetalle={setInsumoDetalle}
+        onEliminar={(id) =>
+          setInsumoAEliminar(insumos.find((i) => i.id === id) ?? null)
+        }
+        onVerDetalle={handleVerDetalle}
         onEditar={handleOpenEditar}
       />
 
@@ -262,12 +271,13 @@ export function GestionarInsumosPage() {
         onSubmit={handleEditarSubmit}
       />
 
-      <InsumoDetailModal
-        open={insumoDetalle !== null}
+      <InsumoDeleteDialog
+        open={insumoAEliminar !== null}
+        insumo={insumoAEliminar}
         onOpenChange={(open) => {
-          if (!open) setInsumoDetalle(null);
+          if (!open) setInsumoAEliminar(null);
         }}
-        insumo={insumoDetalle}
+        onConfirmar={handleConfirmarEliminar}
       />
     </div>
   );

@@ -2,8 +2,8 @@ import { ArrowClockwise, Check, Warning, X } from '@phosphor-icons/react'
 import { AlertDialog, AlertDialogContent } from '@/shared/components/ui/alert-dialog'
 import { Button } from '@/shared/components/ui/button'
 import { useToastStore } from '@/shared/stores/toast-store'
-import { useEliminarInsumo, useEvaluacionEliminarInsumo, useInsumoResumen } from '../hooks/hooks'
-import type { InsumoAEliminar } from '../interfaces/types'
+import { useEliminarInsumo, useEvaluacionEliminarInsumo, useInsumoResumen } from '../hooks/use-eliminar-insumo'
+import type { InsumoAEliminar } from '../interfaces/insumo.types'
 
 interface Props {
   open: boolean
@@ -30,7 +30,7 @@ interface Props {
  * Integración desde gestionar-insumos (o donde esté el botón real).
  * El dialog hace el DELETE internamente; `onConfirmar` solo cierra/limpia:
  *
- *   import { InsumoDeleteDialog } from '@/modules/eliminar-insumo/components/insumo-delete-dialog'
+ *   import { InsumoDeleteDialog } from '@/modules/insumo/components/insumo-delete-dialog'
  *
  *   const [insumoAEliminar, setInsumoAEliminar] = useState<Insumo | null>(null)
  *   ...

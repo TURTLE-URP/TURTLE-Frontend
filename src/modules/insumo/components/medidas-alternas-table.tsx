@@ -4,9 +4,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { useToastStore } from '@/shared/stores/toast-store'
-import { medidaAlternaSchema, USOS_MEDIDA } from '../schemas/schema'
+import { medidaAlternaSchema, USOS_MEDIDA } from '../schemas/insumo.schema'
 import { useCrearMedida, useMedidas } from '../services/queries'
-import type { MedidaAlterna } from '../interfaces/types'
+import type { MedidaAlterna } from '../interfaces/insumo.types'
 
 interface Props {
   insumoId: string

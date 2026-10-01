@@ -6,8 +6,8 @@ import { Input } from '@/shared/components/ui/input'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/components/ui/tooltip'
 import { useToastStore } from '@/shared/stores/toast-store'
 import { ALMACENES_MOCK } from '@/modules/almacen/lib/mock-almacenes'
-import { alertaStockSchema } from '../schemas/schema'
-import { esAlcanceGlobal, parseIdAlmacen } from '../services/detalle-insumo.api'
+import { alertaStockSchema } from '../schemas/insumo.schema'
+import { esAlcanceGlobal, parseIdAlmacen } from '../services/insumo.api'
 import {
   useAlertas,
   useRemoveAlertaAlmacen,
@@ -15,7 +15,7 @@ import {
   useUpsertAlertaAlmacen,
   useUpsertAlertaGlobal,
 } from '../services/queries'
-import type { AlertaStock } from '../interfaces/types'
+import type { AlertaStock } from '../interfaces/insumo.types'
 import { ConfirmDeleteDialog } from './confirm-delete-dialog'
 
 interface Props {

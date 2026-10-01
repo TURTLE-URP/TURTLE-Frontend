@@ -8,12 +8,12 @@ import {
   removeAlertaGlobal,
   upsertAlertaAlmacen,
   upsertAlertaGlobal,
-} from './detalle-insumo.api'
+} from './insumo.api'
 import type {
   CrearMedidaInput,
   UpsertAlertaAlmacenInput,
   UpsertAlertaGlobalInput,
-} from '../interfaces/types'
+} from '../interfaces/insumo.types'
 
 export const insumoKeys = {
   detalle: (insumoId: string) => ['insumo', insumoId] as const,

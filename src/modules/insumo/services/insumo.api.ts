@@ -6,7 +6,7 @@ import type {
   MedidaAlterna,
   UpsertAlertaAlmacenInput,
   UpsertAlertaGlobalInput,
-} from '../interfaces/types'
+} from '../interfaces/insumo.types'
 
 // TODO(auth): reemplazar por el id real del usuario en sesión cuando el
 // backend lo provea. Valor temporal acordado.

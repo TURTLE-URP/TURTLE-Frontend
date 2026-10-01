@@ -1,8 +1,8 @@
 // src/features/gestionar-insumos/logic/hooks.ts
 import { useState } from 'react';
-import type { Insumo, InsumoFiltros, KpiInsumos } from '../interfaces/types';
-import type { InsumoFormValues } from '../schemas/schema';
-import { MOCK_INSUMOS } from '../lib/mock';
+import type { Insumo, InsumoFiltros, KpiInsumos } from '../interfaces/insumo.types';
+import type { InsumoFormValues } from '../schemas/insumo.schema';
+import { MOCK_INSUMOS } from '../lib/mock-insumos';
  
 export function useInsumos() {
   const [insumos, setInsumos] = useState<Insumo[]>(MOCK_INSUMOS);
