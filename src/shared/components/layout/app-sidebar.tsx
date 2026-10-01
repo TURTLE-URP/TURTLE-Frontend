@@ -7,6 +7,7 @@ import {
   ChairIcon,
   ClipboardTextIcon,
   FileArchiveIcon,
+  ClockCounterClockwiseIcon,
   PackageIcon,
   SignOutIcon,
   SquaresFourIcon,
@@ -45,6 +46,7 @@ const NAV_GROUPS: NavGroup[] = [
     label: 'Gestión',
     items: [
       { to: '/insumos', label: 'Insumos', icon: PackageIcon },
+      { to: '/kardex', label: 'Kardex', icon: ClockCounterClockwiseIcon },
       { to: '/proveedores', label: 'Proveedores', icon: BuildingsIcon, gated: 'proveedores' },
       { to: '/', label: 'Almacenes', icon: WarehouseIcon },
       { to: '/usuarios', label: 'Personal', icon: UsersThreeIcon },
