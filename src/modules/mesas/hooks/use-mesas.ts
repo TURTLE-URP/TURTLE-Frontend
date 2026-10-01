@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useAuthStore } from '@/shared/stores/auth-store'
 import type { Mesa } from '../interfaces/mesa'
 import { mapMesa, toPisoApi } from '../lib/map-mesa'
 import { MesasApi, type UpdateOcupadoPayload } from '../services/mesas.api'
@@ -10,13 +9,6 @@ export function useMesas() {
   const [error, setError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
-    if (!useAuthStore.getState().session?.token) {
-      setMesas([])
-      setError('Inicia sesión para ver el estado de las mesas.')
-      setLoading(false)
-      return
-    }
-
     setLoading(true)
     setError(null)
     try {

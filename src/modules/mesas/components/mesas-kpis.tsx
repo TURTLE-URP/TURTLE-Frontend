@@ -1,12 +1,5 @@
 ﻿import React from 'react'
-import {
-  MagnifyingGlassIcon,
-  ArrowsClockwiseIcon,
-  SquaresFourIcon,
-  TableIcon,
-  MagnifyingGlass,
-  ArrowsClockwise,
-} from '@phosphor-icons/react'
+import { MagnifyingGlass } from '@phosphor-icons/react'
 import type { FiltroEstado, VistaModo } from '../interfaces/mesa'
 
 interface MesasKPIsProps {
@@ -33,7 +26,7 @@ export const MesasKPIs: React.FC<MesasKPIsProps> = ({
   busqueda,
   onBusquedaChange,
   onPisoChange,
-  onActualizar,
+  onActualizar: _onActualizar,
   vistaModo: _vistaModo,
   onVistaModoChange: _onVistaModoChange,
   filtroEstado,

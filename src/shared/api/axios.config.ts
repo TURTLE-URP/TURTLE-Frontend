@@ -10,9 +10,6 @@ const apiBaseUrl =
 const axiosInstance = axios.create({
   baseURL: apiBaseUrl,
   timeout: 6000,
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-  },
   responseType: 'json',
   responseEncoding: 'utf8',
   paramsSerializer: {

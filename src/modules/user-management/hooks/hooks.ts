@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { ManagedUser, UserFilters } from '../interfaces/types';
 import type { UserInviteFormValues } from '../schemas/schema';
 import { WorkersApi } from '../services/workers.api';
-import { useAuthStore } from '@/shared/stores/auth-store';
 
 export function useUsuarios() {
   const [users, setUsers] = useState<ManagedUser[]>([]);
@@ -58,16 +57,6 @@ export function useUsuarios() {
 
   // Cargar lista de trabajadores desde el backend
   const fetchUsuarios = useCallback(async () => {
-    if (!useAuthStore.getState().session?.token) {
-      // Sin sesión no tiene sentido llamar al backend: evita el 401 en
-      // consola que salía en cada mount mientras el usuario ni siquiera
-      // había iniciado sesión todavía.
-      setUsers([]);
-      setError('Inicia sesión para ver el listado de trabajadores.');
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
     setError(null);
     try {
@@ -82,7 +71,12 @@ export function useUsuarios() {
       setUsers(mapped);
     } catch (err: any) {
       console.error('Error al cargar trabajadores:', err);
-      setError(err.message || 'Error al conectar con el servidor');
+      const apiMessage = err?.response?.data?.message;
+      setError(
+        Array.isArray(apiMessage)
+          ? apiMessage.join('. ')
+          : apiMessage || err.message || 'Error al conectar con el servidor',
+      );
     } finally {
       setLoading(false);
     }
