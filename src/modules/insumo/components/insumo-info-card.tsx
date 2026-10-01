@@ -39,11 +39,8 @@ export function InsumoInfoCard({ insumoId }: Props) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Campo label="Nombre" value={insumo.nombre} />
             <Campo label="Código" value={insumo.codigo} />
-            <Campo label="Categoría" value={insumo.categoria} />
-            <Campo label="Estado" value={insumo.estado} />
+            <Campo label="Unidad base" value={`${insumo.unidadBase.nombre} (${insumo.unidadBase.abreviatura})`} />
             <Campo label="Stock actual" value={`${insumo.stockActual} ${insumo.unidadMedida}`} />
-            <Campo label="Stock mínimo" value={`${insumo.stockMinimo} ${insumo.unidadMedida}`} />
-            <Campo label="Unidad de medida" value={insumo.unidadMedida} />
             {insumo.descripcion ? (
               <div className="col-span-2 sm:col-span-4">
                 <Campo label="Descripción" value={insumo.descripcion} />

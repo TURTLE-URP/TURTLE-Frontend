@@ -1,44 +1,21 @@
-// Tipos de listar / registrar / editar (antes gestionar-insumos)
-export type CategoriaInsumo =
-  | 'Mariscos'
-  | 'Pescados'
-  | 'Verduras'
-  | 'Condimentos'
-  | 'Bebidas'
-  | 'Envases'
-  | 'Abarrotes'
-
-export type EstadoInsumo = 'Activo' | 'Inactivo'
-
-export type NivelStock = 'OK' | 'Bajo' | 'Critico'
+/**
+ * Insumo = vista UI de SupplyResponseEntity (GET /supplies).
+ * Solo existen los campos que el Swagger expone.
+ */
+export interface UnidadBase {
+  id: number
+  abreviatura: string
+  nombre: string
+}
 
 export interface Insumo {
   id: string
   codigo: string
   nombre: string
-  descripcion: string
-  categorias: CategoriaInsumo[]
-  unidadMedida: string
-  stockActual: number
-  stockMinimo: number
-  stockAbasto: number
-  estado: EstadoInsumo
-  nivelStock: NivelStock
-  imagenUrl?: string
-}
-
-export interface InsumoFiltros {
-  busqueda: string
-  categoria: CategoriaInsumo | 'Todos'
-  estadoStock: NivelStock | 'Todos'
-  estado: EstadoInsumo | 'Todos'
-}
-
-export interface KpiInsumos {
-  total: number
-  activos: number
-  stockBajo: number
-  criticos: number
+  descripcion?: string
+  id_unidad_base: number
+  unidadBase?: UnidadBase
+  stockActual?: number
 }
 
 // Tipos de ver detalle (antes detalle-insumo)
@@ -47,11 +24,9 @@ export interface InsumoDetalle {
   codigo: string
   nombre: string
   descripcion?: string
-  categoria: string
+  unidadBase: UnidadBase
   unidadMedida: string
   stockActual: number
-  stockMinimo: number
-  estado: 'Activo' | 'Inactivo'
 }
 
 export type UsoMedidaApi = 'todo' | 'receta' | 'productos_proveedor'

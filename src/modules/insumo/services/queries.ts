@@ -1,19 +1,72 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  createInsumo,
   createMedida,
+  deleteInsumoBackend,
   fetchAlertas,
   fetchInsumoDetalle,
+  fetchInsumos,
   fetchMedidas,
   removeAlertaAlmacen,
   removeAlertaGlobal,
+  updateInsumo,
   upsertAlertaAlmacen,
   upsertAlertaGlobal,
+  type ActualizarInsumoInput,
+  type CrearInsumoInput,
 } from './insumo.api'
 import type {
   CrearMedidaInput,
   UpsertAlertaAlmacenInput,
   UpsertAlertaGlobalInput,
 } from '../interfaces/insumo.types'
+
+export const insumosKeys = {
+  list: (search?: string, page?: number) => ['insumos', { search: search ?? '', page: page ?? 1 }] as const,
+}
+
+function useInvalidarListado() {
+  const queryClient = useQueryClient()
+  return () => queryClient.invalidateQueries({ queryKey: ['insumos'] })
+}
+
+export function useInsumosList(search?: string, page?: number) {
+  return useQuery({
+    queryKey: insumosKeys.list(search, page),
+    queryFn: ({ signal }) => fetchInsumos({ search, page, signal }),
+  })
+}
+
+export function useCrearInsumo() {
+  const invalidar = useInvalidarListado()
+  return useMutation({
+    mutationFn: (input: CrearInsumoInput) => createInsumo(input),
+    onSuccess: () => {
+      void invalidar()
+    },
+  })
+}
+
+export function useActualizarInsumo() {
+  const invalidar = useInvalidarListado()
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string; input: ActualizarInsumoInput }) =>
+      updateInsumo(id, input),
+    onSuccess: () => {
+      void invalidar()
+    },
+  })
+}
+
+export function useEliminarInsumoBackend() {
+  const invalidar = useInvalidarListado()
+  return useMutation({
+    mutationFn: (id: string) => deleteInsumoBackend(id),
+    onSuccess: () => {
+      void invalidar()
+    },
+  })
+}
 
 export const insumoKeys = {
   detalle: (insumoId: string) => ['insumo', insumoId] as const,

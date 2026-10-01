@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 
 import {
@@ -18,54 +18,43 @@ import { InsumoDeleteDialog } from '../components/insumo-delete-dialog';
 import { useInsumos } from '../hooks/use-insumos';
 
 import { Input } from '@/shared/components/ui/input';
-import { Switch } from '@/shared/components/ui/switch';
-import { Label } from '@/shared/components/ui/label';
 
 export function InsumosPage() {
   const {
+    busqueda,
+    cambiarBusqueda,
+    pagina,
+    setPagina,
     insumos,
-    kpis,
-    filtros,
-    setFiltros,
-    registrarInsumo,
-    eliminarInsumo,
+    meta,
+    isLoading,
+    isError,
+    crear,
+    actualizar,
   } = useInsumos();
 
   const [modalRegistrarOpen, setModalRegistrarOpen] = useState(false);
-
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
 
-  const [insumoSeleccionado, setInsumoSeleccionado] =
-    useState<Insumo | null>(null);
-
+  const [insumoSeleccionado, setInsumoSeleccionado] = useState<Insumo | null>(null);
   const [insumoAEliminar, setInsumoAEliminar] = useState<Insumo | null>(null);
 
   const navigate = useNavigate();
 
-  const [paginaActual, setPaginaActual] = useState(1);
-
-  const elementosPorPagina = 5;
-
-  const totalPaginas =
-    Math.ceil(insumos.length / elementosPorPagina) || 1;
-
-  const insumosPaginados = insumos.slice(
-    (paginaActual - 1) * elementosPorPagina,
-    paginaActual * elementosPorPagina
-  );
+  const totalPaginas = meta?.totalPages ?? 1;
 
   const handleOpenEditar = (insumo: Insumo) => {
     setInsumoSeleccionado(insumo);
     setModalEditarOpen(true);
   };
 
-  const handleEditarSubmit = (data: InsumoFormValues) => {
-    console.log(
-      'Insumo editado:',
-      insumoSeleccionado?.id,
-      data
-    );
+  const handleRegistrar = (data: InsumoFormValues) => {
+    crear.mutate(data);
+  };
 
+  const handleEditarSubmit = (data: InsumoFormValues) => {
+    if (!insumoSeleccionado) return;
+    actualizar.mutate({ id: insumoSeleccionado.id, input: data });
     setModalEditarOpen(false);
   };
 
@@ -73,23 +62,13 @@ export function InsumosPage() {
     void navigate({ to: '/insumo/$insumoId/ver-detalles', params: { insumoId: insumo.id } });
   };
 
-  const handleConfirmarEliminar = () => {
-    if (insumoAEliminar) eliminarInsumo(insumoAEliminar.id);
-    setInsumoAEliminar(null);
-  };
-
-  // Si eliminas el último insumo de una página, vuelve a una página válida
-  useEffect(() => {
-    if (paginaActual > totalPaginas) setPaginaActual(totalPaginas);
-  }, [paginaActual, totalPaginas]);
-
   return (
     <div className="space-y-6">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            MÓDULO - CUS03
+            MÓDULO - INSUMOS
           </span>
 
           <h1 className="text-2xl font-bold text-foreground">
@@ -97,7 +76,7 @@ export function InsumosPage() {
           </h1>
 
           <p className="text-xs text-muted-foreground mt-0.5">
-            {kpis.activos} insumos activos de {kpis.total} registrados
+            {meta ? `${meta.total} insumos registrados` : 'Cargando...'}
           </p>
         </div>
 
@@ -110,9 +89,8 @@ export function InsumosPage() {
         </button>
       </div>
 
-      {/* BARRA DE BÚSQUEDA Y FILTROS */}
+      {/* BUSCADOR (server-side: ?search=) */}
       <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
-        {/* BUSCADOR */}
         <div className="relative w-full md:max-w-xs">
           <MagnifyingGlassIcon
             size={18}
@@ -120,116 +98,43 @@ export function InsumosPage() {
           />
 
           <Input
-            placeholder="Buscar por nombre, código o proveedor..."
-            value={filtros.busqueda}
-            onChange={(e) => {
-              setPaginaActual(1);
-
-              setFiltros((prev) => ({
-                ...prev,
-                busqueda: e.target.value,
-              }));
-            }}
+            placeholder="Buscar por nombre..."
+            value={busqueda}
+            onChange={(e) => cambiarBusqueda(e.target.value)}
             className="pl-9 bg-white shadow-xs border-gray-200"
           />
-        </div>
-
-        <div className="flex w-full md:w-auto gap-3 items-center flex-wrap sm:flex-nowrap">
-          {/* FILTRO DE CATEGORÍA */}
-          <select
-            value={filtros.categoria}
-            onChange={(e) => {
-              setPaginaActual(1);
-
-              setFiltros((prev) => ({
-                ...prev,
-                categoria: e.target.value as
-                  | 'Todos'
-                  | 'Mariscos'
-                  | 'Pescados'
-                  | 'Verduras'
-                  | 'Condimentos'
-                  | 'Bebidas'
-                  | 'Envases'
-                  | 'Abarrotes',
-              }));
-            }}
-            className="flex h-9 w-full sm:w-44 rounded-md border border-gray-200 bg-white px-3 py-1 text-xs shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            <option value="Todos">
-              Todas las Categorías
-            </option>
-
-            <option value="Mariscos">Mariscos</option>
-            <option value="Pescados">Pescados</option>
-            <option value="Verduras">Verduras</option>
-            <option value="Condimentos">Condimentos</option>
-            <option value="Bebidas">Bebidas</option>
-            <option value="Envases">Envases</option>
-            <option value="Abarrotes">Abarrotes</option>
-          </select>
-
-          {/* MOSTRAR INACTIVOS */}
-          <div className="flex items-center space-x-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-xs h-9">
-            <Switch
-              id="filtro-inactivos"
-              checked={filtros.estado === 'Inactivo'}
-              onCheckedChange={(checked) => {
-                setPaginaActual(1);
-
-                setFiltros((prev) => ({
-                  ...prev,
-                  estado: checked ? 'Inactivo' : 'Activo',
-                }));
-              }}
-            />
-
-            <Label
-              htmlFor="filtro-inactivos"
-              className="text-xs font-medium cursor-pointer select-none"
-            >
-              {filtros.estado === 'Inactivo'
-                ? 'Mostrando Inactivos'
-                : 'Mostrar Inactivos'}
-            </Label>
-          </div>
         </div>
       </div>
 
       {/* TABLA */}
-      <InsumosTable
-        insumos={insumosPaginados}
-        onEliminar={(id) =>
-          setInsumoAEliminar(insumos.find((i) => i.id === id) ?? null)
-        }
-        onVerDetalle={handleVerDetalle}
-        onEditar={handleOpenEditar}
-      />
+      {isLoading ? (
+        <p className="text-sm text-muted-foreground">Cargando insumos...</p>
+      ) : isError ? (
+        <p className="text-sm text-red-500">No se pudieron cargar los insumos.</p>
+      ) : (
+        <InsumosTable
+          insumos={insumos}
+          onEliminar={(id) =>
+            setInsumoAEliminar(insumos.find((i) => i.id === id) ?? null)
+          }
+          onVerDetalle={handleVerDetalle}
+          onEditar={handleOpenEditar}
+        />
+      )}
 
-      {/* PAGINACIÓN */}
+      {/* PAGINACIÓN (backend: 10 por página) */}
       <div className="flex items-center justify-between px-2 text-xs text-muted-foreground">
         <span>
-          Mostrando{' '}
-          {insumos.length === 0
-            ? 0
-            : (paginaActual - 1) * elementosPorPagina + 1}{' '}
-          a{' '}
-          {Math.min(
-            paginaActual * elementosPorPagina,
-            insumos.length
-          )}{' '}
-          de {insumos.length} resultados
+          {meta
+            ? `Página ${meta.page} de ${meta.totalPages} · ${meta.total} resultados`
+            : ''}
         </span>
 
         <div className="flex items-center space-x-2">
           <button
             type="button"
-            onClick={() =>
-              setPaginaActual((prev) =>
-                Math.max(prev - 1, 1)
-              )
-            }
-            disabled={paginaActual === 1}
+            onClick={() => setPagina((prev) => Math.max(prev - 1, 1))}
+            disabled={pagina === 1}
             className="p-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             title="Página anterior"
           >
@@ -237,17 +142,13 @@ export function InsumosPage() {
           </button>
 
           <span className="font-medium text-foreground">
-            Página {paginaActual} de {totalPaginas}
+            Página {pagina} de {totalPaginas}
           </span>
 
           <button
             type="button"
-            onClick={() =>
-              setPaginaActual((prev) =>
-                Math.min(prev + 1, totalPaginas)
-              )
-            }
-            disabled={paginaActual === totalPaginas}
+            onClick={() => setPagina((prev) => Math.min(prev + 1, totalPaginas))}
+            disabled={pagina === totalPaginas}
             className="p-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             title="Página siguiente"
           >
@@ -260,7 +161,8 @@ export function InsumosPage() {
       <InsumoFormModal
         open={modalRegistrarOpen}
         onOpenChange={setModalRegistrarOpen}
-        onSubmit={registrarInsumo}
+        onSubmit={handleRegistrar}
+        isPending={crear.isPending}
       />
 
       {/* MODAL EDITAR */}
@@ -269,15 +171,17 @@ export function InsumosPage() {
         onOpenChange={setModalEditarOpen}
         insumo={insumoSeleccionado}
         onSubmit={handleEditarSubmit}
+        isPending={actualizar.isPending}
       />
 
+      {/* MODAL ELIMINAR (hace el DELETE + invalida el listado; aquí solo se limpia) */}
       <InsumoDeleteDialog
         open={insumoAEliminar !== null}
         insumo={insumoAEliminar}
         onOpenChange={(open) => {
           if (!open) setInsumoAEliminar(null);
         }}
-        onConfirmar={handleConfirmarEliminar}
+        onConfirmar={() => setInsumoAEliminar(null)}
       />
     </div>
   );

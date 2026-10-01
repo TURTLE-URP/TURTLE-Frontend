@@ -15,8 +15,6 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 
-import { Badge } from '@/shared/components/ui/badge';
-
 interface Props {
   insumos: Insumo[];
   onEliminar: (id: string) => void;
@@ -37,7 +35,9 @@ export function InsumosTable({
           <TableRow className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wider">
             <TableHead>Insumo</TableHead>
 
-            <TableHead>Categoría</TableHead>
+            <TableHead>Unidad base</TableHead>
+
+            <TableHead>Stock</TableHead>
 
             <TableHead>Descripción</TableHead>
 
@@ -51,7 +51,7 @@ export function InsumosTable({
           {insumos.length === 0 ? (
             <TableRow>
               <TableCell
-                colSpan={4}
+                colSpan={5}
                 className="text-center py-8 text-muted-foreground"
               >
                 No se encontraron insumos.
@@ -74,38 +74,29 @@ export function InsumosTable({
                   </div>
                 </TableCell>
 
-                {/* CATEGORÍAS */}
+                {/* UNIDAD BASE */}
                 <TableCell>
-                  <div className="flex items-center gap-1.5 flex-wrap max-w-60">
-                    {item.categorias.slice(0, 2).map((categoria) => (
-                      <Badge
-                        key={categoria}
-                        variant="outline"
-                        className="font-normal text-xs bg-background"
-                      >
-                        {categoria}
-                      </Badge>
-                    ))}
+                  <span className="text-sm text-muted-foreground">
+                    {item.unidadBase
+                      ? `${item.unidadBase.nombre} (${item.unidadBase.abreviatura})`
+                      : item.id_unidad_base}
+                  </span>
+                </TableCell>
 
-                    {item.categorias.length > 2 && (
-                      <Badge
-                        variant="outline"
-                        className="font-normal text-xs bg-background"
-                        title={item.categorias.slice(2).join(', ')}
-                      >
-                        ...
-                      </Badge>
-                    )}
-                  </div>
+                {/* STOCK */}
+                <TableCell>
+                  <span className="text-sm text-foreground">
+                    {item.stockActual ?? '—'}
+                  </span>
                 </TableCell>
 
                 {/* DESCRIPCIÓN */}
                 <TableCell>
                   <p
                     className="text-sm text-muted-foreground max-w-md truncate"
-                    title={item.descripcion}
+                    title={item.descripcion ?? ''}
                   >
-                    {item.descripcion}
+                    {item.descripcion ?? '—'}
                   </p>
                 </TableCell>
 

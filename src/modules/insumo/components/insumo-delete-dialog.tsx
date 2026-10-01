@@ -2,7 +2,8 @@ import { ArrowClockwise, Check, Warning, X } from '@phosphor-icons/react'
 import { AlertDialog, AlertDialogContent } from '@/shared/components/ui/alert-dialog'
 import { Button } from '@/shared/components/ui/button'
 import { useToastStore } from '@/shared/stores/toast-store'
-import { useEliminarInsumo, useEvaluacionEliminarInsumo, useInsumoResumen } from '../hooks/use-eliminar-insumo'
+import { useEvaluacionEliminarInsumo, useInsumoResumen } from '../hooks/use-eliminar-insumo'
+import { useEliminarInsumoBackend } from '../services/queries'
 import type { InsumoAEliminar } from '../interfaces/insumo.types'
 
 interface Props {
@@ -58,7 +59,7 @@ export function InsumoDeleteDialog({ open, insumo, onOpenChange, onConfirmar }: 
     refetch,
   } = useEvaluacionEliminarInsumo(insumoId, open)
   const { data: resumen } = useInsumoResumen(insumoId, open)
-  const eliminar = useEliminarInsumo()
+  const eliminar = useEliminarInsumoBackend()
   const notificar = useToastStore((s) => s.notificar)
 
   const bloqueos = evaluacion?.criterios.filter((c) => !c.cumple).length ?? 0

@@ -1,23 +1,15 @@
 import { z } from 'zod'
 
+/**
+ * Form de insumo = DTO del backend sin auditoría.
+ * Solo existen los campos que el Swagger expone en Create/UpdateSupplyDto.
+ * `created_by / updated_by` los inyecta el service, no van en el form.
+ * `id_unidad_base` es numérico temporal hasta que exista catálogo de unidades.
+ */
 export const insumoSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio'),
-  categoria: z.enum([
-    'Mariscos',
-    'Pescados',
-    'Verduras',
-    'Condimentos',
-    'Bebidas',
-    'Envases',
-    'Abarrotes',
-  ]),
   descripcion: z.string().optional(),
-  stockActual: z.coerce.number().min(0, 'Debe ser mayor o igual a 0'),
-  stockMinimo: z.coerce.number().min(0, 'Debe ser mayor o igual a 0'),
-  stockAbasto: z.coerce.number().min(0, 'Debe ser mayor o igual a 0'),
-  unidadMedida: z.string().min(1, 'La unidad es obligatoria'),
-  fechaVencimiento: z.string().optional(),
-  etiquetas: z.array(z.string()).optional().default([]),
+  id_unidad_base: z.coerce.number().int().positive('Debe ser un ID válido mayor a 0'),
 })
 
 export type InsumoFormValues = z.infer<typeof insumoSchema>

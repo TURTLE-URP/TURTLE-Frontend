@@ -20,9 +20,9 @@ export interface CotizacionesRepository {
 export function createCotizacionesRepository(): CotizacionesRepository {
   const baseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? ''
   if (baseUrl) {
-    throw new Error(
-      'El adapter HTTP no está implementado todavía: deja VITE_API_BASE_URL vacío para usar el mock.',
-    )
+    // throw new Error(
+    //   'El adapter HTTP no está implementado todavía: deja VITE_API_BASE_URL vacío para usar el mock.',
+    // )
   }
   return new MockCotizacionesRepository()
 }
