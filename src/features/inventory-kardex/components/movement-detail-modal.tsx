@@ -1,5 +1,7 @@
-import { PrinterIcon, ArrowDownIcon, ArrowUpIcon, DropIcon } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { ArrowDownIcon, ArrowUpIcon, DropIcon } from '@phosphor-icons/react'
+// TODO: reactivar junto con la exportación a PDF
+// import { PrinterIcon } from '@phosphor-icons/react'
+// import { Button } from '@/components/ui/button'
 import { formatMovementDate, formatMovementTime } from '../logic/format-date'
 import { movementTypeLabel } from '../logic/movement-type'
 import type { KardexMovement } from '../types'
@@ -54,85 +56,86 @@ const TIPO_STYLES = {
   },
 }
 
-/** Genera y descarga un PDF con el detalle del movimiento usando jsPDF */
-async function exportarPDF(
-  movement: KardexMovement,
-  insumoNombre: string,
-  unidadMedida: string,
-) {
-  // Importación dinámica para no bloquear el bundle inicial
-  const { jsPDF } = await import('jspdf')
+// TODO: exportación a PDF pendiente, se agregará más adelante
+// /** Genera y descarga un PDF con el detalle del movimiento usando jsPDF */
+// async function exportarPDF(
+//   movement: KardexMovement,
+//   insumoNombre: string,
+//   unidadMedida: string,
+// ) {
+//   // Importación dinámica para no bloquear el bundle inicial
+//   const { jsPDF } = await import('jspdf')
 
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+//   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 
-  const tipoLabel = movementTypeLabel(movement.tipo).toUpperCase()
-  const fecha = `${formatMovementDate(movement.fecha)} ${formatMovementTime(movement.fecha)}`
-  const balanceBefore =
-    movement.tipo === 'entrada'
-      ? movement.saldoResultante - movement.cantidad
-      : movement.saldoResultante + movement.cantidad
-  const signo = movement.tipo === 'entrada' ? '+' : '-'
+//   const tipoLabel = movementTypeLabel(movement.tipo).toUpperCase()
+//   const fecha = `${formatMovementDate(movement.fecha)} ${formatMovementTime(movement.fecha)}`
+//   const balanceBefore =
+//     movement.tipo === 'entrada'
+//       ? movement.saldoResultante - movement.cantidad
+//       : movement.saldoResultante + movement.cantidad
+//   const signo = movement.tipo === 'entrada' ? '+' : '-'
 
-  const MARGIN = 20
-  const COL = MARGIN
-  const PAGE_W = 210
-  const CONTENT_W = PAGE_W - MARGIN * 2
+//   const MARGIN = 20
+//   const COL = MARGIN
+//   const PAGE_W = 210
+//   const CONTENT_W = PAGE_W - MARGIN * 2
 
-  // ── Encabezado ──────────────────────────────────────────────────────────
-  doc.setFillColor(15, 23, 42)           // slate-900
-  doc.rect(0, 0, PAGE_W, 28, 'F')
+//   // ── Encabezado ──────────────────────────────────────────────────────────
+//   doc.setFillColor(15, 23, 42)           // slate-900
+//   doc.rect(0, 0, PAGE_W, 28, 'F')
 
-  doc.setTextColor(255, 255, 255)
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(16)
-  doc.text('TURTLE · Kardex de Almacén', COL, 13)
+//   doc.setTextColor(255, 255, 255)
+//   doc.setFont('helvetica', 'bold')
+//   doc.setFontSize(16)
+//   doc.text('TURTLE · Kardex de Almacén', COL, 13)
 
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(9)
-  doc.text(`Detalle de movimiento — ${tipoLabel}`, COL, 21)
+//   doc.setFont('helvetica', 'normal')
+//   doc.setFontSize(9)
+//   doc.text(`Detalle de movimiento — ${tipoLabel}`, COL, 21)
 
-  // ── Cuerpo ───────────────────────────────────────────────────────────────
-  let y = 38
+//   // ── Cuerpo ───────────────────────────────────────────────────────────────
+//   let y = 38
 
-  const addRow = (label: string, value: string) => {
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(8)
-    doc.setTextColor(100, 116, 139)   // slate-500
-    doc.text(label.toUpperCase(), COL, y)
-    y += 5
+//   const addRow = (label: string, value: string) => {
+//     doc.setFont('helvetica', 'bold')
+//     doc.setFontSize(8)
+//     doc.setTextColor(100, 116, 139)   // slate-500
+//     doc.text(label.toUpperCase(), COL, y)
+//     y += 5
 
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(10)
-    doc.setTextColor(15, 23, 42)      // slate-900
-    doc.text(value, COL, y)
-    y += 3
+//     doc.setFont('helvetica', 'normal')
+//     doc.setFontSize(10)
+//     doc.setTextColor(15, 23, 42)      // slate-900
+//     doc.text(value, COL, y)
+//     y += 3
 
-    // línea separadora
-    doc.setDrawColor(226, 232, 240)   // slate-200
-    doc.line(COL, y, COL + CONTENT_W, y)
-    y += 6
-  }
+//     // línea separadora
+//     doc.setDrawColor(226, 232, 240)   // slate-200
+//     doc.line(COL, y, COL + CONTENT_W, y)
+//     y += 6
+//   }
 
-  addRow('Insumo', insumoNombre)
-  addRow('Documento / comprobante', movement.documento)
-  addRow('Fecha / hora', fecha)
-  addRow('Tipo de movimiento', tipoLabel)
-  addRow('Cantidad', `${signo}${movement.cantidad} ${unidadMedida}`)
-  addRow('Saldo anterior → nuevo', `${balanceBefore} ${unidadMedida} → ${movement.saldoResultante} ${unidadMedida}`)
-  addRow('Motivo', movement.motivo)
-  addRow('Responsable', movement.responsable)
+//   addRow('Insumo', insumoNombre)
+//   addRow('Documento / comprobante', movement.documento)
+//   addRow('Fecha / hora', fecha)
+//   addRow('Tipo de movimiento', tipoLabel)
+//   addRow('Cantidad', `${signo}${movement.cantidad} ${unidadMedida}`)
+//   addRow('Saldo anterior → nuevo', `${balanceBefore} ${unidadMedida} → ${movement.saldoResultante} ${unidadMedida}`)
+//   addRow('Motivo', movement.motivo)
+//   addRow('Responsable', movement.responsable)
 
-  // ── Pie de página ────────────────────────────────────────────────────────
-  const today = new Date().toLocaleDateString('es-PE', {
-    day: '2-digit', month: 'long', year: 'numeric',
-  })
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(8)
-  doc.setTextColor(148, 163, 184)   // slate-400
-  doc.text(`Generado el ${today} · TURTLE Sistema de Gestión`, COL, 285)
+//   // ── Pie de página ────────────────────────────────────────────────────────
+//   const today = new Date().toLocaleDateString('es-PE', {
+//     day: '2-digit', month: 'long', year: 'numeric',
+//   })
+//   doc.setFont('helvetica', 'normal')
+//   doc.setFontSize(8)
+//   doc.setTextColor(148, 163, 184)   // slate-400
+//   doc.text(`Generado el ${today} · TURTLE Sistema de Gestión`, COL, 285)
 
-  doc.save(`kardex-${movement.documento}-${movement.id}.pdf`)
-}
+//   doc.save(`kardex-${movement.documento}-${movement.id}.pdf`)
+// }
 
 function DetailField({
   label,
@@ -235,6 +238,7 @@ export function MovementDetailPanel({
               fieldClass={styles.field}
               labelClass={styles.label}
             />
+            {/* TODO: exportación a PDF pendiente, se agregará más adelante
             <div className="mt-auto pt-2">
               <Button
                 type="button"
@@ -246,6 +250,7 @@ export function MovementDetailPanel({
                 Exportar PDF
               </Button>
             </div>
+            */}
           </>
         ) : (
           <p className="m-auto max-w-xs text-center text-sm text-muted-foreground py-8">
