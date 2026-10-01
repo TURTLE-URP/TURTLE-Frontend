@@ -1,7 +1,7 @@
 import { createRootRoute, Outlet, useLocation } from '@tanstack/react-router'
 import { ErrorBoundary } from '../app/error-boundary'
-import { AppSidebar } from '../components/layout/app-sidebar'
-import { ToastRegion } from '../features/proveedores/components/toast'
+import { AppSidebar } from '@/shared/components/layout/app-sidebar'
+import { ToastRegion } from '@/modules/proveedores/components/toast'
 
 export const Route = createRootRoute({
   component: RootLayout,

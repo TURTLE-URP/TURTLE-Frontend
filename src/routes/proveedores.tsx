@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { SinAcceso } from '@/features/proveedores/components/sin-acceso'
-import { getMockSesion } from '@/features/proveedores/data/mock-session'
-import { puedeGestionarProveedores } from '@/features/proveedores/logic/access'
-import { ProveedoresPage } from '@/features/proveedores/pages/proveedores-page'
+import { SinAcceso } from '@/modules/proveedores/components/sin-acceso'
+import { getMockSesion } from '@/modules/proveedores/lib/mock-session'
+import { puedeGestionarProveedores } from '@/modules/proveedores/lib/access'
+import { ProveedoresPage } from '@/modules/proveedores/pages/proveedores-page'
 
 export const Route = createFileRoute('/proveedores')({
   component: ProveedoresRoute,

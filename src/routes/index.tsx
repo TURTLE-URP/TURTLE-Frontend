@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { GestionarAlmacenesPage } from '../features/almacen/components/gestionar-almacenes-page'
+import { GestionarAlmacenesPage } from '@/modules/almacen/pages/gestionar-almacenes-page'
 
 export const Route = createFileRoute('/')({
   component: GestionarAlmacenesPage,

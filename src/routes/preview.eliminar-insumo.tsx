@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { InsumoDeleteDialog } from '@/features/eliminar-insumo/components/insumo-delete-dialog'
-import type { InsumoAEliminar } from '@/features/eliminar-insumo/logic/types'
+import { InsumoDeleteDialog } from '@/modules/eliminar-insumo/components/insumo-delete-dialog'
+import type { InsumoAEliminar } from '@/modules/eliminar-insumo/interfaces/types'
 
 export const Route = createFileRoute('/preview/eliminar-insumo')({
   component: PreviewEliminarInsumo,
