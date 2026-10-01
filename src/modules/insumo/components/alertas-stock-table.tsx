@@ -3,11 +3,10 @@ import { Check, PencilSimple, Plus, X } from '@phosphor-icons/react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/components/ui/tooltip'
 import { useToastStore } from '@/shared/stores/toast-store'
-import { ALMACENES_MOCK } from '@/modules/almacen/lib/mock-almacenes'
 import { alertaStockSchema } from '../schemas/insumo.schema'
 import { esAlcanceGlobal, parseIdAlmacen } from '../services/insumo.api'
+import { AlcanceCombobox, type AlcanceSeleccionado } from './alcance-combobox'
 import {
   useAlertas,
   useRemoveAlertaAlmacen,
@@ -53,15 +52,23 @@ export function AlertasStockTable({ insumoId }: Props) {
   const codigosConAlerta = new Set(
     alertas.filter((a) => !(a.esGlobal ?? esAlcanceGlobal(a.alcance))).map((a) => a.alcance),
   )
-  // TODO(backend): reemplazar ALMACENES_MOCK por GET /almacenes (o
-  // GET /supplies/{id}/almacenes) cuando el endpoint exista.
-  const almacenesLibres = ALMACENES_MOCK.filter((m) => !codigosConAlerta.has(m.codigo))
-  const opcionesAlcance: string[] = [
-    ...(tieneGlobal ? [] : [VALOR_GLOBAL]),
-    ...almacenesLibres.map((m) => m.codigo),
-  ]
-  const puedeAgregar = opcionesAlcance.length > 0
+  // La lista de almacenes es infinita (cursor del backend): el botón siempre
+  // está disponible y el combobox excluye los códigos que ya tienen alerta.
+  const puedeAgregar = true
   const botonBloqueado = !puedeAgregar || !!editandoId || isLoading
+
+  const [seleccion, setSeleccion] = useState<AlcanceSeleccionado | null>(null)
+
+  function elegirAlcance(valor: AlcanceSeleccionado | null) {
+    setSeleccion(valor)
+    if (valor === null) {
+      cambiarCampo('alcance', '')
+    } else if (valor.tipo === 'global') {
+      cambiarCampo('alcance', VALOR_GLOBAL)
+    } else {
+      cambiarCampo('alcance', valor.codigo)
+    }
+  }
 
   function cambiarCampo(campo: keyof Borrador, valor: string) {
     setBorrador((prev) => ({ ...prev, [campo]: valor }))
@@ -71,6 +78,7 @@ export function AlertasStockTable({ insumoId }: Props) {
     if (!puedeAgregar) return
     setEditandoId(TEMP_ID)
     setBorrador(BORRADOR_VACIO)
+    setSeleccion(null)
     setErrores({})
   }
 
@@ -88,6 +96,7 @@ export function AlertasStockTable({ insumoId }: Props) {
   function cancelar() {
     setEditandoId(null)
     setBorrador(BORRADOR_VACIO)
+    setSeleccion(null)
     setErrores({})
   }
 
@@ -117,12 +126,8 @@ export function AlertasStockTable({ insumoId }: Props) {
     )
   }
 
+  // Solo para filas legacy sin idAlmacen: el id viene del combobox al crear.
   function resolverIdAlmacen(codigo: string): number | null {
-    const mock = ALMACENES_MOCK.find((m) => m.codigo === codigo)
-    if (mock) {
-      const id = Number(mock.id)
-      if (Number.isFinite(id)) return id
-    }
     return parseIdAlmacen(codigo)
   }
 
@@ -155,7 +160,11 @@ export function AlertasStockTable({ insumoId }: Props) {
       return
     }
 
-    const idAlmacen = resolverIdAlmacen(alcance)
+    // El id sale directo del combobox (sin resolver por código).
+    const idAlmacen =
+      seleccion !== null && seleccion.tipo === 'almacen'
+        ? seleccion.id
+        : resolverIdAlmacen(alcance)
     if (idAlmacen === null) {
       setErrores({ alcance: 'Selecciona un alcance válido' })
       return
@@ -192,8 +201,7 @@ export function AlertasStockTable({ insumoId }: Props) {
   }
 
   return (
-    <TooltipProvider>
-      <section>
+    <section>
         <div>
           <h2 className="text-sm font-semibold text-foreground">
             Alertas de Stock y Preferencias de reposición
@@ -216,30 +224,14 @@ export function AlertasStockTable({ insumoId }: Props) {
             <TableBody>
               <TableRow>
                 <TableCell colSpan={4} className="p-0">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="block">
-                        <button
-                          type="button"
-                          onClick={agregar}
-                          disabled={botonBloqueado}
-                          className={
-                            puedeAgregar
-                              ? 'w-full py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1'
-                              : 'w-full py-2 text-xs font-semibold text-muted-foreground bg-muted/40 transition-colors opacity-50 cursor-not-allowed flex items-center justify-center gap-1'
-                          }
-                        >
-                          <Plus size={14} /> Agregar Alerta
-                        </button>
-                      </span>
-                    </TooltipTrigger>
-                    {!puedeAgregar && !isLoading ? (
-                      <TooltipContent>
-                        Ya existe la alerta global y todos los almacenes tienen alerta. Elimina una
-                        alerta para crear otra.
-                      </TooltipContent>
-                    ) : null}
-                  </Tooltip>
+                  <button
+                    type="button"
+                    onClick={agregar}
+                    disabled={botonBloqueado}
+                    className="w-full py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
+                  >
+                    <Plus size={14} /> Agregar Alerta
+                  </button>
                 </TableCell>
               </TableRow>
 
@@ -267,27 +259,14 @@ export function AlertasStockTable({ insumoId }: Props) {
               {editandoId === TEMP_ID ? (
                 <TableRow className="bg-muted/20">
                   <TableCell>
-                    <select
+                    <AlcanceCombobox
                       autoFocus
-                      value={borrador.alcance}
-                      onChange={(e) => cambiarCampo('alcance', e.target.value)}
-                      aria-invalid={!!errores.alcance}
-                      className="h-8 w-full rounded-md border border-input bg-background px-2 text-center text-sm"
-                    >
-                      <option value="" disabled>
-                        GLOBAL/ALM-XXX
-                      </option>
-                      {opcionesAlcance.map((opcion) => (
-                        <option key={opcion} value={opcion}>
-                          {opcion}
-                        </option>
-                      ))}
-                    </select>
-                    {errores.alcance ? (
-                      <p className="text-[11px] text-rose-600 mt-1 text-center">
-                        {errores.alcance}
-                      </p>
-                    ) : null}
+                      mostrarGlobal={!tieneGlobal}
+                      excluirCodigos={codigosConAlerta}
+                      value={seleccion}
+                      onChange={elegirAlcance}
+                      error={errores.alcance}
+                    />
                   </TableCell>
                   <TableCell>
                     <Input
@@ -447,6 +426,5 @@ export function AlertasStockTable({ insumoId }: Props) {
           onConfirmar={confirmarEliminacion}
         />
       </section>
-    </TooltipProvider>
   )
 }

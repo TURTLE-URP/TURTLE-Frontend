@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useDebouncedValue } from '@/shared/hooks/use-debounced-value'
 import {
   useActualizarInsumo,
   useCrearInsumo,
@@ -13,8 +14,9 @@ import {
 export function useInsumos() {
   const [busqueda, setBusqueda] = useState('')
   const [pagina, setPagina] = useState(1)
+  const busquedaDebounced = useDebouncedValue(busqueda)
 
-  const listado = useInsumosList(busqueda || undefined, pagina)
+  const listado = useInsumosList(busquedaDebounced || undefined, pagina)
   const crear = useCrearInsumo()
   const actualizar = useActualizarInsumo()
 
