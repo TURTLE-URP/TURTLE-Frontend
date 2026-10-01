@@ -52,7 +52,7 @@ export function InsumoEditModal({
     if (insumo && open) {
       reset({
         nombre: insumo.nombre,
-        categoria: insumo.categoria,
+        categoria: insumo.categorias[0],
         descripcion: insumo.descripcion || '',
         stockActual: insumo.stockActual,
         stockMinimo: insumo.stockMinimo,

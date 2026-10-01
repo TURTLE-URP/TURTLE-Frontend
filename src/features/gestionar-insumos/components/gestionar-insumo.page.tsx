@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   MagnifyingGlassIcon,
@@ -12,6 +12,7 @@ import type { InsumoFormValues } from '../logic/schema';
 import { InsumosTable } from './insumo-table';
 import { InsumoFormModal } from './insumo-form-modal';
 import { InsumoEditModal } from './insumo-edit-modal';
+import { InsumoDetailModal } from './insumo-detail-modal';
 
 import { useInsumos } from '../logic/hooks';
 
@@ -26,13 +27,14 @@ export function GestionarInsumosPage() {
     filtros,
     setFiltros,
     registrarInsumo,
-    inactivarInsumo,
-    activarInsumo,
+    eliminarInsumo,
   } = useInsumos();
 
   const [modalRegistrarOpen, setModalRegistrarOpen] = useState(false);
 
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
+
+  const [insumoDetalle, setInsumoDetalle] = useState<Insumo | null>(null);
 
   const [insumoSeleccionado, setInsumoSeleccionado] =
     useState<Insumo | null>(null);
@@ -63,6 +65,16 @@ export function GestionarInsumosPage() {
 
     setModalEditarOpen(false);
   };
+
+  const handleEliminar = (id: string) => {
+    if (!confirm('¿Seguro que quieres eliminar este insumo? Esta acción no se puede deshacer.')) return;
+    eliminarInsumo(id);
+  };
+
+  // Si eliminas el último insumo de una página, vuelve a una página válida
+  useEffect(() => {
+    if (paginaActual > totalPaginas) setPaginaActual(totalPaginas);
+  }, [paginaActual, totalPaginas]);
 
   return (
     <div className="space-y-6">
@@ -180,8 +192,8 @@ export function GestionarInsumosPage() {
       {/* TABLA */}
       <InsumosTable
         insumos={insumosPaginados}
-        onInactivar={inactivarInsumo}
-        onActivar={activarInsumo}
+        onEliminar={handleEliminar}
+        onVerDetalle={setInsumoDetalle}
         onEditar={handleOpenEditar}
       />
 
@@ -248,6 +260,14 @@ export function GestionarInsumosPage() {
         onOpenChange={setModalEditarOpen}
         insumo={insumoSeleccionado}
         onSubmit={handleEditarSubmit}
+      />
+
+      <InsumoDetailModal
+        open={insumoDetalle !== null}
+        onOpenChange={(open) => {
+          if (!open) setInsumoDetalle(null);
+        }}
+        insumo={insumoDetalle}
       />
     </div>
   );
