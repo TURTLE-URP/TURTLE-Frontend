@@ -1,9 +1,8 @@
 <!--
   Sync Impact Report
-  Version: 1.2.0 → 1.3.0
-  Modified principles: III. Test-First (logic tests vs component tests; Browser
-    Mode mandatory; per-component tests)
-  Modified sections: Environment & Configuration (CI browser runtime provision)
+  Version: 1.3.0 → 1.4.0
+  Modified principles: n/a
+  Modified sections: Technology Stack (Phosphor icons naming rule added)
   Added sections: n/a
   Removed sections: n/a
   Deferred TODOs: n/a
@@ -126,6 +125,10 @@ design freedom while keeping the bundle lean and the codebase consistent.
 - **Global state**: Zustand MUST be used for global/client-side state.
 - **HTTP**: The native browser `fetch` API MUST be used for HTTP requests; no
   additional HTTP client library is required.
+- **Icons**: `@phosphor-icons/react` MUST be used for all icons, exclusively
+  with the non-deprecated names ending in `Icon` (e.g. `HouseIcon`,
+  `UserIcon`). Deprecated names without the suffix (e.g. `House`, `User`)
+  MUST NOT be used.
 
 Dependency rules:
 
@@ -240,4 +243,4 @@ released.
 - Complexity MUST be justified; the simplest design that meets the
   specification wins.
 
-**Version**: 1.3.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-02
+**Version**: 1.4.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-09-28

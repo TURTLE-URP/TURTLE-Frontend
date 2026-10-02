@@ -10,33 +10,194 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AbastecimientoRouteImport } from './routes/abastecimiento'
+import { Route as AbastoRouteImport } from './routes/abasto'
+import { Route as GestionMesasRouteImport } from './routes/gestion-mesas'
+import { Route as InsumosRouteImport } from './routes/insumos'
+import { Route as InventarioRouteImport } from './routes/inventario'
+import { Route as KardexRouteImport } from './routes/kardex'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MesasRouteImport } from './routes/mesas'
+import { Route as ProveedoresRouteImport } from './routes/proveedores'
+import { Route as UsuariosRouteImport } from './routes/usuarios'
+import { Route as CatalogosCotizacionesRouteImport } from './routes/catalogos/cotizaciones'
+import { Route as InsumoInsumoIdVerDetallesRouteImport } from './routes/insumo.$insumoId.ver-detalles'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AbastecimientoRoute = AbastecimientoRouteImport.update({
+  id: '/abastecimiento',
+  path: '/abastecimiento',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbastoRoute = AbastoRouteImport.update({
+  id: '/abasto',
+  path: '/abasto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GestionMesasRoute = GestionMesasRouteImport.update({
+  id: '/gestion-mesas',
+  path: '/gestion-mesas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsumosRoute = InsumosRouteImport.update({
+  id: '/insumos',
+  path: '/insumos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InventarioRoute = InventarioRouteImport.update({
+  id: '/inventario',
+  path: '/inventario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KardexRoute = KardexRouteImport.update({
+  id: '/kardex',
+  path: '/kardex',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesasRoute = MesasRouteImport.update({
+  id: '/mesas',
+  path: '/mesas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProveedoresRoute = ProveedoresRouteImport.update({
+  id: '/proveedores',
+  path: '/proveedores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsuariosRoute = UsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogosCotizacionesRoute = CatalogosCotizacionesRouteImport.update({
+  id: '/catalogos/cotizaciones',
+  path: '/catalogos/cotizaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsumoInsumoIdVerDetallesRoute =
+  InsumoInsumoIdVerDetallesRouteImport.update({
+    id: '/insumo/$insumoId/ver-detalles',
+    path: '/insumo/$insumoId/ver-detalles',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abastecimiento': typeof AbastecimientoRoute
+  '/abasto': typeof AbastoRoute
+  '/gestion-mesas': typeof GestionMesasRoute
+  '/insumos': typeof InsumosRoute
+  '/inventario': typeof InventarioRoute
+  '/kardex': typeof KardexRoute
+  '/login': typeof LoginRoute
+  '/mesas': typeof MesasRoute
+  '/proveedores': typeof ProveedoresRoute
+  '/usuarios': typeof UsuariosRoute
+  '/catalogos/cotizaciones': typeof CatalogosCotizacionesRoute
+  '/insumo/$insumoId/ver-detalles': typeof InsumoInsumoIdVerDetallesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abastecimiento': typeof AbastecimientoRoute
+  '/abasto': typeof AbastoRoute
+  '/gestion-mesas': typeof GestionMesasRoute
+  '/insumos': typeof InsumosRoute
+  '/inventario': typeof InventarioRoute
+  '/kardex': typeof KardexRoute
+  '/login': typeof LoginRoute
+  '/mesas': typeof MesasRoute
+  '/proveedores': typeof ProveedoresRoute
+  '/usuarios': typeof UsuariosRoute
+  '/catalogos/cotizaciones': typeof CatalogosCotizacionesRoute
+  '/insumo/$insumoId/ver-detalles': typeof InsumoInsumoIdVerDetallesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abastecimiento': typeof AbastecimientoRoute
+  '/abasto': typeof AbastoRoute
+  '/gestion-mesas': typeof GestionMesasRoute
+  '/insumos': typeof InsumosRoute
+  '/inventario': typeof InventarioRoute
+  '/kardex': typeof KardexRoute
+  '/login': typeof LoginRoute
+  '/mesas': typeof MesasRoute
+  '/proveedores': typeof ProveedoresRoute
+  '/usuarios': typeof UsuariosRoute
+  '/catalogos/cotizaciones': typeof CatalogosCotizacionesRoute
+  '/insumo/$insumoId/ver-detalles': typeof InsumoInsumoIdVerDetallesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/abastecimiento'
+    | '/abasto'
+    | '/gestion-mesas'
+    | '/insumos'
+    | '/inventario'
+    | '/kardex'
+    | '/login'
+    | '/mesas'
+    | '/proveedores'
+    | '/usuarios'
+    | '/catalogos/cotizaciones'
+    | '/insumo/$insumoId/ver-detalles'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/abastecimiento'
+    | '/abasto'
+    | '/gestion-mesas'
+    | '/insumos'
+    | '/inventario'
+    | '/kardex'
+    | '/login'
+    | '/mesas'
+    | '/proveedores'
+    | '/usuarios'
+    | '/catalogos/cotizaciones'
+    | '/insumo/$insumoId/ver-detalles'
+  id:
+    | '__root__'
+    | '/'
+    | '/abastecimiento'
+    | '/abasto'
+    | '/gestion-mesas'
+    | '/insumos'
+    | '/inventario'
+    | '/kardex'
+    | '/login'
+    | '/mesas'
+    | '/proveedores'
+    | '/usuarios'
+    | '/catalogos/cotizaciones'
+    | '/insumo/$insumoId/ver-detalles'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbastecimientoRoute: typeof AbastecimientoRoute
+  AbastoRoute: typeof AbastoRoute
+  GestionMesasRoute: typeof GestionMesasRoute
+  InsumosRoute: typeof InsumosRoute
+  InventarioRoute: typeof InventarioRoute
+  KardexRoute: typeof KardexRoute
+  LoginRoute: typeof LoginRoute
+  MesasRoute: typeof MesasRoute
+  ProveedoresRoute: typeof ProveedoresRoute
+  UsuariosRoute: typeof UsuariosRoute
+  CatalogosCotizacionesRoute: typeof CatalogosCotizacionesRoute
+  InsumoInsumoIdVerDetallesRoute: typeof InsumoInsumoIdVerDetallesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +209,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abastecimiento': {
+      id: '/abastecimiento'
+      path: '/abastecimiento'
+      fullPath: '/abastecimiento'
+      preLoaderRoute: typeof AbastecimientoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/abasto': {
+      id: '/abasto'
+      path: '/abasto'
+      fullPath: '/abasto'
+      preLoaderRoute: typeof AbastoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gestion-mesas': {
+      id: '/gestion-mesas'
+      path: '/gestion-mesas'
+      fullPath: '/gestion-mesas'
+      preLoaderRoute: typeof GestionMesasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insumos': {
+      id: '/insumos'
+      path: '/insumos'
+      fullPath: '/insumos'
+      preLoaderRoute: typeof InsumosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inventario': {
+      id: '/inventario'
+      path: '/inventario'
+      fullPath: '/inventario'
+      preLoaderRoute: typeof InventarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kardex': {
+      id: '/kardex'
+      path: '/kardex'
+      fullPath: '/kardex'
+      preLoaderRoute: typeof KardexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mesas': {
+      id: '/mesas'
+      path: '/mesas'
+      fullPath: '/mesas'
+      preLoaderRoute: typeof MesasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proveedores': {
+      id: '/proveedores'
+      path: '/proveedores'
+      fullPath: '/proveedores'
+      preLoaderRoute: typeof ProveedoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/usuarios': {
+      id: '/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof UsuariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogos/cotizaciones': {
+      id: '/catalogos/cotizaciones'
+      path: '/catalogos/cotizaciones'
+      fullPath: '/catalogos/cotizaciones'
+      preLoaderRoute: typeof CatalogosCotizacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insumo/$insumoId/ver-detalles': {
+      id: '/insumo/$insumoId/ver-detalles'
+      path: '/insumo/$insumoId/ver-detalles'
+      fullPath: '/insumo/$insumoId/ver-detalles'
+      preLoaderRoute: typeof InsumoInsumoIdVerDetallesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbastecimientoRoute: AbastecimientoRoute,
+  AbastoRoute: AbastoRoute,
+  GestionMesasRoute: GestionMesasRoute,
+  InsumosRoute: InsumosRoute,
+  InventarioRoute: InventarioRoute,
+  KardexRoute: KardexRoute,
+  LoginRoute: LoginRoute,
+  MesasRoute: MesasRoute,
+  ProveedoresRoute: ProveedoresRoute,
+  UsuariosRoute: UsuariosRoute,
+  CatalogosCotizacionesRoute: CatalogosCotizacionesRoute,
+  InsumoInsumoIdVerDetallesRoute: InsumoInsumoIdVerDetallesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
