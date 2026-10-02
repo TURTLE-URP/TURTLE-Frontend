@@ -26,3 +26,42 @@ export async function fetchAlmacenesOptions({
     signal,
   })
 }
+
+export interface GetAlmacenesListsParams {
+  page?: number
+  limit?: number
+  search?: string
+}
+
+export async function getAlmacenesList({
+  page = 1,
+  limit = 10,
+  search = '',
+}: GetAlmacenesListsParams) {
+  return safeRequest<GetAlmacenesListResponse>({
+    method: 'GET',
+    url: '/stores',
+    params: { page, limit, search },
+  })
+}
+
+export interface GetAlmacenesListResponse {
+  data: Almacen[]
+  meta: Meta
+}
+
+export interface Almacen {
+  id: number
+  codigo: string
+  nombre: string
+  descripcion: string
+  ubicacion: string
+  cantidadInsumos: number
+}
+
+export interface Meta {
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}

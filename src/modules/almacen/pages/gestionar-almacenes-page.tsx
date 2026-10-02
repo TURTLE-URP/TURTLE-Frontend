@@ -12,8 +12,17 @@ import {
 
 import type { AlmacenArea, FormErrors } from '../interfaces/almacen'
 import { ALMACENES_MOCK } from '../lib/mock-almacenes'
-
+import { useQuery } from '@tanstack/react-query'
+import { getAlmacenesList } from '../services/almacen-options.api'
+import type { GetAlmacenesListsParams } from '../services/almacen-options.api'
 export function GestionarAlmacenesPage() {
+  const [query, setQuery] = useState<GetAlmacenesListsParams>({})
+
+  const { data, isError, isPending } = useQuery({
+    queryKey: ['almacenes', query],
+    queryFn: () => getAlmacenesList(query),
+  })
+
   const [almacenes, setAlmacenes] = useState<AlmacenArea[]>(ALMACENES_MOCK)
   const [busqueda, setBusqueda] = useState<string>('')
 
@@ -70,26 +79,25 @@ export function GestionarAlmacenesPage() {
   }
 
   // Cambiar estado del almacén completo (ACTIVO / INACTIVO)
-const handleToggleEstado = (id: string) => {
-  setAlmacenes((prev) =>
-    prev.map((a) => {
-      if (a.id === id) {
-        const nuevoEstado: 'ACTIVO' | 'INACTIVO' =
-          a.estado === 'INACTIVO' ? 'ACTIVO' : 'INACTIVO'
+  const handleToggleEstado = (id: string) => {
+    setAlmacenes((prev) =>
+      prev.map((a) => {
+        if (a.id === id) {
+          const nuevoEstado: 'ACTIVO' | 'INACTIVO' = a.estado === 'INACTIVO' ? 'ACTIVO' : 'INACTIVO'
 
-        setMensaje({
-          tipo: 'ok',
-          texto: `Área "\({a.nombre}"\){
+          setMensaje({
+            tipo: 'ok',
+            texto: `Área "\({a.nombre}"\){
             nuevoEstado === 'ACTIVO' ? 'activada' : 'inactivada'
           } correctamente.`,
-        })
+          })
 
-        return { ...a, estado: nuevoEstado }
-      }
-      return a
-    })
-  )
-}
+          return { ...a, estado: nuevoEstado }
+        }
+        return a
+      }),
+    )
+  }
   // Cambiar estado individual de un insumo resguardado dentro de un almacén
   const handleToggleEstadoInsumo = (almacenId: string, nombreInsumo: string) => {
     setAlmacenes((prevAlmacenes) =>
@@ -123,7 +131,7 @@ const handleToggleEstado = (id: string) => {
           insumosContenidos: nuevosInsumos,
           insumos: nuevosInsumos,
         }
-      })
+      }),
     )
   }
 
@@ -138,7 +146,7 @@ const handleToggleEstado = (id: string) => {
       const existeDuplicado = almacenes.some(
         (a) =>
           a.id !== almacenEdit?.id &&
-          a.nombre.toLowerCase().trim() === formData.nombre.toLowerCase().trim()
+          a.nombre.toLowerCase().trim() === formData.nombre.toLowerCase().trim(),
       )
       if (existeDuplicado) {
         newErrors.nombre = 'Ya existe un área registrada con este nombre.'
@@ -168,8 +176,8 @@ const handleToggleEstado = (id: string) => {
                 ubicacion: formData.ubicacion.trim(),
                 descripcion: formData.descripcion.trim(),
               }
-            : a
-        )
+            : a,
+        ),
       )
       setMensaje({ tipo: 'ok', texto: 'Área de almacén actualizada con éxito.' })
     } else {
@@ -229,7 +237,10 @@ const handleToggleEstado = (id: string) => {
             {mensaje.tipo === 'ok' ? <CheckCircleIcon size={16} /> : <WarningIcon size={16} />}
             <span>{mensaje.texto}</span>
           </div>
-          <button onClick={() => setMensaje(null)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <button
+            onClick={() => setMensaje(null)}
+            className="text-slate-400 hover:text-slate-600 cursor-pointer"
+          >
             <XIcon size={14} />
           </button>
         </div>
@@ -250,7 +261,7 @@ const handleToggleEstado = (id: string) => {
 
         <div className="flex items-center gap-3 text-slate-400 text-[11px]">
           <span className="border-l border-slate-200 pl-3 font-mono">
-            {almacenesFiltrados.length} resultados
+            {data?.data.length} resultados
           </span>
         </div>
       </div>
@@ -266,114 +277,66 @@ const handleToggleEstado = (id: string) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {almacenesFiltrados.map((item) => {
-              const listaInsumos = ((item.insumosContenidos || item.insumos || []) as any[])
-
-              return (
-                <tr
-                  key={item.id}
-                  className={`hover:bg-slate-50 transition-colors ${
-                    item.estado === 'INACTIVO' ? 'opacity-60 bg-slate-50/50' : ''
-                  }`}
-                >
-                  <td className="py-3 px-4">
-                    <div className="flex items-start gap-2.5">
-                      <div className="w-7 h-7 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 shrink-0 mt-0.5">
-                        <WarehouseIcon size={14} />
-                      </div>
-                      <div className="space-y-1 w-full">
-                        <div className="font-semibold text-slate-800 flex items-center gap-2">
-                          <span>{item.nombre}</span>
-                          {item.estado === 'INACTIVO' && (
-                            <span className="text-[9px] bg-rose-100 text-rose-700 font-mono px-1.5 py-0.5 rounded uppercase font-bold">
-                              Inactivo
-                            </span>
+            {isPending ? (
+              <tr>
+                <td colSpan={3} className="py-4 px-4 text-center text-slate-500">
+                  cargando...
+                </td>
+              </tr>
+            ) : isError ? (
+              <tr>
+                <td colSpan={3} className="py-4 px-4 text-center text-rose-600">
+                  hubo un error
+                </td>
+              </tr>
+            ) : (
+              data.data.map((almacen) => {
+                return (
+                  <tr key={almacen.id} className={`hover:bg-slate-50 transition-colors`}>
+                    <td className="py-3 px-4">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-7 h-7 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 shrink-0 mt-0.5">
+                          <WarehouseIcon size={14} />
+                        </div>
+                        <div className="space-y-1 w-full">
+                          <div className="text-[10px] text-slate-400 font-mono">
+                            {almacen.codigo} • {almacen.cantidadInsumos} insumos registrados
+                          </div>
+                          {almacen.descripcion && (
+                            <p className="text-[11px] text-slate-500 leading-snug">
+                              {almacen.descripcion}
+                            </p>
                           )}
                         </div>
-                        <div className="text-[10px] text-slate-400 font-mono">
-                          {item.codigo} • {item.totalInsumos || listaInsumos.length} insumos registrados
-                        </div>
-                        {item.descripcion && (
-                          <p className="text-[11px] text-slate-500 leading-snug">
-                            {item.descripcion}
-                          </p>
-                        )}
-
-                        {/* Listado interactivo de insumos */}
-                        {listaInsumos.length > 0 && (
-                          <div className="pt-2 space-y-1">
-                            <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
-                              Insumos resguardados:
-                            </p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {listaInsumos.map((ins, idx) => {
-                                const nombreInsumo = typeof ins === 'string' ? ins : ins.nombre
-                                const esActivo = typeof ins === 'string' ? true : ins.activo !== false
-
-                                return (
-                                  <button
-                                    key={idx}
-                                    type="button"
-                                    onClick={() => handleToggleEstadoInsumo(item.id, nombreInsumo)}
-                                    title={
-                                      esActivo
-                                        ? `Haz clic para inactivar ${nombreInsumo}`
-                                        : `Haz clic para activar ${nombreInsumo}`
-                                    }
-                                    className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-medium transition-all cursor-pointer border ${
-                                      esActivo
-                                        ? 'bg-cyan-50 text-cyan-800 border-cyan-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200'
-                                        : 'bg-slate-100 text-slate-400 border-slate-200 line-through hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 hover:no-underline'
-                                    }`}
-                                  >
-                                    <span
-                                      className={`w-1.5 h-1.5 rounded-full ${
-                                        esActivo ? 'bg-cyan-500' : 'bg-slate-400'
-                                      }`}
-                                    />
-                                    <span>{nombreInsumo}</span>
-                                    {!esActivo && (
-                                      <span className="text-[9px] font-bold text-rose-500 ml-0.5">
-                                        (Inactivo)
-                                      </span>
-                                    )}
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        )}
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td className="py-3 px-4 align-top text-slate-600 text-[11px]">{item.ubicacion}</td>
+                    <td className="py-3 px-4 align-top text-slate-600 text-[11px]">
+                      {almacen.ubicacion}
+                    </td>
 
-                  <td className="py-3 px-4 text-right align-top">
-                    <div className="flex items-center justify-end gap-1 text-slate-400">
-                      <button
-                        onClick={() => handleOpenEdit(item)}
-                        className="p-1 hover:text-slate-700 hover:bg-slate-100 rounded cursor-pointer transition-colors"
-                        title="Editar Área"
-                      >
-                        <PencilSimpleIcon size={14} />
-                      </button>
-                      <button
-                        onClick={() => handleToggleEstado(item.id)}
-                        className={`p-1 rounded cursor-pointer transition-colors ${
-                          item.estado === 'INACTIVO'
-                            ? 'hover:text-emerald-600 hover:bg-emerald-50 text-slate-400'
-                            : 'hover:text-rose-600 hover:bg-rose-50 text-slate-400'
-                        }`}
-                        title={item.estado === 'INACTIVO' ? 'Activar Área' : 'Inactivar Área'}
-                      >
-                        <ProhibitIcon size={14} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
+                    <td className="py-3 px-4 text-right align-top">
+                      <div className="flex items-center justify-end gap-1 text-slate-400">
+                        <button
+                          onClick={/*() => handleOpenEdit(item)*/ () => {}}
+                          className="p-1 hover:text-slate-700 hover:bg-slate-100 rounded cursor-pointer transition-colors"
+                          title="Editar Área"
+                        >
+                          <PencilSimpleIcon size={14} />
+                        </button>
+                        <button
+                          onClick={/*() => handleToggleEstado(almacen.id)*/ () => {}}
+                          className={`p-1 rounded cursor-pointer transition-colors hover:text-rose-600 hover:bg-rose-50 text-slate-400`}
+                          title={'Eliminar Almacen'}
+                        >
+                          <ProhibitIcon size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })
+            )}
           </tbody>
         </table>
       </div>
