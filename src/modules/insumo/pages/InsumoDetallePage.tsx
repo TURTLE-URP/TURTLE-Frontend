@@ -38,7 +38,7 @@ export function InsumoDetallePage({ insumoId }: Props) {
         </div>
 
         <div className="space-y-6">
-          <VistaPreviaUso medida={medidaSeleccionada} />
+          <VistaPreviaUso medida={medidaSeleccionada} insumoId={insumoId} />
           <AyudaBox />
         </div>
       </div>

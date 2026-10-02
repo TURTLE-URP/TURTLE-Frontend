@@ -216,7 +216,7 @@ export function AlertasStockTable({ insumoId }: Props) {
             <TableHeader>
               <TableRow className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wider">
                 <TableHead className="text-center">Alcance</TableHead>
-                <TableHead className="text-center">Stock inicial</TableHead>
+                <TableHead className="text-center">Stock Mínimo</TableHead>
                 <TableHead className="text-center">Stock a reponer</TableHead>
                 <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
