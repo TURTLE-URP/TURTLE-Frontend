@@ -45,6 +45,26 @@ export async function getAlmacenesList({
   })
 }
 
+export interface CreateAlmacenInput {
+  nombre: string
+  ubicacion: string
+  descripcion: string
+}
+
+export type UpdateAlmacenInput = Partial<CreateAlmacenInput>
+
+export async function createAlmacen(input: CreateAlmacenInput) {
+  return safeRequest<Almacen>({ method: 'POST', url: '/stores', data: input })
+}
+
+export async function updateAlmacen(id: number, input: UpdateAlmacenInput) {
+  return safeRequest<Almacen>({ method: 'PATCH', url: `/stores/${id}`, data: input })
+}
+
+export async function deleteAlmacen(id: number) {
+  return safeRequest<{ id: number; message: string }>({ method: 'DELETE', url: `/stores/${id}` })
+}
+
 export interface GetAlmacenesListResponse {
   data: Almacen[]
   meta: Meta

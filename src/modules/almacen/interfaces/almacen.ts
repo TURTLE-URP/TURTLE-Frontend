@@ -17,6 +17,7 @@ export interface AlmacenArea {
 
 export interface FormErrors {
   nombre?: string
+  descripcion?: string
   ubicacion?: string
   responsable?: string
   capacidadMaxKg?: string
