@@ -1,71 +1,50 @@
 import { useMemo, useState } from 'react';
-import { useKardex } from '../logic/use-kardex';
+import { ALMACENES_MOCK } from '../../../modules/almacen/lib/mock-almacenes';
 import { INSUMOS_FIXTURE } from '../fixtures/insumos.fixtures';
-import { KARDEX_MOVEMENTS_FIXTURE } from '../fixtures/movimientos.fixtures';
-import { KardexTable, type KardexMovement } from './kardex-table';
+import { KardexTable } from './kardex-table';
 
-type MovementTypeFilter = 'todos' | 'entrada' | 'salida' | 'ajuste' | 'merma';
+type MovementRecord = {
+  id: string;
+  fecha: string;
+  tipo: 'Entrada' | 'Salida' | 'Merma' | 'Ajuste';
+  insumo: string;
+  almacen: string;
+  cantidad: string;
+  saldo: string;
+  documento: string;
+  responsable: string;
+  motivo: string;
+};
 
-function normalizeMovement(value: unknown, index: number): KardexMovement | null {
-  if (typeof value !== 'object' || value === null) return null;
-
-  const movement = value as Record<string, unknown>;
-  const type = typeof movement.tipo === 'string' ? movement.tipo.toLowerCase() : '';
-  const typeLabel = type.includes('entrada')
-    ? 'Entrada'
-    : type.includes('salida')
-      ? 'Salida'
-      : type.includes('merma')
-        ? 'Merma'
-        : type.includes('ajuste')
-          ? 'Ajuste'
-          : 'Movimiento';
-  const insumo = INSUMOS_FIXTURE.find((item) => item.id === movement.insumoId);
-  const rawQuantity = Number(movement.cantidad ?? 0);
-  const quantity =
-    typeLabel === 'Salida' || typeLabel === 'Merma'
-      ? -Math.abs(rawQuantity)
-      : Math.abs(rawQuantity);
-  const date = typeof movement.fecha === 'string' ? movement.fecha : '';
-  const document =
-    typeof movement.documento === 'string' ? movement.documento : '';
-  const id =
-    typeof movement.id === 'string' || typeof movement.id === 'number'
-      ? String(movement.id)
-      : `${date}-${document}-${index}`;
-  const rawBalance = movement.saldo ?? movement.saldoResultante;
-  const balance =
-    typeof rawBalance === 'number' || typeof rawBalance === 'string'
-      ? rawBalance
-      : '-';
-
-  return {
-    id,
-    fecha: date,
-    tipo: typeLabel,
-    insumo:
-      typeof movement.insumo === 'string'
-        ? movement.insumo
-        : insumo?.nombre ?? 'Insumo desconocido',
-    unidadMedida:
-      typeof movement.unidadMedida === 'string'
-        ? movement.unidadMedida
-        : insumo?.unidadMedida ?? 'kg',
-    almacen:
-      typeof movement.almacen === 'string' ? movement.almacen : 'Cocina Central',
-    cantidad: Number.isFinite(quantity) ? quantity : String(movement.cantidad ?? '-'),
-    saldo: balance,
-    documento: document,
-    responsable:
-      typeof movement.responsable === 'string' ? movement.responsable : 'Sistema',
-    motivo: typeof movement.motivo === 'string' ? movement.motivo : '',
-  };
-}
+const ALL_MOVEMENTS: MovementRecord[] = [
+  { id: 'm1', fecha: '2026-09-29T09:00:00', tipo: 'Salida', insumo: 'Harina de trigo', almacen: 'Almacén Seco de Abarrotes', cantidad: '-4', saldo: '42', documento: 'PROD-2308', responsable: 'Luis Ramírez', motivo: 'Consumo en producción del día' },
+  { id: 'm2', fecha: '2026-09-28T10:00:00', tipo: 'Entrada', insumo: 'Harina de trigo', almacen: 'Almacén Seco de Abarrotes', cantidad: '10', saldo: '46', documento: 'OC-1098', responsable: 'Ana Morales', motivo: 'Compra de emergencia' },
+  { id: 'm3', fecha: '2026-09-27T11:00:00', tipo: 'Salida', insumo: 'Aceite vegetal', almacen: 'Almacén Seco de Abarrotes', cantidad: '-6', saldo: '36', documento: 'PROD-2301', responsable: 'Luis Ramírez', motivo: 'Consumo en preparación de platos' },
+  { id: 'm4', fecha: '2026-09-26T08:45:00', tipo: 'Merma', insumo: 'Harina de trigo', almacen: 'Almacén Seco de Abarrotes', cantidad: '-2', saldo: '42', documento: 'MERMA-025', responsable: 'Carlos Ruiz', motivo: 'Producto afectado por humedad' },
+  { id: 'm5', fecha: '2026-09-25T11:30:00', tipo: 'Salida', insumo: 'Cajas para delivery', almacen: 'Almacén de Empaques y Delivery', cantidad: '-8', saldo: '332', documento: 'DESP-2299', responsable: 'Luis Ramírez', motivo: 'Despachos de pedidos del día' },
+  { id: 'm6', fecha: '2026-09-24T10:00:00', tipo: 'Ajuste', insumo: 'Tomate fresco', almacen: 'Refrigerador de Frescos y Vegetales', cantidad: '1', saldo: '12', documento: 'AJ-0081', responsable: 'Carlos Ruiz', motivo: 'Ajuste por conteo físico' },
+  { id: 'm7', fecha: '2026-09-23T09:30:00', tipo: 'Entrada', insumo: 'Filete de lenguado', almacen: 'Cámara Fría de Pescados y Mariscos', cantidad: '15', saldo: '24', documento: 'OC-1091', responsable: 'Ana Morales', motivo: 'Ingreso fresco de proveedor' },
+  { id: 'm8', fecha: '2026-09-22T08:15:00', tipo: 'Entrada', insumo: 'Limón', almacen: 'Refrigerador de Frescos y Vegetales', cantidad: '20', saldo: '30', documento: 'OC-1085', responsable: 'Ana Morales', motivo: 'Reposición de productos frescos' },
+  { id: 'm9', fecha: '2026-09-21T14:20:00', tipo: 'Salida', insumo: 'Cerveza', almacen: 'Cava y Depósito de Barra', cantidad: '-10', saldo: '96', documento: 'BARRA-2240', responsable: 'Luis Ramírez', motivo: 'Consumo registrado en barra' },
+  { id: 'm10', fecha: '2026-09-20T11:00:00', tipo: 'Entrada', insumo: 'Cloro alimentario', almacen: 'Bodega de Limpieza y Químicos', cantidad: '5', saldo: '8', documento: 'OC-1040', responsable: 'Ana Morales', motivo: 'Reposición de productos de limpieza' },
+  { id: 'm11', fecha: '2026-09-19T09:00:00', tipo: 'Entrada', insumo: 'Langostinos', almacen: 'Cámara Fría de Pescados y Mariscos', cantidad: '12', saldo: '16', documento: 'OC-1102', responsable: 'Ana Morales', motivo: 'Recepción de producto congelado' },
+  { id: 'm12', fecha: '2026-09-18T12:30:00', tipo: 'Salida', insumo: 'Queso mozzarella', almacen: 'Refrigerador de Frescos y Vegetales', cantidad: '-2', saldo: '7', documento: 'PROD-2310', responsable: 'Luis Ramírez', motivo: 'Consumo en preparación de platos' },
+  { id: 'm13', fecha: '2026-09-17T08:00:00', tipo: 'Entrada', insumo: 'Camote', almacen: 'Almacén Seco de Abarrotes', cantidad: '15', saldo: '28', documento: 'OC-1097', responsable: 'Ana Morales', motivo: 'Compra semanal de abarrotes' },
+  { id: 'm14', fecha: '2026-09-16T15:00:00', tipo: 'Salida', insumo: 'Pisco', almacen: 'Cava y Depósito de Barra', cantidad: '-3', saldo: '12', documento: 'BARRA-2290', responsable: 'Luis Ramírez', motivo: 'Preparación de bebidas' },
+  { id: 'm15', fecha: '2026-09-15T10:20:00', tipo: 'Entrada', insumo: 'Envases herméticos', almacen: 'Almacén de Empaques y Delivery', cantidad: '100', saldo: '240', documento: 'OC-1090', responsable: 'Ana Morales', motivo: 'Reposición de envases para pedidos' },
+  { id: 'm16', fecha: '2026-09-14T09:10:00', tipo: 'Merma', insumo: 'Tomate fresco', almacen: 'Refrigerador de Frescos y Vegetales', cantidad: '-2', saldo: '11', documento: 'MERMA-027', responsable: 'Carlos Ruiz', motivo: 'Producto deteriorado durante almacenamiento' },
+  { id: 'm17', fecha: '2026-09-13T11:45:00', tipo: 'Entrada', insumo: 'Cebolla roja', almacen: 'Refrigerador de Frescos y Vegetales', cantidad: '10', saldo: '18', documento: 'OC-1088', responsable: 'Ana Morales', motivo: 'Reposición de vegetales frescos' },
+  { id: 'm18', fecha: '2026-09-12T13:00:00', tipo: 'Salida', insumo: 'Choclo', almacen: 'Almacén Seco de Abarrotes', cantidad: '-5', saldo: '40', documento: 'PROD-2281', responsable: 'Luis Ramírez', motivo: 'Consumo en preparación del día' },
+  { id: 'm19', fecha: '2026-09-11T08:30:00', tipo: 'Entrada', insumo: 'Pechuga de pollo', almacen: 'Cámara Fría de Pescados y Mariscos', cantidad: '10', saldo: '25', documento: 'OC-1086', responsable: 'Ana Morales', motivo: 'Recepción de producto refrigerado' },
+  { id: 'm20', fecha: '2026-09-10T10:00:00', tipo: 'Merma', insumo: 'Aceite vegetal', almacen: 'Almacén Seco de Abarrotes', cantidad: '-1', saldo: '18', documento: 'MERMA-026', responsable: 'Carlos Ruiz', motivo: 'Envase dañado durante manipulación' },
+  { id: 'm21', fecha: '2026-09-09T14:00:00', tipo: 'Salida', insumo: 'Cloro alimentario', almacen: 'Bodega de Limpieza y Químicos', cantidad: '-2', saldo: '6', documento: 'LIMP-052', responsable: 'Carlos Ruiz', motivo: 'Desinfección de superficies de trabajo' },
+  { id: 'm22', fecha: '2026-09-08T16:30:00', tipo: 'Entrada', insumo: 'Cajas para delivery', almacen: 'Almacén de Empaques y Delivery', cantidad: '50', saldo: '340', documento: 'OC-1080', responsable: 'Ana Morales', motivo: 'Compra de cajas para despacho' },
+];
 
 export function InventoryKardexPage() {
-  const { data: apiMovements = [] } = useKardex();
   const [selectedInsumoId, setSelectedInsumoId] = useState<string>('todos');
-  const [movementType, setMovementType] = useState<MovementTypeFilter>('todos');
+  const [selectedAlmacen, setSelectedAlmacen] = useState<string>('todos');
+  const [movementType, setMovementType] = useState<'todos' | 'entrada' | 'salida' | 'merma' | 'ajuste'>('todos');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedMovementId, setSelectedMovementId] = useState<string | null>(null);
@@ -75,52 +54,38 @@ export function InventoryKardexPage() {
     [selectedInsumoId],
   );
 
-  const allMovements = useMemo(() => {
-    const source = Array.isArray(apiMovements) && apiMovements.length > 0
-      ? apiMovements
-      : KARDEX_MOVEMENTS_FIXTURE;
+  const rawMovements = useMemo(() => {
+    let list = ALL_MOVEMENTS;
 
-    return source
-      .map((movement: unknown, index: number) => normalizeMovement(movement, index))
-      .filter((movement): movement is KardexMovement => movement !== null)
-      .sort((a, b) => b.fecha.localeCompare(a.fecha));
-  }, [apiMovements]);
+    if (selectedInsumoId !== 'todos') {
+      const insumoName = selectedInsumo?.nombre || '';
+      list = list.filter((m) => m.insumo.toLowerCase() === insumoName.toLowerCase());
+    }
 
-  const movements = useMemo(
-    () =>
-      allMovements.filter((movement) => {
-        const matchesInsumo =
-          selectedInsumoId === 'todos' ||
-          movement.insumo === selectedInsumo?.nombre;
-        const matchesType =
-          movementType === 'todos' ||
-          movement.tipo.toLowerCase() === movementType;
-        const movementDate = movement.fecha.slice(0, 10);
-        const matchesStartDate = !startDate || movementDate >= startDate;
-        const matchesEndDate = !endDate || movementDate <= endDate;
+    if (selectedAlmacen !== 'todos') {
+      list = list.filter((m) => m.almacen.toLowerCase() === selectedAlmacen.toLowerCase());
+    }
 
-        return (
-          matchesInsumo &&
-          matchesType &&
-          matchesStartDate &&
-          matchesEndDate
-        );
-      }),
-    [allMovements, selectedInsumoId, selectedInsumo, movementType, startDate, endDate],
-  );
+    if (startDate) {
+      list = list.filter((m) => m.fecha.slice(0, 10) >= startDate);
+    }
+
+    if (endDate) {
+      list = list.filter((m) => m.fecha.slice(0, 10) <= endDate);
+    }
+
+    return list;
+  }, [selectedInsumoId, selectedAlmacen, selectedInsumo, startDate, endDate]);
+
+  const movements = useMemo(() => {
+    if (movementType === 'todos') return rawMovements;
+    return rawMovements.filter((m) => m.tipo.toLowerCase() === movementType);
+  }, [rawMovements, movementType]);
 
   const selectedMovement = useMemo(
-    () =>
-      movements.find((movement) => movement.id === selectedMovementId) ??
-      movements[0] ??
-      null,
+    () => movements.find((m) => m.id === selectedMovementId) || movements[0] || null,
     [movements, selectedMovementId],
   );
-  const selectedUnit =
-    selectedMovement?.unidadMedida ?? selectedInsumo?.unidadMedida ?? 'kg';
-  const previousBalance = selectedMovement
-    ? Number(selectedMovement.saldo) - Number(selectedMovement.cantidad)
-    : Number.NaN;
 
   const getDetailBadgeStyle = (tipo: string) => {
     const t = (tipo || '').toLowerCase();
@@ -131,13 +96,30 @@ export function InventoryKardexPage() {
     return 'bg-gray-100 text-gray-800';
   };
 
-  const countInsumosConMovimiento = new Set(
-    movements.map((movement) => movement.insumo),
-  ).size;
-  const countEntradas = movements.filter((movement) => movement.tipo === 'Entrada').length;
-  const countSalidas = movements.filter((movement) => movement.tipo === 'Salida').length;
-  const countAjustes = movements.filter((movement) => movement.tipo === 'Ajuste').length;
-  const countMermas = movements.filter((movement) => movement.tipo === 'Merma').length;
+  const countInsumosConMovimiento = useMemo(() => {
+    const uniqueInsumos = new Set(rawMovements.map((m) => m.insumo));
+    return uniqueInsumos.size;
+  }, [rawMovements]);
+
+  const countEntradas = useMemo(() => 
+    rawMovements.filter((m) => m.tipo.toLowerCase().includes('entrada')).length,
+    [rawMovements]
+  );
+  
+  const countSalidas = useMemo(() => 
+    rawMovements.filter((m) => m.tipo.toLowerCase().includes('salida')).length,
+    [rawMovements]
+  );
+  
+  const countAjustes = useMemo(() => 
+    rawMovements.filter((m) => m.tipo.toLowerCase().includes('ajuste')).length,
+    [rawMovements]
+  );
+  
+  const countMermas = useMemo(() => 
+    rawMovements.filter((m) => m.tipo.toLowerCase().includes('merma')).length,
+    [rawMovements]
+  );
 
   return (
     <div className="p-8 space-y-6 bg-background min-h-screen text-foreground">
@@ -165,7 +147,7 @@ export function InventoryKardexPage() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-semibold text-muted-foreground tracking-wider">INSUMO</label>
-            <select
+            <select 
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs"
               value={selectedInsumoId}
               onChange={(e) => {
@@ -182,30 +164,40 @@ export function InventoryKardexPage() {
 
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-semibold text-muted-foreground tracking-wider">ALMACÉN</label>
-            <select className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs" defaultValue="central">
-              <option value="central">Cocina Central</option>
+            <select 
+              className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs"
+              value={selectedAlmacen}
+              onChange={(e) => {
+                setSelectedAlmacen(e.target.value);
+                setSelectedMovementId(null);
+              }}
+            >
+              <option value="todos">Todos los almacenes</option>
+              {ALMACENES_MOCK.map((almacen) => (
+                <option key={almacen.id} value={almacen.nombre}>{almacen.nombre}</option>
+              ))}
             </select>
           </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-semibold text-muted-foreground tracking-wider">TIPO DE MOVIMIENTO</label>
-            <select
+            <select 
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs"
               value={movementType}
-              onChange={(e) => setMovementType(e.target.value as MovementTypeFilter)}
+              onChange={(e) => setMovementType(e.target.value as typeof movementType)}
             >
               <option value="todos">Todos los movimientos</option>
               <option value="entrada">Entradas</option>
               <option value="salida">Salidas</option>
-              <option value="ajuste">Ajustes</option>
               <option value="merma">Mermas</option>
+              <option value="ajuste">Ajustes</option>
             </select>
           </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-semibold text-muted-foreground tracking-wider">DESDE</label>
-            <input
-              type="date"
+            <input 
+              type="date" 
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
@@ -214,8 +206,8 @@ export function InventoryKardexPage() {
 
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-semibold text-muted-foreground tracking-wider">HASTA</label>
-            <input
-              type="date"
+            <input 
+              type="date" 
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
@@ -223,7 +215,7 @@ export function InventoryKardexPage() {
           </div>
         </div>
 
-        {/* Tarjetas de Indicadores */}
+        {/* Tarjetas de Indicadores Dinámicas */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
           <div className="bg-zinc-900 text-zinc-100 p-3 rounded-lg flex items-center justify-between shadow-2xs">
             <div>
@@ -274,17 +266,16 @@ export function InventoryKardexPage() {
             <div>
               <h2 className="text-base font-bold text-foreground">Historial</h2>
               <p className="text-[11px] text-muted-foreground">
-                {selectedInsumoId === 'todos' ? 'Todos los insumos - Cocina Central' : `${selectedInsumo?.nombre} - Cocina Central`}
+                {selectedAlmacen === 'todos' ? 'Todos los almacenes' : selectedAlmacen}
               </p>
             </div>
             <span className="text-xs text-muted-foreground font-medium">{movements.length} movimientos</span>
           </div>
-          <KardexTable
-            movements={movements}
+          <KardexTable 
+            movements={movements} 
             unidadMedida={selectedInsumo?.unidadMedida || 'kg'}
-            onSelectMovement={(movement) => setSelectedMovementId(movement.id)}
+            onSelectMovement={(m) => setSelectedMovementId(m.id)}
             selectedMovementId={selectedMovement?.id}
-            paginationKey={`${selectedInsumoId}:${movementType}:${startDate}:${endDate}`}
           />
         </div>
 
@@ -304,16 +295,16 @@ export function InventoryKardexPage() {
               <div className="space-y-4 text-xs">
                 <div className="bg-zinc-900 text-zinc-100 p-4 rounded-xl flex items-center justify-between shadow-xs">
                   <div>
-                    <span className="text-[10px] text-zinc-400 uppercase font-semibold block mb-1">ANTERIOR</span>
+                    <span className="text-[10px] text-zinc-400 uppercase font-semibold block mb-1">VARIACIÓN DE STOCK</span>
                     <span className="text-lg font-bold">
-                      {Number.isFinite(previousBalance) ? previousBalance : '-'} {selectedUnit}
+                      {String(selectedMovement.cantidad).startsWith('-') ? selectedMovement.cantidad : `+${selectedMovement.cantidad}`}
                     </span>
                   </div>
                   <span className="text-zinc-500 text-lg">&rarr;</span>
                   <div className="text-right">
                     <span className="text-[10px] text-zinc-400 uppercase font-semibold block mb-1">NUEVO</span>
                     <span className="text-lg font-bold text-emerald-400">
-                      {selectedMovement.saldo} {selectedUnit}
+                      {selectedMovement.saldo} {selectedInsumo?.unidadMedida || 'kg'}
                     </span>
                   </div>
                 </div>
@@ -336,7 +327,7 @@ export function InventoryKardexPage() {
                   <div>
                     <span className="text-muted-foreground block text-[10px] font-semibold uppercase">CANTIDAD</span>
                     <span className="font-medium text-foreground text-sm">
-                      {String(selectedMovement.cantidad).startsWith('-') ? selectedMovement.cantidad : `+${selectedMovement.cantidad}`} {selectedUnit}
+                      {String(selectedMovement.cantidad).startsWith('-') ? selectedMovement.cantidad : `+${selectedMovement.cantidad}`} {selectedInsumo?.unidadMedida || 'kg'}
                     </span>
                   </div>
                   <div>
